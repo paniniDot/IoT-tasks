@@ -1,4 +1,5 @@
 #define LEDS 4
+#include <avr/sleep.h>
 
 enum State {OFF, BLINKING, WAITING_USER_INPUT, GAME_OVER};
 
@@ -36,10 +37,14 @@ void setup_current_state() {
   currentState = OFF;
 }
 
-void sleep_mode() {
+void sleep_setup() {
   sleep_enable();
   attachInterrupt(0, wakeUp, LOW);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  
+}
+
+void wakeUp() {
   
 }
 
@@ -51,7 +56,7 @@ void random_sequence_generator() {
 
 void handle_off_state() {
   int brightness = 0;
-  int fadeAmout = 5;
+  int fadeAmount = 5;
   analogWrite(debug_led, brightness);
   brightness += fadeAmount;
   if (brightness <= 0 || brightness >= 255) {
