@@ -23,10 +23,10 @@ void setup_hw() {
   //configuring game leds and buttons
   for (int i=0; i<LEDS; i++) {
     //leds
-    led_states[i] = 0;
+    led_states[i] = false;
     pinMode(leds[i], OUTPUT);
     //buttons
-    user_input[i] = 0;
+    user_input[i] = false;
     pinMode(buttons[i], INPUT);
   }
   //configuring debug led
@@ -46,12 +46,12 @@ void sleep_setup() {
 }
 
 void wakeUp() {
-  
+   
 }
 
 void random_sequence_generator() {
   for (int i=0; i<LEDS; i++) {
-    led_states[i] = random(0, 1);
+    led_states[i] = random(0, 1) & 1;
   }
 }
 
@@ -66,5 +66,8 @@ void handle_off_state() {
 }
 
 void loop() {
-  
+  switch(currentState) {
+    OFF: handle_off_state();
+    break;
+  }
 }
