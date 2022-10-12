@@ -2,11 +2,14 @@
 #include <avr/sleep.h>
 #include <stdbool.h>
 
+
 enum State {OFF, BLINKING, WAITING_USER_INPUT, GAME_OVER};
 
 int debug_led = 11;
 int debug_led_brightness = 0;
 int fadeAmount = 5;
+long prevts = 0;
+long ts;
 
 bool led_states[LEDS];
 bool user_input[LEDS];
@@ -70,11 +73,17 @@ void handle_off_state() {
   blink_debug_led();
 }
 
+
 void loop() {
+  ts = micros();
+  if (ts - prevts > 10000000){
+  }
   switch(currentState) {
     case OFF: handle_off_state();
     break;
     default: handle_off_state();
     break;
   }
+  
+
 }
