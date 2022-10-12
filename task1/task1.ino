@@ -1,12 +1,13 @@
 #define LEDS 4
 #include <avr/sleep.h>
+#include <stdbool.h>
 
 enum State {OFF, BLINKING, WAITING_USER_INPUT, GAME_OVER};
 
 int debug_led = 11;
 
-int led_states[LEDS];
-int user_input[LEDS];
+bool led_states[LEDS];
+bool user_input[LEDS];
 int leds[LEDS] = {10, 9, 8, 7};
 int buttons[LEDS] = {6, 5, 4, 3};
 State currentState;
