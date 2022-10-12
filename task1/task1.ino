@@ -1,6 +1,9 @@
 #define LEDS 4
 #include <avr/sleep.h>
 #include <stdbool.h>
+#include <EnableInterrupt.h>
+#include <PinChangeInt.h>
+#include <PinChangeIntConfig.h>
 
 enum State {OFF, BLINKING, WAITING_USER_INPUT, GAME_OVER};
 
@@ -42,7 +45,6 @@ void setup_current_state() {
 
 void sleep_setup() {
   sleep_enable();
-  attachInterrupt(0, wakeUp, LOW);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   
 }
@@ -68,11 +70,23 @@ void blink_debug_led() {
 
 void handle_off_state() {
   blink_debug_led();
+  PCintPort::attachInterrupt(buttons[0], trigger_blinking_state, RISING); 
+}
+
+void trigger_blinking_state() {
+  currentState = BLINKING;
 }
 
 void loop() {
   switch(currentState) {
     case OFF: handle_off_state();
+    break;
+    case BLINKING:
+    Serial.println("Blinking");
+    break;
+    case WAITING_USER_INPUT:
+    break;
+    case GAME_OVER:
     break;
     default: handle_off_state();
     break;
