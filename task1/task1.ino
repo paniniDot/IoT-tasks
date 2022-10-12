@@ -6,6 +6,7 @@ enum State {OFF, BLINKING, WAITING_USER_INPUT, GAME_OVER};
 
 int debug_led = 11;
 int debug_led_brightness = 0;
+int fadeAmount = 5;
 
 bool led_states[LEDS];
 bool user_input[LEDS];
@@ -57,12 +58,12 @@ void random_sequence_generator() {
 }
 
 void blink_debug_led() {
-  int fadeAmount = 5;
   analogWrite(debug_led, debug_led_brightness);
   debug_led_brightness += fadeAmount;
   if (debug_led_brightness <= 0 || debug_led_brightness >= 255) {
-    debug_led_brightness = -debug_led_brightness; 
+    fadeAmount = -fadeAmount;
   }
+  delay(30);
 }
 
 void handle_off_state() {
@@ -72,6 +73,8 @@ void handle_off_state() {
 void loop() {
   switch(currentState) {
     case OFF: handle_off_state();
+    break;
+    default: handle_off_state();
     break;
   }
 }
