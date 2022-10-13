@@ -7,7 +7,8 @@
 enum State { OFF,
              BLINKING,
              WAITING_USER_INPUT,
-             GAME_OVER };
+             GAME_OVER,
+             SLEEP };
 
 int debug_led = 11;
 int debug_led_brightness = 0;
@@ -49,15 +50,18 @@ void setup_current_state() {
 }
 
 void sleep_setup() {
-  sleep_enable();
+  currentState = SLEEP;
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  sleep_enable();
+  sleep_mode();
 }
 
 void handle_off_state() {
   ts = micros();
   if (ts - prevts > 10000000) {
-    //Serial.print("10 secondi passati");
-    //break;
+    prevts = ts;
+    analogWrite(debug_led, 0);
+    sleep_setup();
   }
   analogWrite(debug_led, debug_led_brightness);
   debug_led_brightness += fadeAmount;
@@ -131,6 +135,10 @@ void interruptCheckState() {
       break;
     case GAME_OVER:
       break;
+    case SLEEP:
+      sleep_disable();
+      currentState = OFF;
+      break;
     default:
       break;
   }
@@ -149,6 +157,8 @@ void loop() {
       break;
     case GAME_OVER:
       game_over();
+      break;
+    case SLEEP:
       break;
     default:
       handle_off_state();
