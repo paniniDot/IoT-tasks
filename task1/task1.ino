@@ -1,11 +1,13 @@
 #define LEDS 4
+#define MAX_PENALTIES 3
+
 #include <avr/sleep.h>
 #include <stdbool.h>
 #include <EnableInterrupt.h>
 
 
 enum State { OFF,
-             BLINKING,
+             SHOWING_PATTERN,
              WAITING_USER_INPUT,
              GAME_OVER,
              SLEEP };
@@ -13,8 +15,6 @@ enum State { OFF,
 int debug_led = 11;
 int debug_led_brightness = 0;
 int fadeAmount = 5;
-int count = 0;
-int penality = 0;
 long prevts = 0;
 long ts;
 
@@ -22,13 +22,25 @@ int led_states[LEDS];
 int user_input[LEDS];
 int leds[LEDS] = { 10, 9, 8, 7 };
 int buttons[LEDS] = { 6, 5, 4, 3 };
+
 State currentState;
+
+int pattern_time;
+int user_input_time;
+int decreasing_factor;
+int user_score;
+int penalties;
 
 void setup() {
   Serial.begin(9600);
   setup_hw();
   setup_current_state();
   randomSeed(analogRead(0));
+  pattern_time = 10000000;
+  user_input_time = 10000000;
+  decreasing_factor = 5000;
+  user_score = 0;
+  penalties = 0;
 }
 
 void setup_hw() {
@@ -118,19 +130,21 @@ void interrupt3Check() {
 }
 
 void game_over() {
-  if (memcmp(led_states, user_input, LEDS) == 0) {
-    count++;
+  if (memcmp(led_states, user_input, LEDS) == 0 && penalties != MAX_PENALTIES) {
+    user_score++;
+    pattern_time < decreasing_factor ? 0 : pattern_time - decreasing_factor;
+    user_input_time < decreasing_factor ? 0 : user_input_time - decreasing_factor;
     Serial.print("you won!!");
-    Serial.println(count);
-    currentState = BLINKING;
+    Serial.println(user_score);
+    currentState = SHOWING_PATTERN;
   } else {
-    Serial.print("you lost!!");
-    Serial.println(count);
-    penality++;
-    if (penality == 3) {
+    penalties++;
+    Serial.println("you lost!!");
+    currentState = SHOWING_PATTERN;
+    if (penalties == 3) {
       Serial.println("game over!!");
-      penality = 0;
-      count = 0;
+      penalties = 0;
+      user_score = 0;
       currentState = OFF;
     }
     currentState = BLINKING;
@@ -144,16 +158,16 @@ void game_over() {
 void interruptCheckState() {
   switch (currentState) {
     case OFF:
-      currentState = BLINKING;
+      currentState = SHOWING_PATTERN;
       debug_led_brightness = 0;
       analogWrite(debug_led, debug_led_brightness);
       break;
-    case BLINKING:
-      penality++;
-      if (penality == 3) {
+    case SHOWING_PATTERN:
+      penalities++;
+      if (penalities == 3) {
         Serial.println("game over!!");
-        penality = 0;
-        count = 0;
+        penalities = 0;
+        user_score = 0;
         currentState = OFF;
       }
       break;
@@ -175,7 +189,7 @@ void loop() {
     case OFF:
       handle_off_state();
       break;
-    case BLINKING:
+    case SHOWING_PATTERN:
       blinking();
       break;
     case WAITING_USER_INPUT:
