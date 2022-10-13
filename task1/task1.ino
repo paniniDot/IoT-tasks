@@ -75,7 +75,7 @@ void blinking() {
     analogWrite(leds[i], (led_states[i] == 0) ? 0 : 255);
   }
   delay(1000);
-    for (int i = 0; i < LEDS; i++) {
+  for (int i = 0; i < LEDS; i++) {
     analogWrite(leds[i], 0);
   }
   currentState = WAITING_USER_INPUT;
@@ -116,6 +116,7 @@ void game_over() {
   } else {
     Serial.println("you lost!!");
   }
+  currentState = OFF;
 }
 
 void interruptCheckState() {
@@ -123,7 +124,6 @@ void interruptCheckState() {
     case OFF:
       currentState = BLINKING;
       analogWrite(debug_led, 0);
-      Serial.print("interrupt");
       break;
     case BLINKING:
       break;
@@ -147,7 +147,8 @@ void loop() {
     case WAITING_USER_INPUT:
       waiting_user_input();
       break;
-    case GAME_OVER: game_over();
+    case GAME_OVER:
+      game_over();
       break;
     default:
       handle_off_state();
