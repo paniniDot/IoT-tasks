@@ -2,8 +2,6 @@
 #include <avr/sleep.h>
 #include <stdbool.h>
 #include <EnableInterrupt.h>
-#include <PinChangeInt.h>
-#include <PinChangeIntConfig.h>
 
 
 enum State {OFF, BLINKING, WAITING_USER_INPUT, GAME_OVER};
@@ -73,7 +71,7 @@ void blink_debug_led() {
 
 void handle_off_state() {
   blink_debug_led();
-  PCintPort::attachInterrupt(buttons[0], trigger_blinking_state, RISING); 
+  enableInterrupt(buttons[0], trigger_blinking_state, RISING);
 }
 
 void trigger_blinking_state() {
