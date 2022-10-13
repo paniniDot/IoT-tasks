@@ -12,8 +12,8 @@ int fadeAmount = 5;
 long prevts = 0;
 long ts;
 
-bool led_states[LEDS];
-bool user_input[LEDS];
+int led_states[LEDS];
+int user_input[LEDS];
 int leds[LEDS] = {10, 9, 8, 7};
 int buttons[LEDS] = {6, 5, 4, 3};
 State currentState;
@@ -29,11 +29,12 @@ void setup_hw() {
   //configuring game leds and buttons
   for (int i=0; i<LEDS; i++) {
     //leds
-    led_states[i] = false;
+    led_states[i] = 0;
     pinMode(leds[i], OUTPUT);
     //buttons
-    user_input[i] = false;
+    user_input[i] = 0;
     pinMode(buttons[i], INPUT);
+    enableInterrupt(buttons[i], interruptCheckState, RISING);
   }
   //configuring debug led
   pinMode(debug_led, OUTPUT);
@@ -50,17 +51,24 @@ void sleep_setup() {
   
 }
 
-void wakeUp() {
-   
-}
-
-void random_sequence_generator() {
+void blinking() {
   for (int i=0; i<LEDS; i++) {
-    led_states[i] = random(0, 1) & 1;
+    led_states[i] = random(0, 1);
   }
+  delay(1000);
+  for (int i=0; i<LEDS; i++) {
+        analogWrite(leds[i], 255);
+  }
+  delay(1000);
+  currentState = WAITING_USER_INPUT;
 }
 
-void blink_debug_led() {
+void handle_off_state() {
+  ts = micros();
+  if (ts - prevts > 10000000){
+    //Serial.print("10 secondi passati");
+    //break;
+  }
   analogWrite(debug_led, debug_led_brightness);
   debug_led_brightness += fadeAmount;
   if (debug_led_brightness <= 0 || debug_led_brightness >= 255) {
@@ -69,25 +77,28 @@ void blink_debug_led() {
   delay(30);
 }
 
-void handle_off_state() {
-  blink_debug_led();
-  enableInterrupt(buttons[0], trigger_blinking_state, RISING);
+void interruptCheckState() {
+    switch(currentState) {
+    case OFF: currentState = BLINKING;
+    analogWrite(debug_led, 0);
+    Serial.print("interrupt");
+    break;
+    case BLINKING:
+    break;
+    case WAITING_USER_INPUT:
+    break;
+    case GAME_OVER:
+    break;
+    default:
+    break;
+  }
 }
-
-void trigger_blinking_state() {
-  currentState = BLINKING;
-}
-
 
 void loop() {
-  ts = micros();
-  if (ts - prevts > 10000000){
-  }
   switch(currentState) {
     case OFF: handle_off_state();
     break;
-    case BLINKING:
-    Serial.println("Blinking");
+    case BLINKING: blinking();
     break;
     case WAITING_USER_INPUT:
     break;
