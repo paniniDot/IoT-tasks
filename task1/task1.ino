@@ -14,6 +14,7 @@ int debug_led = 11;
 int debug_led_brightness = 0;
 int fadeAmount = 5;
 int count = 0;
+int penality = 0;
 long prevts = 0;
 long ts;
 
@@ -123,8 +124,15 @@ void game_over() {
     Serial.println(count);
     currentState = BLINKING;
   } else {
-    count = 0;
-    Serial.println("you lost!!");
+    Serial.print("you lost!!");
+    Serial.println(count);
+    penality++;
+    if (penality == 3) {
+      Serial.println("game over!!");
+      penality = 0;
+      count = 0;
+      currentState = OFF;
+    }
     currentState = BLINKING;
   }
   for (int i = 0; i < LEDS; i++) {
@@ -141,6 +149,13 @@ void interruptCheckState() {
       analogWrite(debug_led, debug_led_brightness);
       break;
     case BLINKING:
+      penality++;
+      if (penality == 3) {
+        Serial.println("game over!!");
+        penality = 0;
+        count = 0;
+        currentState = OFF;
+      }
       break;
     case WAITING_USER_INPUT:
       break;
