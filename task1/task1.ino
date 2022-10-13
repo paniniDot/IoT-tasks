@@ -13,6 +13,7 @@ enum State { OFF,
 int debug_led = 11;
 int debug_led_brightness = 0;
 int fadeAmount = 5;
+int count = 0;
 long prevts = 0;
 long ts;
 
@@ -60,7 +61,8 @@ void handle_off_state() {
   ts = micros();
   if (ts - prevts > 10000000) {
     prevts = ts;
-    analogWrite(debug_led, 0);
+    debug_led_brightness = 0;
+    analogWrite(debug_led, debug_led_brightness);
     sleep_setup();
   }
   analogWrite(debug_led, debug_led_brightness);
@@ -90,7 +92,7 @@ void waiting_user_input() {
   enableInterrupt(buttons[1], interrupt1Check, RISING);
   enableInterrupt(buttons[2], interrupt2Check, RISING);
   enableInterrupt(buttons[3], interrupt3Check, RISING);
-  delay(2000);
+  delay(5000);
   currentState = GAME_OVER;
 }
 
@@ -116,18 +118,27 @@ void interrupt3Check() {
 
 void game_over() {
   if (memcmp(led_states, user_input, LEDS) == 0) {
-    Serial.println("you won!!");
+    count++;
+    Serial.print("you won!!");
+    Serial.println(count);
+    currentState = BLINKING;
   } else {
+    count = 0;
     Serial.println("you lost!!");
+    currentState = BLINKING;
   }
-  currentState = OFF;
+  for (int i = 0; i < LEDS; i++) {
+    enableInterrupt(buttons[i], interruptCheckState, RISING);
+    user_input[i] = 0;
+  }
 }
 
 void interruptCheckState() {
   switch (currentState) {
     case OFF:
       currentState = BLINKING;
-      analogWrite(debug_led, 0);
+      debug_led_brightness = 0;
+      analogWrite(debug_led, debug_led_brightness);
       break;
     case BLINKING:
       break;
