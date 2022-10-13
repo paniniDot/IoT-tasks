@@ -4,7 +4,10 @@
 #include <EnableInterrupt.h>
 
 
-enum State {OFF, BLINKING, WAITING_USER_INPUT, GAME_OVER};
+enum State { OFF,
+             BLINKING,
+             WAITING_USER_INPUT,
+             GAME_OVER };
 
 int debug_led = 11;
 int debug_led_brightness = 0;
@@ -14,8 +17,8 @@ long ts;
 
 int led_states[LEDS];
 int user_input[LEDS];
-int leds[LEDS] = {10, 9, 8, 7};
-int buttons[LEDS] = {6, 5, 4, 3};
+int leds[LEDS] = { 10, 9, 8, 7 };
+int buttons[LEDS] = { 6, 5, 4, 3 };
 State currentState;
 
 void setup() {
@@ -27,7 +30,7 @@ void setup() {
 
 void setup_hw() {
   //configuring game leds and buttons
-  for (int i=0; i<LEDS; i++) {
+  for (int i = 0; i < LEDS; i++) {
     //leds
     led_states[i] = 0;
     pinMode(leds[i], OUTPUT);
@@ -48,16 +51,15 @@ void setup_current_state() {
 void sleep_setup() {
   sleep_enable();
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-  
 }
 
 void blinking() {
-  for (int i=0; i<LEDS; i++) {
-    led_states[i] = random(0, 1);
+  for (int i = 0; i < LEDS; i++) {
+    led_states[i] = random(0, 2);
   }
   delay(1000);
-  for (int i=0; i<LEDS; i++) {
-        analogWrite(leds[i], 255);
+  for (int i = 0; i < LEDS; i++) {
+    analogWrite(leds[i], (led_states[i] == 0) ? 0 : 255);
   }
   delay(1000);
   currentState = WAITING_USER_INPUT;
@@ -65,7 +67,7 @@ void blinking() {
 
 void handle_off_state() {
   ts = micros();
-  if (ts - prevts > 10000000){
+  if (ts - prevts > 10000000) {
     //Serial.print("10 secondi passati");
     //break;
   }
@@ -78,35 +80,37 @@ void handle_off_state() {
 }
 
 void interruptCheckState() {
-    switch(currentState) {
-    case OFF: currentState = BLINKING;
-    analogWrite(debug_led, 0);
-    Serial.print("interrupt");
-    break;
+  switch (currentState) {
+    case OFF:
+      currentState = BLINKING;
+      analogWrite(debug_led, 0);
+      Serial.print("interrupt");
+      break;
     case BLINKING:
-    break;
+      break;
     case WAITING_USER_INPUT:
-    break;
+      break;
     case GAME_OVER:
-    break;
+      break;
     default:
-    break;
+      break;
   }
 }
 
 void loop() {
-  switch(currentState) {
-    case OFF: handle_off_state();
-    break;
-    case BLINKING: blinking();
-    break;
+  switch (currentState) {
+    case OFF:
+      handle_off_state();
+      break;
+    case BLINKING:
+      blinking();
+      break;
     case WAITING_USER_INPUT:
-    break;
+      break;
     case GAME_OVER:
-    break;
-    default: handle_off_state();
-    break;
+      break;
+    default:
+      handle_off_state();
+      break;
   }
-  
-
 }
