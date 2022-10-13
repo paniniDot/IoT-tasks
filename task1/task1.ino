@@ -147,7 +147,7 @@ void game_over() {
       user_score = 0;
       currentState = OFF;
     }
-    currentState = BLINKING;
+    currentState = SHOWING_PATTERN;
   }
   for (int i = 0; i < LEDS; i++) {
     enableInterrupt(buttons[i], interruptCheckState, RISING);
@@ -163,10 +163,10 @@ void interruptCheckState() {
       analogWrite(debug_led, debug_led_brightness);
       break;
     case SHOWING_PATTERN:
-      penalities++;
-      if (penalities == 3) {
+      penalties++;
+      if (penalties == 3) {
         Serial.println("game over!!");
-        penalities = 0;
+        penalties = 0;
         user_score = 0;
         currentState = OFF;
       }
