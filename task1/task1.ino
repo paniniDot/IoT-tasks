@@ -53,18 +53,6 @@ void sleep_setup() {
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 }
 
-void blinking() {
-  for (int i = 0; i < LEDS; i++) {
-    led_states[i] = random(0, 2);
-  }
-  delay(1000);
-  for (int i = 0; i < LEDS; i++) {
-    analogWrite(leds[i], (led_states[i] == 0) ? 0 : 255);
-  }
-  delay(1000);
-  currentState = WAITING_USER_INPUT;
-}
-
 void handle_off_state() {
   ts = micros();
   if (ts - prevts > 10000000) {
@@ -77,6 +65,57 @@ void handle_off_state() {
     fadeAmount = -fadeAmount;
   }
   delay(30);
+}
+
+void blinking() {
+  for (int i = 0; i < LEDS; i++) {
+    led_states[i] = random(0, 2);
+  }
+  for (int i = 0; i < LEDS; i++) {
+    analogWrite(leds[i], (led_states[i] == 0) ? 0 : 255);
+  }
+  delay(1000);
+    for (int i = 0; i < LEDS; i++) {
+    analogWrite(leds[i], 0);
+  }
+  currentState = WAITING_USER_INPUT;
+}
+
+void waiting_user_input() {
+  enableInterrupt(buttons[0], interrupt0Check, RISING);
+  enableInterrupt(buttons[1], interrupt1Check, RISING);
+  enableInterrupt(buttons[2], interrupt2Check, RISING);
+  enableInterrupt(buttons[3], interrupt3Check, RISING);
+  delay(2000);
+  currentState = GAME_OVER;
+}
+
+void interruptCheck(int n) {
+  user_input[n] = 1;
+}
+
+void interrupt0Check() {
+  interruptCheck(0);
+}
+
+void interrupt1Check() {
+  interruptCheck(1);
+}
+
+void interrupt2Check() {
+  interruptCheck(2);
+}
+
+void interrupt3Check() {
+  interruptCheck(3);
+}
+
+void game_over() {
+  if (memcmp(led_states, user_input, LEDS) == 0) {
+    Serial.println("you won!!");
+  } else {
+    Serial.println("you lost!!");
+  }
 }
 
 void interruptCheckState() {
@@ -106,8 +145,9 @@ void loop() {
       blinking();
       break;
     case WAITING_USER_INPUT:
+      waiting_user_input();
       break;
-    case GAME_OVER:
+    case GAME_OVER: game_over();
       break;
     default:
       handle_off_state();
