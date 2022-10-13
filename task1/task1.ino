@@ -4,7 +4,7 @@
 #include <avr/sleep.h>
 #include <stdbool.h>
 #include <EnableInterrupt.h>
-
+#include <User.h>
 
 enum State { OFF,
              SHOWING_PATTERN,
@@ -28,8 +28,8 @@ State currentState;
 int pattern_time;
 int user_input_time;
 int decreasing_factor;
-int user_score;
-int penalties;
+
+User user();
 
 void setup() {
   Serial.begin(9600);
@@ -39,8 +39,6 @@ void setup() {
   pattern_time = 10000000;
   user_input_time = 10000000;
   decreasing_factor = 5000;
-  user_score = 0;
-  penalties = 0;
 }
 
 void setup_hw() {
@@ -130,21 +128,21 @@ void interrupt3Check() {
 }
 
 void game_over() {
-  if (memcmp(led_states, user_input, LEDS) == 0 && penalties != MAX_PENALTIES) {
-    user_score++;
+  if (memcmp(led_states, user_input, LEDS) == 0 && user.getPenalties() != MAX_PENALTIES) {
+    user.incrementScore();
     pattern_time < decreasing_factor ? 0 : pattern_time - decreasing_factor;
     user_input_time < decreasing_factor ? 0 : user_input_time - decreasing_factor;
     Serial.print("you won!!");
-    Serial.println(user_score);
+    Serial.println(user.getCurrentScore());
     currentState = SHOWING_PATTERN;
   } else {
-    penalties++;
+    user.addPenalty();
     Serial.println("you lost!!");
     currentState = SHOWING_PATTERN;
-    if (penalties == 3) {
+    if (user.getPenalties() == 3) {
       Serial.println("game over!!");
-      penalties = 0;
-      user_score = 0;
+      user.resetPenalties();
+      user.resetScore();
       currentState = OFF;
     }
     currentState = SHOWING_PATTERN;
@@ -163,13 +161,13 @@ void interruptCheckState() {
       analogWrite(debug_led, debug_led_brightness);
       break;
     case SHOWING_PATTERN:
-      penalties++;
-      if (penalties == 3) {
-        Serial.println("game over!!");
-        penalties = 0;
-        user_score = 0;
-        currentState = OFF;
-      }
+//      penalties++;
+//      if (penalties == 3) {
+//        Serial.println("game over!!");
+//        penalties = 0;
+//        user_score = 0;
+//        currentState = OFF;
+//      }
       break;
     case WAITING_USER_INPUT:
       break;
