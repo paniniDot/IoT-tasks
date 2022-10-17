@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <EnableInterrupt.h>
 #include "User.h"
+#include "FadingLed.h"
 
 enum State { OFF,
              SHOWING_PATTERN,
@@ -12,9 +13,7 @@ enum State { OFF,
              GAME_OVER,
              SLEEP };
 
-int debug_led = 11;
-int debug_led_brightness = 0;
-int fadeAmount = 5;
+FadingLed debug_led(11, 5, 30);
 long prevts = 0;
 long ts;
 
@@ -55,8 +54,6 @@ void setup_hw() {
   enableInterrupt(buttons[1], interrupt1Check, RISING);
   enableInterrupt(buttons[2], interrupt2Check, RISING);
   enableInterrupt(buttons[3], interrupt3Check, RISING);
-  //configuring debug led
-  pinMode(debug_led, OUTPUT);
 }
 
 void interrupt0Check() {
@@ -92,20 +89,14 @@ void check_time() {
   ts = micros();
   if (ts - prevts > 10000000) {
     prevts = ts;
-    debug_led_brightness = 0;
-    analogWrite(debug_led, debug_led_brightness);
+    debug_led.powerOff();
     sleep_setup();
   }
 }
 
 void handle_off_state() {
   check_time();
-  analogWrite(debug_led, debug_led_brightness);
-  debug_led_brightness += fadeAmount;
-  if (debug_led_brightness <= 0 || debug_led_brightness >= 255) {
-    fadeAmount = -fadeAmount;
-  }
-  delay(30);
+  debug_led.fading();
 }
 
 void blinking() {
@@ -144,11 +135,9 @@ void check_penality() {
 
 void penality() {
   user.addPenalty();
-  debug_led_brightness = 255;
-  analogWrite(debug_led, debug_led_brightness);
+  debug_led.powerOn();
   delay(1000);
-  debug_led_brightness = 0;
-  analogWrite(debug_led, debug_led_brightness);
+  debug_led.powerOff();
 }
 
 void check_result() {
@@ -173,8 +162,7 @@ void interruptCheck(int n) {
   switch (currentState) {
     case OFF:
       changeState(SHOWING_PATTERN);
-      debug_led_brightness = 0;
-      analogWrite(debug_led, debug_led_brightness);
+      debug_led.powerOff();
       break;
     case SHOWING_PATTERN:
       penality();
