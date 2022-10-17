@@ -58,11 +58,13 @@ void setup_hw() {
 
 
 void setup_current_state() {
-  currentState = OFF;
+  //currentState = OFF;
+  changeState(OFF);
 }
 
 void sleep_setup() {
-  currentState = SLEEP;
+  //currentState = SLEEP;
+  changeState(SLEEP);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   sleep_enable();
   sleep_mode();
@@ -76,7 +78,7 @@ void handle_off_state() {
     analogWrite(debug_led, debug_led_brightness);
     sleep_setup();
   }
-  analogWrite(debug_led, debug_led_brightness);
+  //analogWrite(debug_led, debug_led_brightness);
   debug_led_brightness += fadeAmount;
   if (debug_led_brightness <= 0 || debug_led_brightness >= 255) {
     fadeAmount = -fadeAmount;
@@ -95,7 +97,13 @@ void blinking() {
   for (int i = 0; i < LEDS; i++) {
     analogWrite(leds[i], 0);
   }
-  currentState = WAITING_USER_INPUT;
+  //currentState = WAITING_USER_INPUT;
+  changeState(WAITING_USER_INPUT);
+}
+
+void changeState(State newState) {
+  currentState = newState;
+  Serial.println(newState);
 }
 
 void waiting_user_input() {
@@ -104,7 +112,8 @@ void waiting_user_input() {
   enableInterrupt(buttons[2], interrupt2Check, RISING);
   enableInterrupt(buttons[3], interrupt3Check, RISING);
   delay(5000);
-  currentState = GAME_OVER;
+  //currentState = GAME_OVER;
+  changeState(GAME_OVER);
 }
 
 void interruptCheck(int n) {
@@ -161,7 +170,8 @@ void game_over() {
 void interruptCheckState() {
   switch (currentState) {
     case OFF:
-      currentState = SHOWING_PATTERN;
+      //currentState = SHOWING_PATTERN;
+      changeState(SHOWING_PATTERN);
       debug_led_brightness = 0;
       analogWrite(debug_led, debug_led_brightness);
       break;
@@ -180,7 +190,8 @@ void interruptCheckState() {
       break;
     case SLEEP:
       sleep_disable();
-      currentState = OFF;
+      //currentState = OFF;
+      changeState(OFF);
       break;
     default:
       break;
