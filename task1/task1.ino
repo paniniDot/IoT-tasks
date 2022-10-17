@@ -128,24 +128,16 @@ void interrupt3Check() {
 }
 
 void game_over() {
+
   if (memcmp(led_states, user_input, LEDS) == 0 && user.getPenalties() != MAX_PENALTIES) {
     user.incrementScore();
     pattern_time < decreasing_factor ? 0 : pattern_time - decreasing_factor;
     user_input_time < decreasing_factor ? 0 : user_input_time - decreasing_factor;
     Serial.print("you won!!");
     Serial.println(user.getCurrentScore());
-    currentState = SHOWING_PATTERN;
   } else {
     user.addPenalty();
     Serial.println("you lost!!");
-    currentState = SHOWING_PATTERN;
-    if (user.getPenalties() == 3) {
-      Serial.println("game over!!");
-      user.resetPenalties();
-      user.resetScore();
-      currentState = OFF;
-      prevts = ts;
-    }
     debug_led_brightness = 255;
     analogWrite(debug_led, debug_led_brightness);
     delay(1000);
@@ -155,6 +147,14 @@ void game_over() {
   for (int i = 0; i < LEDS; i++) {
     enableInterrupt(buttons[i], interruptCheckState, RISING);
     user_input[i] = 0;
+  }
+  currentState = SHOWING_PATTERN;
+  if (user.getPenalties() == 3) {
+    Serial.println("game over!!");
+    user.resetPenalties();
+    user.resetScore();
+    currentState = OFF;
+    prevts = ts;
   }
 }
 
@@ -166,13 +166,13 @@ void interruptCheckState() {
       analogWrite(debug_led, debug_led_brightness);
       break;
     case SHOWING_PATTERN:
-//      penalties++;
-//      if (penalties == 3) {
-//        Serial.println("game over!!");
-//        penalties = 0;
-//        user_score = 0;
-//        currentState = OFF;
-//      }
+      //      penalties++;
+      //      if (penalties == 3) {
+      //        Serial.println("game over!!");
+      //        penalties = 0;
+      //        user_score = 0;
+      //        currentState = OFF;
+      //      }
       break;
     case WAITING_USER_INPUT:
       break;
