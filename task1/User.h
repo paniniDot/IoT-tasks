@@ -10,17 +10,17 @@
 
 class User 
 {
-    public:
-        User();
-        int getPenalties();
-        int getCurrentScore();
-        void addPenalty();
-        void incrementScore();
-        void resetPenalties();
-        void resetScore();
-    private:
-        int _currentScore;
-        int _penalties;
+  public:
+    User();
+    int getPenalties();
+    int getCurrentScore();
+    void addPenalty();
+    void incrementScore();
+    void resetPenalties();
+    void resetScore();
+  private:
+    int _currentScore;
+    int _penalties;
 };
 
 #endif
