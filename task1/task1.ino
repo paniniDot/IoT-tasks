@@ -50,12 +50,30 @@ void setup_hw() {
     //buttons
     user_input[i] = 0;
     pinMode(buttons[i], INPUT);
-    enableInterrupt(buttons[i], interruptCheckState, RISING);
   }
+  enableInterrupt(buttons[0], interrupt0Check, RISING);
+  enableInterrupt(buttons[1], interrupt1Check, RISING);
+  enableInterrupt(buttons[2], interrupt2Check, RISING);
+  enableInterrupt(buttons[3], interrupt3Check, RISING);
   //configuring debug led
   pinMode(debug_led, OUTPUT);
 }
 
+void interrupt0Check() {
+  interruptCheck(0);
+}
+
+void interrupt1Check() {
+  interruptCheck(1);
+}
+
+void interrupt2Check() {
+  interruptCheck(2);
+}
+
+void interrupt3Check() {
+  interruptCheck(3);
+}
 
 void setup_current_state() {
   //currentState = OFF;
@@ -110,32 +128,8 @@ void changeState(State newState) {
 }
 
 void waiting_user_input() {
-  enableInterrupt(buttons[0], interrupt0Check, RISING);
-  enableInterrupt(buttons[1], interrupt1Check, RISING);
-  enableInterrupt(buttons[2], interrupt2Check, RISING);
-  enableInterrupt(buttons[3], interrupt3Check, RISING);
   delay(5000);
   changeState(GAME_OVER);
-}
-
-void interruptCheck(int n) {
-  user_input[n] = 1;
-}
-
-void interrupt0Check() {
-  interruptCheck(0);
-}
-
-void interrupt1Check() {
-  interruptCheck(1);
-}
-
-void interrupt2Check() {
-  interruptCheck(2);
-}
-
-void interrupt3Check() {
-  interruptCheck(3);
 }
 
 void check_penality() {
@@ -158,7 +152,6 @@ void penality() {
 }
 
 void check_result() {
-
   if (memcmp(led_states, user_input, LEDS) == 0 && user.getPenalties() != MAX_PENALTIES) {
     user.incrementScore();
     pattern_time < decreasing_factor ? 0 : pattern_time - decreasing_factor;
@@ -170,14 +163,13 @@ void check_result() {
     Serial.println("you lost!!");
   }
   for (int i = 0; i < LEDS; i++) {
-    enableInterrupt(buttons[i], interruptCheckState, RISING);
     user_input[i] = 0;
   }
   changeState(SHOWING_PATTERN);
   check_penality();
 }
 
-void interruptCheckState() {
+void interruptCheck(int n) {
   switch (currentState) {
     case OFF:
       changeState(SHOWING_PATTERN);
@@ -188,6 +180,7 @@ void interruptCheckState() {
       penality();
       break;
     case WAITING_USER_INPUT:
+      user_input[n] = 1;
       break;
     case GAME_OVER:
       break;
