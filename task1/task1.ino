@@ -145,7 +145,6 @@ void game_over() {
       user.resetScore();
       currentState = OFF;
     }
-    currentState = SHOWING_PATTERN;
     analogWrite(debug_led, 255);
     delay(1000);
     analogWrite(debug_led, 0);
