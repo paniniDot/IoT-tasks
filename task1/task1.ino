@@ -146,6 +146,9 @@ void game_over() {
       currentState = OFF;
     }
     currentState = SHOWING_PATTERN;
+    analogWrite(debug_led, 255);
+    delay(1000);
+    analogWrite(debug_led, 0);
   }
   for (int i = 0; i < LEDS; i++) {
     enableInterrupt(buttons[i], interruptCheckState, RISING);
