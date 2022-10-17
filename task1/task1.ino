@@ -138,7 +138,7 @@ void interrupt3Check() {
   interruptCheck(3);
 }
 
-void check_penality(){
+void check_penality() {
   if (user.getPenalties() == 3) {
     Serial.println("you gameover!!");
     user.resetPenalties();
@@ -148,13 +148,13 @@ void check_penality(){
   }
 }
 
-void penality(){
-    user.addPenalty();
-    debug_led_brightness = 255;
-    analogWrite(debug_led, debug_led_brightness);
-    delay(1000);
-    debug_led_brightness = 0;
-    analogWrite(debug_led, debug_led_brightness);
+void penality() {
+  user.addPenalty();
+  debug_led_brightness = 255;
+  analogWrite(debug_led, debug_led_brightness);
+  delay(1000);
+  debug_led_brightness = 0;
+  analogWrite(debug_led, debug_led_brightness);
 }
 
 void check_result() {
@@ -185,6 +185,7 @@ void interruptCheckState() {
       analogWrite(debug_led, debug_led_brightness);
       break;
     case SHOWING_PATTERN:
+      penality();
       break;
     case WAITING_USER_INPUT:
       break;
