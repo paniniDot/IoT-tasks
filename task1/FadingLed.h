@@ -1,5 +1,5 @@
 /*
-  User.h - Library for encapsulating a fading led implementation.
+  FadingLed.h - Library for encapsulating a fading led implementation.
   Created by Eleonora Falconi, Alesja Delja, Riccardo Fiorani, Mattia Panni. October 13, 2022.
   Released into the public domain.
 */
@@ -7,6 +7,7 @@
 #define FADING_LED_H
 
 #include "Arduino.h"
+#include <inttypes.h>
 
 class FadingLed 
 {
@@ -19,6 +20,6 @@ class FadingLed
         uint8_t _pin;
         uint8_t _fadeAmount;
         uint32_t _delay;
-}
+};
 
 #endif

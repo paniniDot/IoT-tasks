@@ -12,10 +12,10 @@ FadingLed::FadingLed(uint8_t pin, uint8_t fadeAmount, uint32_t delayTime)
     _delay = delayTime;
 }
 
-FadingLed::fading()
+void FadingLed::fading()
 {
-    currentBrightness = 0;
-    analogWrite(_pin, _fadeAmount);
+    uint8_t currentBrightness = 0;
+    analogWrite(_pin, currentBrightness);
     currentBrightness += _fadeAmount;
     if(currentBrightness <= LOW || currentBrightness >= HIGH) {
         _fadeAmount = -_fadeAmount;
@@ -23,12 +23,12 @@ FadingLed::fading()
     delay(_delay);
 }
 
-FadingLed::powerOn()
+void FadingLed::powerOn()
 {
     analogWrite(_pin, HIGH);
 }
 
-FadingLed::powerOff() 
+void FadingLed::powerOff() 
 {
     analogWrite(_pin, LOW);
 }
