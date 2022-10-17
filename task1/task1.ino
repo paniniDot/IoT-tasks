@@ -101,7 +101,6 @@ void blinking() {
   for (int i = 0; i < LEDS; i++) {
     analogWrite(leds[i], 0);
   }
-  //currentState = WAITING_USER_INPUT;
   changeState(WAITING_USER_INPUT);
 }
 
@@ -116,7 +115,6 @@ void waiting_user_input() {
   enableInterrupt(buttons[2], interrupt2Check, RISING);
   enableInterrupt(buttons[3], interrupt3Check, RISING);
   delay(5000);
-  //currentState = GAME_OVER;
   changeState(GAME_OVER);
 }
 
@@ -175,8 +173,8 @@ void check_result() {
     enableInterrupt(buttons[i], interruptCheckState, RISING);
     user_input[i] = 0;
   }
+  changeState(SHOWING_PATTERN);
   check_penality();
-  currentState = SHOWING_PATTERN;
 }
 
 void interruptCheckState() {
@@ -185,7 +183,6 @@ void interruptCheckState() {
       changeState(SHOWING_PATTERN);
       debug_led_brightness = 0;
       analogWrite(debug_led, debug_led_brightness);
-      currentState = SHOWING_PATTERN;
       break;
     case SHOWING_PATTERN:
       break;
