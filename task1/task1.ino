@@ -211,7 +211,7 @@ void loop() {
       waiting_user_input();
       break;
     case GAME_OVER:
-      game_over();
+      check_result();
       break;
     case SLEEP:
       break;
