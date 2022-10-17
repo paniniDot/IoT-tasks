@@ -11,7 +11,7 @@
 class User 
 {
     public:
-        User()
+        User();
         int getPenalties();
         int getCurrentScore();
         void addPenalty();
