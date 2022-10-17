@@ -4,7 +4,7 @@
 #include <avr/sleep.h>
 #include <stdbool.h>
 #include <EnableInterrupt.h>
-#include <User.h>
+#include "User.h"
 
 enum State { OFF,
              SHOWING_PATTERN,
@@ -29,7 +29,7 @@ int pattern_time;
 int user_input_time;
 int decreasing_factor;
 
-User user();
+User user;
 
 void setup() {
   Serial.begin(9600);
