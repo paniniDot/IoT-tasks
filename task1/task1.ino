@@ -146,9 +146,11 @@ void game_over() {
       currentState = OFF;
       prevts = ts;
     }
-    analogWrite(debug_led, 255);
+    debug_led_brightness = 255;
+    analogWrite(debug_led, debug_led_brightness);
     delay(1000);
-    analogWrite(debug_led, 0);
+    debug_led_brightness = 0;
+    analogWrite(debug_led, debug_led_brightness);
   }
   for (int i = 0; i < LEDS; i++) {
     enableInterrupt(buttons[i], interruptCheckState, RISING);
