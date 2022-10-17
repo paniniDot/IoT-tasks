@@ -144,6 +144,7 @@ void game_over() {
       user.resetPenalties();
       user.resetScore();
       currentState = OFF;
+      prevts = ts;
     }
     analogWrite(debug_led, 255);
     delay(1000);
