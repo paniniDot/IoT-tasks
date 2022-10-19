@@ -20,6 +20,7 @@ class FadingLed
         uint8_t _pin;
         uint8_t _fadeAmount;
         uint32_t _delay;
+        uint8_t _currentBrightness;
 };
 
 #endif

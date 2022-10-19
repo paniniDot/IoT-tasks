@@ -10,16 +10,17 @@ FadingLed::FadingLed(uint8_t pin, uint8_t fadeAmount, uint32_t delayTime)
     _pin = pin;
     _fadeAmount = fadeAmount;
     _delay = delayTime;
+    _currentBrightness = 0;
 }
 
 void FadingLed::fading()
 {
-    uint8_t currentBrightness = 0;
-    analogWrite(_pin, currentBrightness);
-    currentBrightness += _fadeAmount;
-    if(currentBrightness <= LOW || currentBrightness >= HIGH) {
+    analogWrite(_pin, _currentBrightness);
+    _currentBrightness += _fadeAmount;
+    if(_currentBrightness <= LOW || _currentBrightness >= HIGH) {
         _fadeAmount = -_fadeAmount;
     }
+    //Serial.println(_currentBrightness);
     delay(_delay);
 }
 
