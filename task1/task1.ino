@@ -15,7 +15,7 @@ enum State { OFF,
              GAME_OVER,
              SLEEP };
 
-FadingLed debug_led(4, 5, 30);
+FadingLed debug_led(3, 5, 30);
 long prevts = 0;
 long ts;
 
@@ -23,10 +23,7 @@ int led_states[LEDS];
 int user_input[LEDS];
 int leds[LEDS] = { 12, 10, 8, 6 };
 int buttons[LEDS] = { 11, 9, 7, 5 };
-int showing_pattern_times[DIFFICULTIES] = {20000000, 15000000, 10000000, 5000000};
-int user_input_times[DIFFICULTIES] =  {35000000, 30000000, 25000000, 20000000};
-
-
+int decreasing_factors[DIFFICULTIES] = {5000, 10000, 20000, 30000};
 State currentState;
 
 int pattern_time;
@@ -40,19 +37,17 @@ void setup() {
   setup_hw();
   setup_current_state();
   randomSeed(analogRead(A0));
-  int difficulty = getDifficulty();
-  Serial.println(difficulty);
-  pattern_time = showing_pattern_times[difficulty];
-  Serial.print("pattern time = ");
-  Serial.println(pattern_time);
-  user_input_time = user_input_times[difficulty];
-  Serial.print("user input time = ");
-  Serial.println(user_input_time);
-  decreasing_factor = 5000;
+  pattern_time = 20000000;
+  user_input_time = 35000000;
+  decreasing_factor = decreasing_factors[getDifficulty()];
+  Serial.print("Dec factor = "); Serial.println(decreasing_factor);
 }
 
 int getDifficulty() {
-  return map(analogRead(POTENTIOMETER_PIN), 0, 1023, 0, 3);
+  int analogValue = analogRead(POTENTIOMETER_PIN);
+  Serial.print("Valore analogico potenziometro = ");
+  Serial.println(analogValue);
+  return map(analogValue, 0, 1023, 0, 3);
 }
 
 void setup_hw() {
