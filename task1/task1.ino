@@ -25,9 +25,6 @@ int leds[LEDS] = { 12, 10, 8, 6 };
 int buttons[LEDS] = { 11, 9, 7, 5 };
 int times[DIFFICULTIES] = { 1000, 2000, 3000, 4000 };
 State currentState;
-
-int pattern_time;
-int user_input_time;
 int time;
 
 User user;
@@ -104,7 +101,6 @@ void check_time() {
 }
 
 void handle_off_state() {
-  Serial.println("OFF!!");
   check_time();
   debug_led.fading();
 }
@@ -133,7 +129,7 @@ void waiting_user_input() {
 }
 
 void check_penality() {
-  if (user.getPenalties() == 3) {
+  if (user.getPenalties() >= 3) {
     Serial.println("you gameover!!");
     user.resetPenalties();
     user.resetScore();
@@ -146,8 +142,6 @@ void check_penality() {
 void check_result() {
   if (memcmp(led_states, user_input, LEDS) == 0 && user.getPenalties() != MAX_PENALTIES) {
     user.incrementScore();
-    pattern_time < time ? 0 : pattern_time - time;
-    user_input_time < time ? 0 : user_input_time - time;
     Serial.println("you won!!");
     //Serial.println(user.getCurrentScore());
   } else {
