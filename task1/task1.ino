@@ -18,14 +18,16 @@ enum State { OFF,
 FadingLed debug_led(3, 5, 30);
 long prevts = 0;
 long ts;
-
+bool penality = false;
 int led_states[LEDS];
 int user_input[LEDS];
 int leds[LEDS] = { 12, 10, 8, 6 };
 int buttons[LEDS] = { 11, 9, 7, 5 };
-int times[DIFFICULTIES] = { 4000, 3000, 2000, 1000 };
+int decreasing_factors[DIFFICULTIES] = {1000, 2000, 3000, 4000};
 State currentState;
-int time;
+int pattern_time;
+int user_input_time;
+int decreasing_factor;
 
 User user;
 
@@ -34,9 +36,11 @@ void setup() {
   setup_hw();
   setup_current_state();
   randomSeed(analogRead(A0));
-  time = times[getDifficulty()];
+  decreasing_factor = decreasing_factors[getDifficulty()];
   Serial.print("Dec factor = ");
-  Serial.println(time);
+  Serial.println(decreasing_factor);
+  pattern_time = 5000 - decreasing_factor;
+  user_input_time = 5000 - decreasing_factor;
 }
 
 int getDifficulty() {
@@ -112,7 +116,7 @@ void blinking() {
   for (int i = 0; i < LEDS; i++) {
     analogWrite(leds[i], (led_states[i] == 0) ? 0 : 255);
   }
-  delay(time);
+  delay(pattern_time);
   for (int i = 0; i < LEDS; i++) {
     analogWrite(leds[i], 0);
   }
@@ -125,7 +129,7 @@ void changeState(State newState) {
 
 void waiting_user_input() {
   changeState(GAME_OVER);
-  delay(time);
+  delay(user_input_time);
 }
 
 void check_penality() {
@@ -147,17 +151,19 @@ void add_penality() {
 
 void check_result() {
   changeState(SHOWING_PATTERN);
-  if (memcmp(led_states, user_input, LEDS) == 0) {
-    user.incrementScore();
-    Serial.println("you won!!");
-    //Serial.println(user.getCurrentScore());
-  } else {
+  if (memcmp(led_states, user_input, LEDS) == 0 && penality == false ){
+      user.incrementScore();
+      Serial.println("you won!!");
+      //Serial.println(user.getCurrentScore());
+    }
+  else {
     Serial.println("you lost!!");
     add_penality();
   }
   for (int i = 0; i < LEDS; i++) {
     user_input[i] = 0;
   }
+  penality = false;
 }
 
 void interruptCheck(int n) {
@@ -167,7 +173,7 @@ void interruptCheck(int n) {
       changeState(SHOWING_PATTERN);
       break;
     case SHOWING_PATTERN:
-      add_penality();
+      penality = true;
       break;
     case WAITING_USER_INPUT:
       user_input[n] = 1;
