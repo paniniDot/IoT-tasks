@@ -1,5 +1,7 @@
 #define LEDS 4
 #define MAX_PENALTIES 3
+#define POTENTIOMETER_PIN A0
+#define DIFFICULTIES 4
 
 #include <avr/sleep.h>
 #include <stdbool.h>
@@ -13,14 +15,17 @@ enum State { OFF,
              GAME_OVER,
              SLEEP };
 
-FadingLed debug_led(11, 5, 30);
+FadingLed debug_led(4, 5, 30);
 long prevts = 0;
 long ts;
 
 int led_states[LEDS];
 int user_input[LEDS];
-int leds[LEDS] = { 10, 9, 8, 7 };
-int buttons[LEDS] = { 6, 5, 4, 3 };
+int leds[LEDS] = { 12, 10, 8, 6 };
+int buttons[LEDS] = { 11, 9, 7, 5 };
+int showing_pattern_times[DIFFICULTIES] = {20000000, 15000000, 10000000, 5000000};
+int user_input_times[DIFFICULTIES] =  {35000000, 30000000, 25000000, 20000000};
+
 
 State currentState;
 
@@ -34,10 +39,20 @@ void setup() {
   Serial.begin(9600);
   setup_hw();
   setup_current_state();
-  randomSeed(analogRead(0));
-  pattern_time = 10000000;
-  user_input_time = 10000000;
+  randomSeed(analogRead(A0));
+  int difficulty = getDifficulty();
+  Serial.println(difficulty);
+  pattern_time = showing_pattern_times[difficulty];
+  Serial.print("pattern time = ");
+  Serial.println(pattern_time);
+  user_input_time = user_input_times[difficulty];
+  Serial.print("user input time = ");
+  Serial.println(user_input_time);
   decreasing_factor = 5000;
+}
+
+int getDifficulty() {
+  return map(analogRead(POTENTIOMETER_PIN), 0, 1023, 0, 3);
 }
 
 void setup_hw() {
@@ -115,7 +130,7 @@ void blinking() {
 
 void changeState(State newState) {
   currentState = newState;
-  Serial.println(newState);
+  //Serial.println(newState);
 }
 
 void waiting_user_input() {
@@ -133,12 +148,6 @@ void check_penality() {
   }
 }
 
-void penality() {
-  user.addPenalty();
-  debug_led.powerOn();
-  delay(1000);
-  debug_led.powerOff();
-}
 
 void check_result() {
   if (memcmp(led_states, user_input, LEDS) == 0 && user.getPenalties() != MAX_PENALTIES) {
@@ -146,9 +155,12 @@ void check_result() {
     pattern_time < decreasing_factor ? 0 : pattern_time - decreasing_factor;
     user_input_time < decreasing_factor ? 0 : user_input_time - decreasing_factor;
     Serial.print("you won!!");
-    Serial.println(user.getCurrentScore());
+    //Serial.println(user.getCurrentScore());
   } else {
-    penality();
+      user.addPenalty();
+  debug_led.powerOn();
+  delay(1000);
+  debug_led.powerOff();
     Serial.println("you lost!!");
   }
   for (int i = 0; i < LEDS; i++) {
@@ -165,7 +177,7 @@ void interruptCheck(int n) {
       debug_led.powerOff();
       break;
     case SHOWING_PATTERN:
-      penality();
+      user.addPenalty();
       break;
     case WAITING_USER_INPUT:
       user_input[n] = 1;
