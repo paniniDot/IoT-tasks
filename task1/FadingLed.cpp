@@ -20,7 +20,6 @@ void FadingLed::fading()
     if(_currentBrightness <= LOW || _currentBrightness >= HIGH) {
         _fadeAmount = -_fadeAmount;
     }
-    //Serial.println(_currentBrightness);
     delay(_delay);
 }
 
