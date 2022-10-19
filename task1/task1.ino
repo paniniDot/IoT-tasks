@@ -23,7 +23,7 @@ int led_states[LEDS];
 int user_input[LEDS];
 int leds[LEDS] = { 12, 10, 8, 6 };
 int buttons[LEDS] = { 11, 9, 7, 5 };
-int decreasing_factors[DIFFICULTIES] = {250000, 500000, 750000, 1000000};
+int decreasing_factors[DIFFICULTIES] = {250, 500, 750, 1000};
 State currentState;
 int pattern_time;
 int user_input_time;
@@ -39,8 +39,8 @@ void setup() {
   decreasing_factor = decreasing_factors[getDifficulty()];
   Serial.print("Dec factor = ");
   Serial.println(decreasing_factor);
-  pattern_time = 2000000;
-  user_input_time = 3500000;
+  pattern_time = 2000;
+  user_input_time = 3500;
 }
 
 int getDifficulty() {
@@ -148,10 +148,11 @@ void add_penality() {
 
 void check_result() {
   changeState(SHOWING_PATTERN);
-  if (memcmp(led_states, user_input, LEDS) == 0 && penality == false ){
+  if (memcmp(led_states, user_input, LEDS) == 0 && penality == false){
       user.incrementScore();
+      pattern_time -= decreasing_factor;
+      user_input_time -= decreasing_factor;
       Serial.println("you won!!");
-      //Serial.println(user.getCurrentScore());
     }
   else {
     Serial.println("you lost!!");
@@ -173,9 +174,10 @@ void interruptCheck(int n) {
       penality = true;
       break;
     case WAITING_USER_INPUT:
-      user_input[n] = 1;
+      
       break;
     case GAME_OVER:
+    user_input[n] = 1;
       break;
     case SLEEP:
       sleep_disable();
