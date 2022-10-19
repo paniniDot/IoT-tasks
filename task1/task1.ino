@@ -23,7 +23,7 @@ int led_states[LEDS];
 int user_input[LEDS];
 int leds[LEDS] = { 12, 10, 8, 6 };
 int buttons[LEDS] = { 11, 9, 7, 5 };
-int decreasing_factors[DIFFICULTIES] = {1000, 2000, 3000, 4000};
+int decreasing_factors[DIFFICULTIES] = {250000, 500000, 750000, 1000000};
 State currentState;
 int pattern_time;
 int user_input_time;
@@ -39,15 +39,12 @@ void setup() {
   decreasing_factor = decreasing_factors[getDifficulty()];
   Serial.print("Dec factor = ");
   Serial.println(decreasing_factor);
-  pattern_time = 5000 - decreasing_factor;
-  user_input_time = 5000 - decreasing_factor;
+  pattern_time = 2000000;
+  user_input_time = 3500000;
 }
 
 int getDifficulty() {
-  int analogValue = analogRead(POTENTIOMETER_PIN);
-  Serial.print("Valore analogico potenziometro = ");
-  Serial.println(analogValue);
-  return map(analogValue, 0, 1023, 0, 3);
+  return map(analogRead(POTENTIOMETER_PIN), 0, 1023, 0, 3);
 }
 
 void setup_hw() {
@@ -134,7 +131,7 @@ void waiting_user_input() {
 
 void check_penality() {
   if (user.getPenalties() >= 3) {
-    Serial.println("you gameover!!");
+    Serial.println("gameover!!");
     user.resetPenalties();
     user.resetScore();
     prevts = micros();
