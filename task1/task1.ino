@@ -23,7 +23,7 @@ int led_states[LEDS];
 int user_input[LEDS];
 int leds[LEDS] = { 12, 10, 8, 6 };
 int buttons[LEDS] = { 11, 9, 7, 5 };
-int decreasing_factors[DIFFICULTIES] = {250, 500, 750, 1000};
+int decreasing_factors[DIFFICULTIES] = { 250, 500, 750, 1000 };
 State currentState;
 int pattern_time;
 int user_input_time;
@@ -37,8 +37,6 @@ void setup() {
   setup_current_state();
   randomSeed(analogRead(A0));
   decreasing_factor = decreasing_factors[getDifficulty()];
-  Serial.print("Dec factor = ");
-  Serial.println(decreasing_factor);
   pattern_time = 2000;
   user_input_time = 3500;
 }
@@ -109,7 +107,9 @@ void handle_off_state() {
 void blinking() {
   for (int i = 0; i < LEDS; i++) {
     led_states[i] = random(0, 2);
+    analogWrite(leds[i], 0);
   }
+  delay(1000);
   for (int i = 0; i < LEDS; i++) {
     analogWrite(leds[i], (led_states[i] == 0) ? 0 : 255);
   }
@@ -131,7 +131,8 @@ void waiting_user_input() {
 
 void check_penality() {
   if (user.getPenalties() >= 3) {
-    Serial.println("gameover!!");
+    Serial.print("Game over!! Final Score: ");
+    Serial.println(user.getCurrentScore());
     user.resetPenalties();
     user.resetScore();
     prevts = micros();
@@ -148,14 +149,14 @@ void add_penality() {
 
 void check_result() {
   changeState(SHOWING_PATTERN);
-  if (memcmp(led_states, user_input, LEDS) == 0 && penality == false){
-      user.incrementScore();
-      pattern_time -= decreasing_factor;
-      user_input_time -= decreasing_factor;
-      Serial.println("you won!!");
-    }
-  else {
-    Serial.println("you lost!!");
+  if (memcmp(led_states, user_input, LEDS) == 0 && penality == false) {
+    user.incrementScore();
+    pattern_time -= decreasing_factor;
+    user_input_time -= decreasing_factor;
+    Serial.print("New poin!! Score: ");
+    Serial.println(user.getCurrentScore());
+  } else {
+    Serial.print("Penality!");
     add_penality();
   }
   for (int i = 0; i < LEDS; i++) {
@@ -174,10 +175,10 @@ void interruptCheck(int n) {
       penality = true;
       break;
     case WAITING_USER_INPUT:
-      
       break;
     case GAME_OVER:
-    user_input[n] = 1;
+      analogWrite(leds[n], 255);
+      user_input[n] = 1;
       break;
     case SLEEP:
       sleep_disable();
