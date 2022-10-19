@@ -23,7 +23,7 @@ int led_states[LEDS];
 int user_input[LEDS];
 int leds[LEDS] = { 12, 10, 8, 6 };
 int buttons[LEDS] = { 11, 9, 7, 5 };
-int times[DIFFICULTIES] = { 1000, 2000, 3000, 4000 };
+int times[DIFFICULTIES] = { 4000, 3000, 2000, 1000 };
 State currentState;
 int time;
 
@@ -124,8 +124,8 @@ void changeState(State newState) {
 }
 
 void waiting_user_input() {
-  delay(time);
   changeState(GAME_OVER);
+  delay(time);
 }
 
 void check_penality() {
@@ -137,35 +137,37 @@ void check_penality() {
     changeState(OFF);
   }
 }
-
+void add_penality() {
+  user.addPenalty();
+  debug_led.powerOn();
+  delay(1000);
+  debug_led.powerOff();
+  check_penality();
+}
 
 void check_result() {
-  if (memcmp(led_states, user_input, LEDS) == 0 && user.getPenalties() != MAX_PENALTIES) {
+  changeState(SHOWING_PATTERN);
+  if (memcmp(led_states, user_input, LEDS) == 0) {
     user.incrementScore();
     Serial.println("you won!!");
     //Serial.println(user.getCurrentScore());
   } else {
-    user.addPenalty();
-    debug_led.powerOn();
-    delay(1000);
-    debug_led.powerOff();
     Serial.println("you lost!!");
+    add_penality();
   }
   for (int i = 0; i < LEDS; i++) {
     user_input[i] = 0;
   }
-  changeState(SHOWING_PATTERN);
-  check_penality();
 }
 
 void interruptCheck(int n) {
   switch (currentState) {
     case OFF:
-      changeState(SHOWING_PATTERN);
       debug_led.powerOff();
+      changeState(SHOWING_PATTERN);
       break;
     case SHOWING_PATTERN:
-      user.addPenalty();
+      add_penality();
       break;
     case WAITING_USER_INPUT:
       user_input[n] = 1;
