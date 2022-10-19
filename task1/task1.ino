@@ -27,6 +27,11 @@ int pattern_time;
 int user_input_time;
 int decreasing_factor;
 
+/*requires as parameters, in the following order
+  - the pin in which the led is plugged
+  - the step of brightness
+  - how much delay between each step
+*/
 FadingLed debug_led(3, 5, 30);
 State currentState;
 User user;
@@ -130,7 +135,7 @@ void waiting_user_input() {
 }
 
 void check_penality() {
-  if (user.getPenalties() >= 3) {
+  if (user.getPenalties() >= MAX_PENALTIES) {
     Serial.print("Game over!! Final Score: ");
     Serial.println(user.getCurrentScore());
     user.resetPenalties();
@@ -153,10 +158,10 @@ void check_result() {
     user.incrementScore();
     pattern_time -= decreasing_factor;
     user_input_time -= decreasing_factor;
-    Serial.print("New poin!! Score: ");
+    Serial.print("New point!! Score: ");
     Serial.println(user.getCurrentScore());
   } else {
-    Serial.println("Penality!");
+    Serial.println("Penalty!");
     add_penality();
   }
   for (int i = 0; i < LEDS; i++) {
