@@ -15,20 +15,25 @@ enum State { OFF,
              GAME_OVER,
              SLEEP };
 
-FadingLed debug_led(3, 5, 30);
-long prevts = 0;
+long prevts;
 long ts;
-bool penality = false;
+bool penality;
 int led_states[LEDS];
 int user_input[LEDS];
 int leds[LEDS] = { 12, 10, 8, 6 };
 int buttons[LEDS] = { 11, 9, 7, 5 };
 int decreasing_factors[DIFFICULTIES] = { 250, 500, 750, 1000 };
-State currentState;
 int pattern_time;
 int user_input_time;
 int decreasing_factor;
 
+/*requires as parameters, in the following order
+  - the pin in which the led is plugged
+  - the step of brightness
+  - how much delay between each step
+*/
+FadingLed debug_led(3, 5, 30);
+State currentState;
 User user;
 
 void setup() {
@@ -39,6 +44,8 @@ void setup() {
   decreasing_factor = decreasing_factors[getDifficulty()];
   pattern_time = 2000;
   user_input_time = 3500;
+  penality = false;
+  prevts = 0;
 }
 
 int getDifficulty() {
@@ -78,12 +85,10 @@ void interrupt3Check() {
 }
 
 void setup_current_state() {
-  //currentState = OFF;
   changeState(OFF);
 }
 
 void sleep_setup() {
-  //currentState = SLEEP;
   changeState(SLEEP);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   sleep_enable();
@@ -130,7 +135,7 @@ void waiting_user_input() {
 }
 
 void check_penality() {
-  if (user.getPenalties() >= 3) {
+  if (user.getPenalties() >= MAX_PENALTIES) {
     Serial.print("Game over!! Final Score: ");
     Serial.println(user.getCurrentScore());
     user.resetPenalties();
@@ -153,10 +158,10 @@ void check_result() {
     user.incrementScore();
     pattern_time -= decreasing_factor;
     user_input_time -= decreasing_factor;
-    Serial.print("New poin!! Score: ");
+    Serial.print("New point!! Score: ");
     Serial.println(user.getCurrentScore());
   } else {
-    Serial.print("Penality!");
+    Serial.println("Penalty!");
     add_penality();
   }
   for (int i = 0; i < LEDS; i++) {
@@ -168,8 +173,10 @@ void check_result() {
 void interruptCheck(int n) {
   switch (currentState) {
     case OFF:
-      debug_led.powerOff();
-      changeState(SHOWING_PATTERN);
+      if (n == 0) {
+        debug_led.powerOff();
+        changeState(SHOWING_PATTERN);
+      }
       break;
     case SHOWING_PATTERN:
       penality = true;
