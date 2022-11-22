@@ -3,7 +3,7 @@
 
 class Pir {
 public:
-  virtual double getMotion() = 0;  
+  virtual int getMotion() = 0;  
 };
 
 #endif

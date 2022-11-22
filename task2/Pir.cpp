@@ -6,13 +6,13 @@ Pir::Pir(int pin){
   pinMode(pin,OUTPUT);
 }
 
- double Pir::getMotion(){
+ int Pir::getMotion(){
   if (digitalRead(pin) == HIGH) {
-      Serial.println("rilevato");
+      return 1;
   }
   // Questo IF permette di stabilire se non c'è più nessun movimento
   if (digitalRead(pin) == LOW) {
-      Serial.println("non rilevo");      //output
+      return 0;
     
   }
 };
