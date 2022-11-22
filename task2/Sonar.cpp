@@ -4,7 +4,8 @@
 Sonar::Sonar(int triggerPin, int echoPin){
   this->triggerPin = triggerPin;
   this->echoPin = echoPin;
-  pinMode(pin,OUTPUT);
+  pinMode(triggerPin,OUTPUT);
+  pinMode(echoPin,OUTPUT);
 }
 
  double Sonar::getDistance(){
