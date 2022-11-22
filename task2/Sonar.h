@@ -3,7 +3,7 @@
 
 class Sonar {
 public:
-  virtual double getDistance() = 0;  
+  virtual double measure() = 0;  
 };
 
 #endif
