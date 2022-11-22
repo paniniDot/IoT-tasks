@@ -7,7 +7,7 @@ Sonar::Sonar(int triggerPin, int echoPin){
   pinMode(pin,OUTPUT);
 }
 
- int Sonar::waterLevel(){
+ double Sonar::getDistance(){
   digitalWrite(triggerPin, LOW);
   delayMicroseconds(2);
   // Sets the trigger pin to HIGH state for 10 microseconds

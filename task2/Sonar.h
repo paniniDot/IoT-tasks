@@ -3,7 +3,7 @@
 
 class Sonar {
 public:
-  virtual int waterLevel() = 0;  
+  virtual double getDistance() = 0;  
 };
 
 #endif
