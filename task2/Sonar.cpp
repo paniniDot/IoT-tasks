@@ -8,7 +8,7 @@ Sonar::Sonar(int triggerPin, int echoPin){
   pinMode(echoPin,OUTPUT);
 }
 
- double Sonar::getDistance(){
+ double Sonar::measure(){
   digitalWrite(triggerPin, LOW);
   delayMicroseconds(2);
   // Sets the trigger pin to HIGH state for 10 microseconds
