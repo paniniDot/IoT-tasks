@@ -1,6 +1,7 @@
 #ifndef __WATERLEVELTASK__
 #define __WATERLEVELTASK__
 
+#include "WaterLevelUtils.h"
 #include "Task.h"
 #include "Sonar.h"
 #include <Servo.h>
@@ -8,7 +9,6 @@
 #include "Light.h"
 #include "Button.h"
 #include <LiquidCrystal.h>
-
 
 class WaterLevelTask : public Task {
         
@@ -19,9 +19,7 @@ class WaterLevelTask : public Task {
         Light* ledC;
         Button* btn;
         LiquidCrystal* screen;
-
-
-        enum { NORMAL, PRE_ALARM, ALARM } state;
+        State state;
 
         public:
             WaterLevelTask(Sonar sonar, Servo servo, Potentiometer pot, Light ledB, Light ledC, Button btn, LiquidCrystal lcdScreen);

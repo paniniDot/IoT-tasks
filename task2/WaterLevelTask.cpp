@@ -48,12 +48,5 @@ double measureWaterLevel() {
 }
 
 void updateState() {
-    double waterLevel = measureWaterLevel();
-    if(waterLevel < ??) {
-        state = NORMAL;
-    } else if (waterLevel >= ?? && waterLevel < ??) {
-        state = PRE_ALARM;
-    } else {
-        state = ALARM;
-    }
+    state = WaterLevelUtils::getState(measureWaterLevel());
 }
