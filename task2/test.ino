@@ -1,7 +1,7 @@
 #include <Servo.h>
-#include <Adafruit_LiquidCrystal.h>
+#include <LiquidCrystal.h>
 
-Adafruit_LiquidCrystal lcd_1(0);
+LiquidCrystal lcd_1(0);
 Servo servo_9;
 
 int cm =0 ;
