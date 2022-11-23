@@ -22,6 +22,13 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:30.1.1-jre")
+
+    //Used for arduino serial comunication
+    implementation("com.fazecast:jSerialComm:2.9.1")
+    implementation("jcommon:jcommon:0.9.5")
+
+    //Used for plotting graphs
+    implementation("jfree:jfreechart:1.0.13")
 }
 
 application {
