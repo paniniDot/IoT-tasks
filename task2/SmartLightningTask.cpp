@@ -2,4 +2,4 @@
 
 class SmartLightingOffState : public Task {
     
-}
+};

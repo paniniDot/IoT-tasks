@@ -1,4 +1,4 @@
-#include <Servo.h>
+/*#include <Servo.h>
 #include <LiquidCrystal.h>
 
 LiquidCrystal lcd_1(0);
@@ -70,4 +70,4 @@ void loop()
   readServo();
   readfoto();
   delay(1000); // Wait for 100 millisecond(s)
-}
+}*/
