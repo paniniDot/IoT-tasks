@@ -2,8 +2,14 @@
 #define __PHOTORESISTOR__
 
 class PhotoResistor {
-public:
-  virtual double measure() = 0;  
+
+  private:
+    int pin;
+
+  public:
+    PhotoResistor(int pin);
+    virtual double measure() = 0;  
+
 };
 
 #endif

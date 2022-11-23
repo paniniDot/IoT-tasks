@@ -2,8 +2,14 @@
 #define __POTENTIOMETER__
 
 class Potentiometer {
-public:
-  virtual double measure() = 0;  
+
+  private:
+    int pin;
+
+  public:
+  Potentiometer(int pin);
+    virtual double measure() = 0;  
+
 };
 
 #endif

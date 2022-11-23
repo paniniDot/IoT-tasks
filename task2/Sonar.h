@@ -2,8 +2,15 @@
 #define __SONAR__
 
 class Sonar {
-public:
-  virtual double measure() = 0;  
+
+  private:
+    int triggerPin;
+    int echoPin;
+
+  public:
+    Sonar(int triggerPin, int echoPin);
+    virtual double measure() = 0;  
+
 };
 
 #endif
