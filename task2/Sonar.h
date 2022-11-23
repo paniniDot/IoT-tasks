@@ -9,7 +9,7 @@ class Sonar {
 
   public:
     Sonar(int triggerPin, int echoPin);
-    virtual double measure() = 0;  
+    double measure();  
 
 };
 

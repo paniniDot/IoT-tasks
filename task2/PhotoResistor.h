@@ -8,7 +8,7 @@ class PhotoResistor {
 
   public:
     PhotoResistor(int pin);
-    virtual double measure() = 0;  
+    double measure();  
 
 };
 
