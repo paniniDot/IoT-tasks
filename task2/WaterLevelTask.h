@@ -10,21 +10,22 @@
 #include "Button.h"
 #include <LiquidCrystal.h>
 
-class WaterLevelTask : public Task {
+class WaterLevelTask: public Task {
         
-        Sonar* sonar;
-        Servo* servo;
-        Potentiometer* pot;
-        Light* ledB;
-        Light* ledC;
-        Button* btn;
-        LiquidCrystal* screen;
-        State state;
+        private:
+          Sonar* sonar;
+          Servo* servo;
+          Potentiometer* pot;
+          Light* ledB;
+          Light* ledC;
+          /*Button* btn;*/
+          LiquidCrystal* screen;
+          /*WaterLevelUtils.State state;*/
 
         public:
-            WaterLevelTask(Sonar sonar, Servo servo, Potentiometer pot, Light ledB, Light ledC, Button btn, LiquidCrystal lcdScreen);
+            WaterLevelTask(Sonar* sonar, Servo* servo, Potentiometer* pot, Light* ledB, Light* ledC, /*Button btn,*/ LiquidCrystal* lcdScreen);
             void init();
             void tick();
-}
+};
 
 #endif
