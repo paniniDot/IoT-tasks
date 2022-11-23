@@ -3,6 +3,7 @@
 
 class Pir {
 public:
+  Pir(int pin);
   virtual int getMotion() = 0;  
 };
 
