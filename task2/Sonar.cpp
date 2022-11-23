@@ -16,5 +16,5 @@ Sonar::Sonar(int triggerPin, int echoPin){
   delayMicroseconds(10);
   digitalWrite(triggerPin, LOW);
   // Reads the echo pin, and returns the sound wave travel time in microseconds
-  return = 0.01723 *pulseIn(echoPin, HIGH);
+  return 0.01723 *pulseIn(echoPin, HIGH);
 };
