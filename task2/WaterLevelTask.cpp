@@ -28,25 +28,25 @@ void WaterLevelTask::tick() {
     }
 }
 
-void normalStateHandler() {
+void WaterLevelTask::normalStateHandler() {
     ledB->switchOn();
     ledC->switchOff();
     servo->write(0);
     updateState();
 }
 
-void preAlarmStateHandler() {
+void WaterLevelTask::preAlarmStateHandler() {
     updateState();
 }
 
-void alarmStateHandler() {
+void WaterLevelTask::alarmStateHandler() {
     updateState();
 }
 
-double measureWaterLevel() {
+double WaterLevelTask::measureWaterLevel() {
     return sonar->measure();
 }
 
-void updateState() {
-    state = WaterLevelUtils::getState(measureWaterLevel());
+void WaterLevelTask::updateState() {
+    state = WaterLevelUtils::getState(WaterLevelTask::measureWaterLevel());
 }
