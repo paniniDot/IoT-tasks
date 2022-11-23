@@ -7,10 +7,10 @@
 
 class WaterLevelUtils {
 
+public:
+
     enum State { NORMAL, PRE_ALARM, ALARM };
 
-
-public:
     static State getState(double waterLevel) {
         if (waterLevel < WL1) {
             return NORMAL;
@@ -20,6 +20,7 @@ public:
             return ALARM;
         }
     }
+
 };
 
 #endif
