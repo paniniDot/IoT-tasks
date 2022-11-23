@@ -1,7 +1,7 @@
 #ifndef __POTENTIOMETER__
 #define __POTENTIOMETER__
 
-class PotentionMeter {
+class Potentiometer {
 public:
   virtual double measure() = 0;  
 };

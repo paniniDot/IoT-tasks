@@ -1,11 +1,11 @@
-#include "PotentioMeter.h"
+#include "Potentiometer.h"
 #include "Arduino.h"
 
-PotentioMeter::PotentioMeter(string pin){
+Potentiometer::Potentiometer(string pin){
   this->pin = pin;
   pinMode(pin,OUTPUT);
 }
 
- double PotentioMeter::measure(){
+ double Potentiometer::measure(){
   return analogRead(pin);
 };
