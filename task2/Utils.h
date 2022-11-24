@@ -11,25 +11,23 @@ class Utils {
 
 public:
 
-    static WaterState getWaterState(double waterLevel) {
-        if (waterLevel < WL1) {
-            return NORMAL;
-        } else if (waterLevel >= WL1 && waterLevel < WL2) {
-            return PRE_ALARM;
-        } else {
-            return ALARM;
-        }
+  static WaterState getWaterState(double waterLevel) {
+    if (waterLevel < WL1) {
+      return NORMAL;
+    } else if (waterLevel >= WL1 && waterLevel < WL2) {
+      return PRE_ALARM;
+    } else {
+      return ALARM;
     }
+  }
 
-        static PeopleState getPeopleState(int pir, double light) {
-          if(pir==1 && light < 100){
-            return LIGHT_ON;
-          } else{
-            return LIGHT_OFF;
-          }
-            
+  static PeopleState getPeopleState(int pir, double light) {
+    if (pir == 1 && light < 100) {
+      return LIGHT_ON;
+    } else {
+      return LIGHT_OFF;
     }
-
+  }
 };
 
 #endif

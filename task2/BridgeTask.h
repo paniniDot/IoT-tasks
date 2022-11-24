@@ -12,35 +12,35 @@
 #include "Button.h"
 #include <LiquidCrystal.h>*/
 
-class BridgeTask: public Task {
-        
-        private:
-            Sonar* sonar;
-            Potentiometer* pot;
-            PhotoResistor* pho;
-            Pir *pir;
-            ServoTimer2* servo;
-            /*Light* ledB;
+class BridgeTask : public Task {
+
+private:
+  Sonar* sonar;
+  Potentiometer* pot;
+  PhotoResistor* pho;
+  Pir* pir;
+  ServoTimer2* servo;
+  /*Light* ledB;
             Light* ledC;
             Button* btn;
             LiquidCrystal* screen;*/
-            WaterState waterState;
-            PeopleState peopleState;
+  WaterState waterState;
+  PeopleState peopleState;
 
-            void normalStateHandler();
-            void preAlarmStateHandler();
-            void lightOn();
-            void lightOff();
-            void alarmStateHandler();
-            double measureWaterLevel();
-            int CheckPeopleLevel();
-            double CheckLightLevel();
-            void updateState(); 
+  void normalStateHandler();
+  void preAlarmStateHandler();
+  void lightOn();
+  void lightOff();
+  void alarmStateHandler();
+  double measureWaterLevel();
+  int CheckPeopleLevel();
+  double CheckLightLevel();
+  void updateState();
 
-        public:
-            BridgeTask(Sonar* sonar, Potentiometer* pot,PhotoResistor* pho, Pir *pir, ServoTimer2* servo/*, Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/);
-            void init();
-            void tick();
+public:
+  BridgeTask(Sonar* sonar, Potentiometer* pot, PhotoResistor* pho, Pir* pir, ServoTimer2* servo /*, Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/);
+  void init();
+  void tick();
 };
 
 #endif
