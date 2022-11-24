@@ -20,10 +20,7 @@ void BridgeTask::init(int period) {
 }
 
 void BridgeTask::tick() {
-  /*Serial.println(pot->measure());
-  Serial.println(pho->measure());
-  Serial.println(pir->getMotion());
-  Serial.println(sonar->measure());*/
+  /*Serial.println(pot->measure());*/
   switch (waterState) {
     case NORMAL:
       delay(100);
@@ -47,20 +44,17 @@ void BridgeTask::tick() {
 }
 
 void BridgeTask::normalStateHandler() {
-  Serial.println("Normal stato");
   servo->write(750);
   updateState();
 }
 
 void BridgeTask::preAlarmStateHandler() {
-  Serial.println("pre alarm stato");
   servo->write(750);
   updateState();
 }
 
 void BridgeTask::alarmStateHandler() {
-  Serial.println("alarm stato");
-  servo->write(2250);
+  servo->write(map(sonar->measure(), 30, 70, 750, 2250));
   updateState();
 }
 
