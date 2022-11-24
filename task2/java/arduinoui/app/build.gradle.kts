@@ -25,7 +25,7 @@ dependencies {
 
     //Used for arduino serial comunication
     implementation("com.fazecast:jSerialComm:2.9.1")
-    implementation("jcommon:jcommon:0.9.5")
+    implementation("org.jfree:jcommon:1.0.24")
 
     //Used for plotting graphs
     implementation("jfree:jfreechart:1.0.13")
