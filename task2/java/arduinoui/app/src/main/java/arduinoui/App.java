@@ -4,7 +4,8 @@
 package arduinoui;
 
 import java.awt.BorderLayout;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,6 +46,15 @@ public class App {
     	XYSeries series = new XYSeries("Water Level Readings");
     	XYDataset dataset = new XYSeriesCollection(series);
     	JFreeChart chart = ChartFactory.createXYLineChart("Water Level Readings", "Time (Seconds)",  "Water Level (cm)", dataset, PlotOrientation.VERTICAL, true, false, false);
+    	
+    	connectBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+    		
+    	});
     	
     	win.add(new ChartPanel(chart), BorderLayout.CENTER);
     	
