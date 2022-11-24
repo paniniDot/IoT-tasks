@@ -14,7 +14,6 @@ void WaterTask::init(int period) {
 
 void WaterTask::tick() {
   /*Serial.println(pot->measure());*/
-  measureWaterLevel();
   switch (waterState) {
     case NORMAL:
       normalStateHandler();

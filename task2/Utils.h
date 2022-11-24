@@ -17,12 +17,12 @@ public:
       return ALARM;
     } else if (waterLevel > WL2 && waterLevel <= WL1) {
       return PRE_ALARM;
-    } else if (waterLevel > WL1) {
+    } else {
       return NORMAL;
     } 
   }
 
-  static PeopleState getPeopleState(int pir, double light) {
+  static PeopleState getPeopleState(bool pir, double light) {
     if (pir == true && light < THL) {
       return LIGHT_ON;
     } else {
