@@ -3,7 +3,7 @@
 
 PhotoResistor::PhotoResistor(int pin){
   this->pin = pin;
-  pinMode(pin,OUTPUT);
+  pinMode(pin,INPUT);
 }
 
  double PhotoResistor::measure(){
