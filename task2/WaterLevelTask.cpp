@@ -24,7 +24,7 @@ void WaterLevelTask::tick() {
   Serial.println(pho->measure());
   Serial.println(pot->measure());
   Serial.println(pir->getMotion());
-  servo->write(sonar->measure());
+  servo->write(pot->measure());
     switch(state) {
         case NORMAL:
             normalStateHandler();
