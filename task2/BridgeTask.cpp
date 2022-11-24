@@ -33,7 +33,7 @@ void BridgeTask::tick() {
     }
     switch(peopleState) {
         case LIGHT_OFF:
-            LightOff();
+            lightOff();
             break;
         case LIGHT_ON:
             lightOn();
@@ -59,7 +59,7 @@ void BridgeTask::lightOn() {
     updateState();
 }
 
-void BridgeTask::LightOff() {
+void BridgeTask::lightOff() {
     updateState();
 }
 

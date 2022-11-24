@@ -23,7 +23,7 @@ public:
 
         static PeopleState getPeopleState(int pir, double light) {
           if(pir==1 && light < 100){
-            return LIGHT_On;
+            return LIGHT_ON;
           } else{
             return LIGHT_OFF;
           }
