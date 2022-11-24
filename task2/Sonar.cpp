@@ -5,7 +5,7 @@ Sonar::Sonar(int triggerPin, int echoPin){
   this->triggerPin = triggerPin;
   this->echoPin = echoPin;
   pinMode(triggerPin,OUTPUT);
-  pinMode(echoPin,OUTPUT);
+  pinMode(echoPin,INPUT);
 }
 
  double Sonar::measure(){

@@ -2,10 +2,10 @@
 
 #define SCHED_PERIOD 1000 //da aggiornare
 
-Scheduler* sched;
+Scheduler sched;
 
 void setup() {
-    sched->init(SCHED_PERIOD);
+    sched.init(SCHED_PERIOD);
     
     //Task* t0 = new ...
     //t0.init(???)
@@ -13,5 +13,5 @@ void setup() {
 }
 
 void loop() {
-    sched->schedule();
+    sched.schedule();
 }
