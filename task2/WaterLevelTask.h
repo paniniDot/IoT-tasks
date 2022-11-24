@@ -4,7 +4,7 @@
 #include "WaterLevelUtils.h"
 #include "Task.h"
 #include "Sonar.h"
-#include <Servo.h>
+//#include <Servo.h>
 #include "Potentiometer.h"
 #include "Light.h"
 #include "Button.h"
@@ -14,7 +14,7 @@ class WaterLevelTask: public Task {
         
         private:
             Sonar* sonar;
-            Servo* servo;
+            //Servo* servo;
             Potentiometer* pot;
             Light* ledB;
             Light* ledC;
@@ -29,7 +29,7 @@ class WaterLevelTask: public Task {
             void updateState(); 
 
         public:
-            WaterLevelTask(Sonar* sonar, Servo* servo, Potentiometer* pot, Light* ledB, Light* ledC, /*Button btn,*/ LiquidCrystal* lcdScreen);
+            WaterLevelTask(Sonar* sonar, /* Servo* servo, */ Potentiometer* pot, Light* ledB, Light* ledC, /*Button btn,*/ LiquidCrystal* lcdScreen);
             void init();
             void tick();
 };

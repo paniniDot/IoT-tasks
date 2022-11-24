@@ -1,8 +1,8 @@
 #include "WaterLevelTask.h"
 
-WaterLevelTask::WaterLevelTask(Sonar* sonar, Servo* servo, Potentiometer* pot, Light* ledB, Light* ledC, /*Button btn,*/ LiquidCrystal* lcdScreen) {
+WaterLevelTask::WaterLevelTask(Sonar* sonar, /* Servo* servo, */ Potentiometer* pot, Light* ledB, Light* ledC, /*Button btn,*/ LiquidCrystal* lcdScreen) {
     this->sonar = sonar;
-    this->servo = servo;
+    //this->servo = servo;
     this->pot = pot;
     this->ledB = ledB;
     this->ledC = ledC;
@@ -31,7 +31,7 @@ void WaterLevelTask::tick() {
 void WaterLevelTask::normalStateHandler() {
     ledB->switchOn();
     ledC->switchOff();
-    servo->write(0);
+    //servo->write(0);
     updateState();
 }
 
