@@ -13,9 +13,9 @@ BridgeTask::BridgeTask(Sonar* sonar, Potentiometer* pot, PhotoResistor* pho, Pir
     this->screen = screen;*/
 }
 
-void BridgeTask::init() {
-  this->waterState = NORMAL;
-  Serial.println(this->waterState);
+void BridgeTask::init(int period) {
+  Task::init(period);
+  waterState = NORMAL;
   peopleState = LIGHT_OFF;
 }
 
@@ -24,14 +24,8 @@ void BridgeTask::tick() {
   Serial.println(pho->measure());
   Serial.println(pir->getMotion());
   Serial.println(sonar->measure());*/
-  delay(100);
-  Serial.println("waterState");
-  Serial.println(waterState);
-  Serial.println(peopleState);
-  delay(100);
   switch (waterState) {
     case NORMAL:
-      Serial.println("waterState");
       delay(100);
       normalStateHandler();
       break;
@@ -53,16 +47,20 @@ void BridgeTask::tick() {
 }
 
 void BridgeTask::normalStateHandler() {
-  servo->write(0);
+  Serial.println("Normal stato");
+  servo->write(750);
   updateState();
 }
 
 void BridgeTask::preAlarmStateHandler() {
+  Serial.println("pre alarm stato");
+  servo->write(750);
   updateState();
 }
 
 void BridgeTask::alarmStateHandler() {
-  servo->write(180);
+  Serial.println("alarm stato");
+  servo->write(2250);
   updateState();
 }
 
@@ -75,17 +73,20 @@ void BridgeTask::lightOff() {
 }
 
 double BridgeTask::measureWaterLevel() {
-
+  Serial.print("Sonar = ");
+  Serial.println(sonar->measure());
   return sonar->measure();
 }
 
 int BridgeTask::CheckPeopleLevel() {
-
+  Serial.print("Pir = ");
+  Serial.println(pir->getMotion());
   return pir->getMotion();
 }
 
 double BridgeTask::CheckLightLevel() {
-
+  Serial.print("Pho = ");
+  Serial.println(pho->measure());
   return pho->measure();
 }
 

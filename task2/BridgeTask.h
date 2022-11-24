@@ -39,7 +39,7 @@ private:
 
 public:
   BridgeTask(Sonar* sonar, Potentiometer* pot, PhotoResistor* pho, Pir* pir, ServoTimer2* servo /*, Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/);
-  void init();
+  void init(int period);
   void tick();
 };
 
