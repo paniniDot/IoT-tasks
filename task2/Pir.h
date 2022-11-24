@@ -8,7 +8,7 @@ class Pir {
 
   public:
     Pir(int pin);
-    int getMotion();  
+    bool getMotion();  
 
 };
 

@@ -11,13 +11,13 @@ Pir::Pir(int pin){
   }
 }
 
- int Pir::getMotion(){
+ bool Pir::getMotion(){
   if (digitalRead(pin) == HIGH) {
-      return 1;
+      return true;
   }
   // Questo IF permette di stabilire se non c'è più nessun movimento
   if (digitalRead(pin) == LOW) {
-      return 0;
+      return false;
     
   }
 };

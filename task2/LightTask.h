@@ -1,5 +1,5 @@
-#ifndef __BRIDGETASK__
-#define __BRIDGETASK__
+#ifndef __LIGHTTASK__
+#define __LIGHTTASK__
 
 #include "Utils.h"
 #include "Task.h"
@@ -12,7 +12,7 @@
 #include "Button.h"
 #include <LiquidCrystal.h>*/
 
-class BridgeTask : public Task {
+class LightTask : public Task {
 
 private:
   Sonar* sonar;
@@ -24,21 +24,16 @@ private:
             Light* ledC;
             Button* btn;
             LiquidCrystal* screen;*/
-  WaterState waterState;
   PeopleState peopleState;
 
-  void normalStateHandler();
-  void preAlarmStateHandler();
   void lightOn();
   void lightOff();
-  void alarmStateHandler();
-  double measureWaterLevel();
-  int CheckPeopleLevel();
+  bool CheckPeopleLevel();
   double CheckLightLevel();
   void updateState();
 
 public:
-  BridgeTask(Sonar* sonar, Potentiometer* pot, PhotoResistor* pho, Pir* pir, ServoTimer2* servo /*, Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/);
+  LightTask(Sonar* sonar, Potentiometer* pot, PhotoResistor* pho, Pir* pir, ServoTimer2* servo /*, Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/);
   void init(int period);
   void tick();
 };
