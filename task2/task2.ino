@@ -4,6 +4,7 @@
 #include "PhotoResistor.h"
 #include "WaterLevelTask.h"
 #include "Pir.h"
+#include "Arduino.h"
 
 #define SCHED_PERIOD 1000 //da aggiornare
 
