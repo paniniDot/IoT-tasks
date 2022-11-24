@@ -25,6 +25,7 @@ class BridgeTask: public Task {
             Button* btn;
             LiquidCrystal* screen;*/
             WaterState waterState;
+            PeopleState peopleState;
 
             void normalStateHandler();
             void preAlarmStateHandler();

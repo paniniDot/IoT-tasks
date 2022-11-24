@@ -15,6 +15,7 @@ BridgeTask::BridgeTask(Sonar* sonar, Potentiometer* pot,PhotoResistor* pho,Pir* 
 
 void BridgeTask::init() {
     waterState = NORMAL;
+    peopleState = NOT_PRESENT_DAY;
 }
 
 void BridgeTask::tick() {
@@ -27,6 +28,20 @@ void BridgeTask::tick() {
             preAlarmStateHandler();
             break;
         case ALARM:
+            alarmStateHandler();
+            break;
+    }
+    switch(peopleState) {
+        case PRESENT_DAY:
+            normalStateHandler();
+            break;
+        case NOT_PRESENT_DAY:
+            preAlarmStateHandler();
+            break;
+        case PRESENT_NIGHT:
+            alarmStateHandler();
+            break;
+          case NOT_PRESENT_NIGHT:
             alarmStateHandler();
             break;
     }
@@ -63,4 +78,5 @@ double BridgeTask::CheckLightLevel() {
 
 void BridgeTask::updateState() {
     waterState = Utils::getWaterState(BridgeTask::measureWaterLevel());
+    peopleState = Utils::getPeopleState(BridgeTask::CheckPeopleLevel(),BridgeTask::CheckLightLevel());
 }
