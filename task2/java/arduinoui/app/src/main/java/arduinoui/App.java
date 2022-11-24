@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -48,10 +49,44 @@ public class App {
     	JFreeChart chart = ChartFactory.createXYLineChart("Water Level Readings", "Time (Seconds)",  "Water Level (cm)", dataset, PlotOrientation.VERTICAL, true, false, false);
     	
     	connectBtn.addActionListener(new ActionListener() {
-
+    		
+    		SerialPort port;
+    		int x;
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
+				if (portList.getItemCount() > 0 && e.getSource().equals(connectBtn)) {
+					port = SerialPort.getCommPort(portList.getSelectedItem().toString());
+					port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
+					if(port.openPort()) {
+						connectBtn.setText("Disconnect");
+						portList.setEnabled(false);
+					}
+					
+					// create a new thread that listens for incoming text and populates the graph
+					Thread thread = new Thread(){
+						@Override public void run() {
+							Scanner scanner = new Scanner(port.getInputStream());
+							while(scanner.hasNextLine()) {
+								try {
+									String line = scanner.nextLine();
+									int number = Integer.parseInt(line);
+									series.add(x++, 1023 - number);
+									win.repaint();
+								} catch(Exception e) {}
+							}
+							scanner.close();
+						}
+					};
+					thread.start();
+				} else {
+					// disconnect from the serial port
+					port.closePort();
+					portList.setEnabled(true);
+					connectBtn.setText("Connect");
+					series.clear();
+					x = 0;
+				}
 			}
     		
     	});
