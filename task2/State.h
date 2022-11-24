@@ -10,10 +10,8 @@ enum WaterState
 
 enum PeopleState
 {
-    PRESENT_DAY,
-    NOT_PRESENT_DAY,
-    PRESENT_NIGHT,
-    NOT_PRESENT_NIGHT
+    LIGHT_ON,
+    LIGHT_OFF
 };
 
 #endif

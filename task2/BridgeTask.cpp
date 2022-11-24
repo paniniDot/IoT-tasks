@@ -15,7 +15,7 @@ BridgeTask::BridgeTask(Sonar* sonar, Potentiometer* pot,PhotoResistor* pho,Pir* 
 
 void BridgeTask::init() {
     waterState = NORMAL;
-    peopleState = NOT_PRESENT_DAY;
+    peopleState = LIGHT_OFF;
 }
 
 void BridgeTask::tick() {
@@ -32,17 +32,11 @@ void BridgeTask::tick() {
             break;
     }
     switch(peopleState) {
-        case PRESENT_DAY:
-            normalStateHandler();
+        case LIGHT_OFF:
+            LightOff();
             break;
-        case NOT_PRESENT_DAY:
-            preAlarmStateHandler();
-            break;
-        case PRESENT_NIGHT:
-            alarmStateHandler();
-            break;
-          case NOT_PRESENT_NIGHT:
-            alarmStateHandler();
+        case LIGHT_ON:
+            lightOn();
             break;
     }
 }
@@ -58,6 +52,14 @@ void BridgeTask::preAlarmStateHandler() {
 
 void BridgeTask::alarmStateHandler() {
     servo->write(180);
+    updateState();
+}
+
+void BridgeTask::lightOn() {
+    updateState();
+}
+
+void BridgeTask::LightOff() {
     updateState();
 }
 

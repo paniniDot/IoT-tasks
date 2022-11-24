@@ -29,6 +29,8 @@ class BridgeTask: public Task {
 
             void normalStateHandler();
             void preAlarmStateHandler();
+            void lightOn();
+            void lightOff();
             void alarmStateHandler();
             double measureWaterLevel();
             int CheckPeopleLevel();

@@ -22,14 +22,10 @@ public:
     }
 
         static PeopleState getPeopleState(int pir, double light) {
-          if(pir==1 && light > 100){
-            return PRESENT_DAY;
-          }else if(pir==1 && light < 100){
-            return PRESENT_NIGHT;
-          } else if(pir==0 && light > 100){
-            return NOT_PRESENT_DAY;
+          if(pir==1 && light < 100){
+            return LIGHT_On;
           } else{
-            return NOT_PRESENT_NIGHT;
+            return LIGHT_OFF;
           }
             
     }
