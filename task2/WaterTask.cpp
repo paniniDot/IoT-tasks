@@ -1,16 +1,10 @@
 #include "WaterTask.h"
 #include "Arduino.h"
 
-WaterTask::WaterTask(Sonar* sonar, Potentiometer* pot, PhotoResistor* pho, Pir* pir, ServoTimer2* servo /*,Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/) {
+WaterTask::WaterTask(Sonar* sonar, Potentiometer* pot, ServoTimer2* servo ) {
   this->sonar = sonar;
   this->pot = pot;
-  this->pho = pho;
-  this->pir = pir;
   this->servo = servo;
-  /*this->ledB = ledB;
-    this->ledC = ledC;
-    this->btn = btn;
-    this->screen = screen;*/
 }
 
 void WaterTask::init(int period) {
@@ -20,9 +14,9 @@ void WaterTask::init(int period) {
 
 void WaterTask::tick() {
   /*Serial.println(pot->measure());*/
+  measureWaterLevel();
   switch (waterState) {
     case NORMAL:
-      delay(100);
       normalStateHandler();
       break;
     case PRE_ALARM:

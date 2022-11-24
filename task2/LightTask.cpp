@@ -1,16 +1,9 @@
 #include "LightTask.h"
 #include "Arduino.h"
 
-LightTask::LightTask(Sonar* sonar, Potentiometer* pot, PhotoResistor* pho, Pir* pir, ServoTimer2* servo /*,Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/) {
-  this->sonar = sonar;
-  this->pot = pot;
+LightTask::LightTask(PhotoResistor* pho, Pir* pir) {
   this->pho = pho;
   this->pir = pir;
-  this->servo = servo;
-  /*this->ledB = ledB;
-    this->ledC = ledC;
-    this->btn = btn;
-    this->screen = screen;*/
 }
 
 void LightTask::init(int period) {
