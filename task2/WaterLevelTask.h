@@ -5,6 +5,8 @@
 #include "Task.h"
 #include "Sonar.h"
 #include "Potentiometer.h"
+#include "PhotoResistor.h"
+#include "Pir.h"
 /*#include <Servo.h>
 #include "Light.h"
 #include "Button.h"
@@ -15,6 +17,8 @@ class WaterLevelTask: public Task {
         private:
             Sonar* sonar;
             Potentiometer* pot;
+            PhotoResistor* pho;
+            Pir *pir;
             
             
             /*
@@ -32,7 +36,7 @@ class WaterLevelTask: public Task {
             void updateState(); 
 
         public:
-            WaterLevelTask(Sonar* sonar, Potentiometer* pot/*, Servo* servo, Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/);
+            WaterLevelTask(Sonar* sonar, Potentiometer* pot,PhotoResistor* pho, Pir *pir/*, Servo* servo, Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/);
             void init();
             void tick();
 };
