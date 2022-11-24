@@ -1,9 +1,11 @@
 #include "WaterLevelTask.h"
 #include "Arduino.h"
 
-WaterLevelTask::WaterLevelTask(Sonar* sonar, Potentiometer* pot /*, Servo* servo, Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/) {
+WaterLevelTask::WaterLevelTask(Sonar* sonar, Potentiometer* pot,PhotoResistor* pho,Pir* pir /*, Servo* servo, Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/) {
     this->sonar = sonar;
     this->pot = pot;
+    this->pho = pho;
+    this->pir = pir;
     /*this->servo = servo;
     this->ledB = ledB;
     this->ledC = ledC;
@@ -16,7 +18,11 @@ void WaterLevelTask::init() {
 }
 
 void WaterLevelTask::tick() {
+
   Serial.println(sonar->measure());
+  Serial.println(pho->measure());
+  Serial.println(pot->measure());
+  Serial.println(pir->getMotion());
     switch(state) {
         case NORMAL:
             normalStateHandler();
