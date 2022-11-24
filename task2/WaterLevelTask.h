@@ -4,22 +4,29 @@
 #include "WaterLevelUtils.h"
 #include "Task.h"
 #include "Sonar.h"
-#include <Servo.h>
 #include "Potentiometer.h"
+#include "PhotoResistor.h"
+#include "Pir.h"
+/*#include <Servo.h>
 #include "Light.h"
 #include "Button.h"
-#include <LiquidCrystal.h>
+#include <LiquidCrystal.h>*/
 
 class WaterLevelTask: public Task {
         
         private:
             Sonar* sonar;
-            Servo* servo;
             Potentiometer* pot;
+            PhotoResistor* pho;
+            Pir *pir;
+            
+            
+            /*
+            Servo* servo;
             Light* ledB;
             Light* ledC;
-            /*Button* btn;*/
-            LiquidCrystal* screen;
+            Button* btn;
+            LiquidCrystal* screen;*/
             State state;
 
             void normalStateHandler();
@@ -29,7 +36,7 @@ class WaterLevelTask: public Task {
             void updateState(); 
 
         public:
-            WaterLevelTask(Sonar* sonar, Servo* servo, Potentiometer* pot, Light* ledB, Light* ledC, /*Button btn,*/ LiquidCrystal* lcdScreen);
+            WaterLevelTask(Sonar* sonar, Potentiometer* pot,PhotoResistor* pho, Pir *pir/*, Servo* servo, Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/);
             void init();
             void tick();
 };
