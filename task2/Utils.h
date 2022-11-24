@@ -1,5 +1,5 @@
-#ifndef __WATERLEVELUTILS__
-#define __WATERLEVELUTILS__
+#ifndef __UTILS__
+#define __UTILS__
 
 #include "State.h"
 
@@ -7,11 +7,11 @@
 #define WL2 70
 #define WL_MAX 30
 
-class WaterLevelUtils {
+class Utils {
 
 public:
 
-    static State getState(double waterLevel) {
+    static WaterState getWaterState(double waterLevel) {
         if (waterLevel < WL1) {
             return NORMAL;
         } else if (waterLevel >= WL1 && waterLevel < WL2) {
@@ -19,6 +19,10 @@ public:
         } else {
             return ALARM;
         }
+    }
+
+        static PeopleState getPeopleState(int pir, double light) {
+            return PRESENT_DAY;
     }
 
 };

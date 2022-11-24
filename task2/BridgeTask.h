@@ -1,19 +1,18 @@
-#ifndef __WATERLEVELTASK__
-#define __WATERLEVELTASK__
+#ifndef __BRIDGETASK__
+#define __BRIDGETASK__
 
-#include "WaterLevelUtils.h"
+#include "Utils.h"
 #include "Task.h"
 #include "Sonar.h"
 #include "Potentiometer.h"
 #include "PhotoResistor.h"
 #include "Pir.h"
 #include "ServoTimer2.h"
-/*#include <Servo.h>
-#include "Light.h"
+/*#include "Light.h"
 #include "Button.h"
 #include <LiquidCrystal.h>*/
 
-class WaterLevelTask: public Task {
+class BridgeTask: public Task {
         
         private:
             Sonar* sonar;
@@ -21,24 +20,22 @@ class WaterLevelTask: public Task {
             PhotoResistor* pho;
             Pir *pir;
             ServoTimer2* servo;
-            
-            
-            /*
-            Servo* servo;
-            Light* ledB;
+            /*Light* ledB;
             Light* ledC;
             Button* btn;
             LiquidCrystal* screen;*/
-            State state;
+            WaterState waterState;
 
             void normalStateHandler();
             void preAlarmStateHandler();
             void alarmStateHandler();
             double measureWaterLevel();
+            int CheckPeopleLevel();
+            double CheckLightLevel();
             void updateState(); 
 
         public:
-            WaterLevelTask(Sonar* sonar, Potentiometer* pot,PhotoResistor* pho, Pir *pir, ServoTimer2* servo/*, Servo* servo, Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/);
+            BridgeTask(Sonar* sonar, Potentiometer* pot,PhotoResistor* pho, Pir *pir, ServoTimer2* servo/*, Light* ledB, Light* ledC, Button btn,  LiquidCrystal* lcdScreen*/);
             void init();
             void tick();
 };

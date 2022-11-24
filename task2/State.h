@@ -1,11 +1,19 @@
 #ifndef __STATE__
 #define __STATE__
 
-enum State
+enum WaterState
 {
     NORMAL,
     PRE_ALARM,
     ALARM
+};
+
+enum PeopleState
+{
+    PRESENT_DAY,
+    NOT_PRESENT_DAY,
+    PRESENT_NIGHT,
+    NOT_PRESENT_NIGHT
 };
 
 #endif
