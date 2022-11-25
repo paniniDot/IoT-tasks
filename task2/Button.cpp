@@ -7,5 +7,5 @@ Button::Button(int pin){
 }
 
  bool Button::press(){
-  return analogRead(pin);
+  return digitalRead(pin);
 };

@@ -16,8 +16,8 @@ Scheduler sched;
 
 void setup() {
   Serial.begin(9600);
-  Button* btn = new Button(3);
-  enableInterrupt(3, interruptCheck, RISING);
+  Button* btn = new Button(2);
+  enableInterrupt(2, interruptCheck, RISING);
   sched.init(SCHED_PERIOD);
   ServoTimer2* servo = new ServoTimer2();
   servo->attach(6);
