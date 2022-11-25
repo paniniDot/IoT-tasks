@@ -1,11 +1,15 @@
 #ifndef __STATE__
 #define __STATE__
 
-enum State
-{
-    NORMAL,
-    PRE_ALARM,
-    ALARM
+enum WaterState {
+  NORMAL,
+  PRE_ALARM,
+  ALARM
+};
+
+enum PeopleState {
+  LIGHT_ON,
+  LIGHT_OFF
 };
 
 #endif

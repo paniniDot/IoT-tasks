@@ -7,8 +7,8 @@ class Potentiometer {
     int pin;
 
   public:
-  Potentiometer(int pin);
-    virtual double measure() = 0;  
+    Potentiometer(int pin);
+    double measure();  
 
 };
 
