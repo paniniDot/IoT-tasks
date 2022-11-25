@@ -7,11 +7,11 @@
 #define WL2 70
 #define WL_MAX 30
 #define THL 100
-
+ extern bool manual;
 class Utils {
 
 public:
-
+ 
   static WaterState getWaterState(double waterLevel) {
     if (waterLevel > WL_MAX && waterLevel <= WL2){
       return ALARM;

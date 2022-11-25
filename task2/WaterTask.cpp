@@ -1,7 +1,7 @@
 #include "WaterTask.h"
 #include "Arduino.h"
 
-WaterTask::WaterTask(Sonar* sonar, Potentiometer* pot, ServoTimer2* servo ) {
+WaterTask::WaterTask(Sonar* sonar, Potentiometer* pot, ServoTimer2* servo) {
   this->sonar = sonar;
   this->pot = pot;
   this->servo = servo;
@@ -13,7 +13,7 @@ void WaterTask::init(int period) {
 }
 
 void WaterTask::tick() {
-  /*Serial.println(pot->measure());*/
+  if(manual == false){
   switch (waterState) {
     case NORMAL:
       normalStateHandler();
@@ -24,6 +24,8 @@ void WaterTask::tick() {
     case ALARM:
       alarmStateHandler();
       break;
+  }}else{
+    servo->write(map(pot->measure(), 0, 1023, 750, 2250));
   }
 }
 
