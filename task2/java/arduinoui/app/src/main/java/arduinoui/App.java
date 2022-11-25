@@ -70,9 +70,7 @@ public class App {
 							while(scanner.hasNextLine()) {
 								try {
 									String line = scanner.nextLine();
-									int number = Integer.parseInt(line);
-									series.add(x++, 1023 - number);
-									win.repaint();
+									System.out.println(line);
 								} catch(Exception e) {}
 							}
 							scanner.close();
