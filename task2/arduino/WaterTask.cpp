@@ -45,7 +45,7 @@ void WaterTask::alarmStateHandler() {
 }
 
 double WaterTask::measureWaterLevel() {
-  Serial.print("Sonar = ");
+  //Serial.print("Sonar = ");
   Serial.println(sonar->measure());
   return sonar->measure();
 }
