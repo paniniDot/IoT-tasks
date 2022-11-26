@@ -24,7 +24,7 @@ void setup() {
   ServoTimer2* servo = new ServoTimer2();
   servo->attach(6);
   Task* t0 = new WaterTask(new Potentiometer(A0), servo);
-  Task* t1 = new LightTask(new PhotoResistor(A1), new Pir(9), new Led(3), new Led(4));
+  Task* t1 = new LightTask(new PhotoResistor(A1), new Pir(9), new Led(3));
   Task* t2 = new SonarTask(new Sonar(7, 8));
   t0->init(SCHED_PERIOD);
   t1->init(SCHED_PERIOD);
