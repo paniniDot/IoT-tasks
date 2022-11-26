@@ -1,15 +1,15 @@
 #ifndef __BUTTON__
 #define __BUTTON__
 
-class Button {
+class Button
+{
 
-  private:
-    int pin;
+private:
+  int pin;
 
-  public:
-    Button(int pin);
-    bool press();  
-
+public:
+  Button(int pin);
+  bool press();
 };
 
 #endif

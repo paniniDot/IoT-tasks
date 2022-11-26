@@ -1,16 +1,16 @@
 #ifndef __SONAR__
 #define __SONAR__
 
-class Sonar {
+class Sonar
+{
 
-  private:
-    int triggerPin;
-    int echoPin;
+private:
+  int triggerPin;
+  int echoPin;
 
-  public:
-    Sonar(int triggerPin, int echoPin);
-    double measure();  
-
+public:
+  Sonar(int triggerPin, int echoPin);
+  double measure();
 };
 
 #endif

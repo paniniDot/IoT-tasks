@@ -12,7 +12,7 @@ int servoPin = 4;
 #define fotoPin A0
 
 void readUltrasonicDistance()
-{ 
+{
   digitalWrite(triggerPin, LOW);
   delayMicroseconds(2);
   // Sets the trigger pin to HIGH state for 10 microseconds
@@ -26,19 +26,19 @@ void readUltrasonicDistance()
 }
 
 void readPir()
-{ 
+{
   if (digitalRead(pirPin) == HIGH) {
       Serial.println("rilevato");
   }
   // Questo IF permette di stabilire se non c'è più nessun movimento
   if (digitalRead(pirPin) == LOW) {
       Serial.println("non rilevo");      //output
-    
+
   }
 }
 
 void readfoto()
-{ 
+{
   Serial.println(analogRead(fotoPin));
 }
 

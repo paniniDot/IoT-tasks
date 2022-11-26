@@ -1,11 +1,13 @@
 #include "PhotoResistor.h"
 #include "Arduino.h"
 
-PhotoResistor::PhotoResistor(int pin){
+PhotoResistor::PhotoResistor(int pin)
+{
   this->pin = pin;
-  pinMode(pin,INPUT);
+  pinMode(pin, INPUT);
 }
 
- double PhotoResistor::measure(){
+double PhotoResistor::measure()
+{
   return analogRead(pin);
 };

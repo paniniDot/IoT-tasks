@@ -1,3 +1,3 @@
 #include "Utils.h"
-bool manual=false;
-double sonarMeasure=0;
+bool manual = false;
+double sonarMeasure = 0;

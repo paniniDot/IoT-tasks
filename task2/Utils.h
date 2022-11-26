@@ -6,40 +6,54 @@
 #define WL2 70
 #define WL_MAX 30
 #define THL 100
-#define T1 5000000 
+#define T1 5000000
 
 extern bool manual;
 extern double sonarMeasure;
-enum WaterState {
+enum WaterState
+{
   NORMAL,
   PRE_ALARM,
   ALARM
 };
 
-enum PeopleState {
+enum PeopleState
+{
   LIGHT_ON,
   LIGHT_OFF
 };
-class Utils {
+class Utils
+{
 
 public:
- 
-  static WaterState getWaterState(double waterLevel) {
-    if (waterLevel > WL_MAX && waterLevel <= WL2){
+  static WaterState getWaterState(double waterLevel)
+  {
+    if (waterLevel > WL_MAX && waterLevel <= WL2)
+    {
       return ALARM;
-    } else if (waterLevel > WL2 && waterLevel <= WL1) {
+    }
+    else if (waterLevel > WL2 && waterLevel <= WL1)
+    {
       return PRE_ALARM;
-    } else {
+    }
+    else
+    {
       return NORMAL;
-    } 
+    }
   }
 
-  static PeopleState getPeopleState(bool pir, double light, long ms) {
-    if ((pir && light < THL) || (!pir && ms < T1)) {
+  static PeopleState getPeopleState(bool pir, double light, long ms)
+  {
+    if ((pir && light < THL) || (!pir && ms < T1))
+    {
       return LIGHT_ON;
-    } else if ((!pir && ms >= T1) || (pir && light >= THL)) {
+    }
+    else if ((!pir && ms >= T1) || (pir && light >= THL))
+    {
       return LIGHT_OFF;
-    } else {
+    }
+    else
+    {
       Serial.println("Dio cacca");
       return LIGHT_OFF;
     }

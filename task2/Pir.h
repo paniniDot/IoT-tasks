@@ -1,15 +1,15 @@
 #ifndef __PIR__
 #define __PIR__
 
-class Pir {
+class Pir
+{
 
-  private:
-    int pin;
+private:
+  int pin;
 
-  public:
-    Pir(int pin);
-    bool getMotion();  
-
+public:
+  Pir(int pin);
+  bool getMotion();
 };
 
 #endif

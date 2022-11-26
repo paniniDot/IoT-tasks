@@ -12,20 +12,21 @@
 #include "SonarTask.h"
 #include <EnableInterrupt.h>
 
-#define SCHED_PERIOD 1000  //da aggiornare
+#define SCHED_PERIOD 1000 // da aggiornare
 
 Scheduler sched;
 long prevts = 0;
 
-void setup() {
+void setup()
+{
   Serial.begin(9600);
   enableInterrupt(2, interruptCheck, RISING);
   sched.init(SCHED_PERIOD);
-  ServoTimer2* servo = new ServoTimer2();
+  ServoTimer2 *servo = new ServoTimer2();
   servo->attach(6);
-  Task* t0 = new WaterTask(new Potentiometer(A0), servo);
-  Task* t1 = new LightTask(new PhotoResistor(A1), new Pir(9), new Led(3));
-  Task* t2 = new SonarTask(new Sonar(7, 8));
+  Task *t0 = new WaterTask(new Potentiometer(A0), servo);
+  Task *t1 = new LightTask(new PhotoResistor(A1), new Pir(9), new Led(3));
+  Task *t2 = new SonarTask(new Sonar(7, 8));
   t0->init(SCHED_PERIOD);
   t1->init(SCHED_PERIOD);
   t2->init(SCHED_PERIOD);
@@ -33,22 +34,28 @@ void setup() {
   sched.addTask(t1);
   sched.addTask(t2);
 }
-void interruptCheck() {
+void interruptCheck()
+{
   long ts = micros();
-  if (ts - prevts > 100000) {
+  if (ts - prevts > 100000)
+  {
     Serial.print("button = ");
     Serial.println(manual);
-    if (manual == false) {
+    if (manual == false)
+    {
       manual = true;
-    } else {
+    }
+    else
+    {
       manual = false;
     }
     prevts = ts;
   }
 }
 
-void loop() {
-  //noInterrupts();
+void loop()
+{
+  // noInterrupts();
   sched.schedule();
-  //interrupts();
+  // interrupts();
 }

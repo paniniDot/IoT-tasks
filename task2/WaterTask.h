@@ -6,11 +6,12 @@
 #include "Potentiometer.h"
 #include "ServoTimer2.h"
 
-class WaterTask : public Task {
+class WaterTask : public Task
+{
 
 private:
-  Potentiometer* pot;
-  ServoTimer2* servo;
+  Potentiometer *pot;
+  ServoTimer2 *servo;
   WaterState waterState;
 
   void normalStateHandler();
@@ -19,7 +20,7 @@ private:
   void updateState();
 
 public:
-  WaterTask(Potentiometer* pot, ServoTimer2* servo);
+  WaterTask(Potentiometer *pot, ServoTimer2 *servo);
   void init(int period);
   void tick();
 };

@@ -1,14 +1,16 @@
 #include "Sonar.h"
 #include "Arduino.h"
 
-Sonar::Sonar(int triggerPin, int echoPin){
+Sonar::Sonar(int triggerPin, int echoPin)
+{
   this->triggerPin = triggerPin;
   this->echoPin = echoPin;
-  pinMode(triggerPin,OUTPUT);
-  pinMode(echoPin,INPUT);
+  pinMode(triggerPin, OUTPUT);
+  pinMode(echoPin, INPUT);
 }
 
- double Sonar::measure(){
+double Sonar::measure()
+{
   digitalWrite(triggerPin, LOW);
   delayMicroseconds(2);
   // Sets the trigger pin to HIGH state for 10 microseconds

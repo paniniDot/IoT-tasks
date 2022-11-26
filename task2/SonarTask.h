@@ -5,16 +5,17 @@
 #include "Task.h"
 #include "Sonar.h"
 
-class SonarTask : public Task {
+class SonarTask : public Task
+{
 
 private:
-  Sonar* sonar;
+  Sonar *sonar;
   WaterState waterState;
   double measureWaterLevel();
   void updateState();
 
 public:
-  SonarTask(Sonar* sonar);
+  SonarTask(Sonar *sonar);
   void init(int period);
   void tick();
 };

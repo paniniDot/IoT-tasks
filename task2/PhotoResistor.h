@@ -1,15 +1,15 @@
 #ifndef __PHOTORESISTOR__
 #define __PHOTORESISTOR__
 
-class PhotoResistor {
+class PhotoResistor
+{
 
-  private:
-    int pin;
+private:
+  int pin;
 
-  public:
-    PhotoResistor(int pin);
-    double measure();  
-
+public:
+  PhotoResistor(int pin);
+  double measure();
 };
 
 #endif

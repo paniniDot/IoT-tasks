@@ -7,13 +7,14 @@
 #include "Pir.h"
 #include "Led.h"
 
-class LightTask : public Task {
+class LightTask : public Task
+{
 
 private:
-  PhotoResistor* pho;
-  Pir* pir;
+  PhotoResistor *pho;
+  Pir *pir;
   PeopleState peopleState;
-  Led* ledA;
+  Led *ledA;
   long prevs_time;
   void lightOn();
   void lightOff();
@@ -22,7 +23,7 @@ private:
   void updateState();
 
 public:
-  LightTask(PhotoResistor* pho, Pir* pir, Led* ledA);
+  LightTask(PhotoResistor *pho, Pir *pir, Led *ledA);
   void init(int period);
   void tick();
 };

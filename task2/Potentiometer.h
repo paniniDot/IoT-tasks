@@ -1,15 +1,15 @@
 #ifndef __POTENTIOMETER__
 #define __POTENTIOMETER__
 
-class Potentiometer {
+class Potentiometer
+{
 
-  private:
-    int pin;
+private:
+  int pin;
 
-  public:
-    Potentiometer(int pin);
-    double measure();  
-
+public:
+  Potentiometer(int pin);
+  double measure();
 };
 
 #endif
