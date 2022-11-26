@@ -32,14 +32,14 @@ void LightTask::lightOff() {
 }
 
 bool LightTask::CheckPeopleLevel() {
-  Serial.print("Pir = ");
-  Serial.println(pir->getMotion());
+  //Serial.print("Pir = ");
+  //Serial.println(pir->getMotion());
   return pir->getMotion();
 }
 
 double LightTask::CheckLightLevel() {
-  Serial.print("Pho = ");
-  Serial.println(pho->measure());
+  //Serial.print("Pho = ");
+  //Serial.println(pho->measure());
   return pho->measure();
 }
 
