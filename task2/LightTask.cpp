@@ -1,12 +1,10 @@
 #include "LightTask.h"
 #include "Arduino.h"
 
-LightTask::LightTask(PhotoResistor* pho, Pir* pir, Led* led1, Led* led2) {
+LightTask::LightTask(PhotoResistor* pho, Pir* pir, Led* ledA) {
   this->pho = pho;
   this->pir = pir;
-  this->led1 = led1;
-  this->led2 = led2;
-
+  this->ledA = ledA;
 }
 
 void LightTask::init(int period) {
@@ -27,10 +25,12 @@ void LightTask::tick() {
 }
 
 void LightTask::lightOn() {
+  ledA->switchOn();
   updateState();
 }
 
 void LightTask::lightOff() {
+  ledA->switchOff();
   updateState();
 }
 

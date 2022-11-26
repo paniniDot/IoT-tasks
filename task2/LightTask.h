@@ -13,8 +13,7 @@ private:
   PhotoResistor* pho;
   Pir* pir;
   PeopleState peopleState;
-  Led* led1;
-  Led* led2;
+  Led* ledA;
 
   void lightOn();
   void lightOff();
@@ -23,7 +22,7 @@ private:
   void updateState();
 
 public:
-  LightTask(PhotoResistor* pho, Pir* pir, Led* led1, Led* led2);
+  LightTask(PhotoResistor* pho, Pir* pir, Led* ledA);
   void init(int period);
   void tick();
 };
