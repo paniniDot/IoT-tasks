@@ -9,6 +9,7 @@ LightTask::LightTask(PhotoResistor* pho, Pir* pir, Led* ledA) {
 
 void LightTask::init(int period) {
   Task::init(period);
+  this->prevs_time = 0;
   peopleState = LIGHT_OFF;
 }
 
@@ -26,6 +27,11 @@ void LightTask::tick() {
 
 void LightTask::lightOn() {
   ledA->switchOn();
+  if(CheckPeopleLevel()==true){
+    long ts = micros();
+  this->prevs_time = ts;
+  }
+  
   updateState();
 }
 
@@ -47,5 +53,8 @@ double LightTask::CheckLightLevel() {
 }
 
 void LightTask::updateState() {
-  peopleState = Utils::getPeopleState(LightTask::CheckPeopleLevel(), LightTask::CheckLightLevel());
+  long ts = micros();
+  Serial.print("Time elapsed: ");
+  Serial.println(ts - this->prevs_time);
+  peopleState = Utils::getPeopleState(LightTask::CheckPeopleLevel(), LightTask::CheckLightLevel(), ts - this->prevs_time );
 }

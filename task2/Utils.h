@@ -2,12 +2,14 @@
 #define __UTILS__
 
 #include "State.h"
+#include "Arduino.h"
 
 #define WL1 100
 #define WL2 70
 #define WL_MAX 30
 #define THL 100
- 
+#define T1 5000000 
+
 extern bool manual;
 extern double sonarMeasure;
 
@@ -25,10 +27,13 @@ public:
     } 
   }
 
-  static PeopleState getPeopleState(bool pir, double light) {
-    if (pir == true && light < THL) {
+  static PeopleState getPeopleState(bool pir, double light, long ms) {
+    if ((pir && light < THL) || (!pir && ms < T1)) {
       return LIGHT_ON;
+    } else if ((!pir && ms >= T1) || (pir && light >= THL)) {
+      return LIGHT_OFF;
     } else {
+      Serial.println("Dio cacca");
       return LIGHT_OFF;
     }
   }
