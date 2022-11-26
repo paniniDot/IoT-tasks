@@ -7,7 +7,9 @@
 #define WL2 70
 #define WL_MAX 30
 #define THL 100
- extern bool manual;
+ 
+extern bool manual;
+
 class Utils {
 
 public:
