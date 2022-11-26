@@ -1,7 +1,5 @@
 #ifndef __UTILS__
 #define __UTILS__
-
-#include "State.h"
 #include "Arduino.h"
 
 #define WL1 100
@@ -12,7 +10,16 @@
 
 extern bool manual;
 extern double sonarMeasure;
+enum WaterState {
+  NORMAL,
+  PRE_ALARM,
+  ALARM
+};
 
+enum PeopleState {
+  LIGHT_ON,
+  LIGHT_OFF
+};
 class Utils {
 
 public:
