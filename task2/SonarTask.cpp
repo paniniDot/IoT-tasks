@@ -16,9 +16,10 @@ void SonarTask::tick() {
 double SonarTask::measureWaterLevel() {
   Serial.print("Sonar = ");
   Serial.println(sonar->measure());
+  sonarMeasure = sonar->measure();
   return sonar->measure();
 }
 
 void SonarTask::updateState() {
-  waterState = Utils::getWaterState(SonarTask::measureWaterLevel());
+  SonarTask::measureWaterLevel();
 }

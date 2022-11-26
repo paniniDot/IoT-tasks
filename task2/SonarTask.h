@@ -4,8 +4,6 @@
 #include "Utils.h"
 #include "Task.h"
 #include "Sonar.h"
-#include "Potentiometer.h"
-#include "ServoTimer2.h"
 
 class SonarTask : public Task {
 

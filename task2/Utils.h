@@ -9,6 +9,7 @@
 #define THL 100
  
 extern bool manual;
+extern double sonarMeasure;
 
 class Utils {
 

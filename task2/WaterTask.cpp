@@ -1,8 +1,7 @@
 #include "WaterTask.h"
 #include "Arduino.h"
 
-WaterTask::WaterTask(Sonar* sonar, Potentiometer* pot, ServoTimer2* servo) {
-  this->sonar = sonar;
+WaterTask::WaterTask(Potentiometer* pot, ServoTimer2* servo) {
   this->pot = pot;
   this->servo = servo;
 }
@@ -40,16 +39,10 @@ void WaterTask::preAlarmStateHandler() {
 }
 
 void WaterTask::alarmStateHandler() {
-  servo->write(map(sonar->measure(), 30, 70, 750, 2250));
+  servo->write(map(sonarMeasure, 30, 70, 750, 2250));
   updateState();
 }
 
-double WaterTask::measureWaterLevel() {
-  Serial.print("Sonar = ");
-  Serial.println(sonar->measure());
-  return sonar->measure();
-}
-
 void WaterTask::updateState() {
-  waterState = Utils::getWaterState(WaterTask::measureWaterLevel());
+  waterState = Utils::getWaterState(sonarMeasure);
 }
