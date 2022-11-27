@@ -28,7 +28,7 @@ class Utils
 public:
   static WaterState getWaterState()
   {
-    if (waterLevel <= WL2)
+    if (sonarMeasure <= WL2)
     {
       return ALARM;
     }
