@@ -6,12 +6,13 @@ class Led
 
 private:
   int pin;
+  bool on;
 
 public:
   Led(int pin);
   void switchOn();
   void switchOff();
-  void setIntensity(int v);
+  bool isOn();
 };
 
 #endif
