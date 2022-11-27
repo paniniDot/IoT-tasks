@@ -14,8 +14,8 @@ private:
   Potentiometer *pot;
   ServoTimer2 *servo;
   WaterState waterState;
-  Led* led1;
-  Led* led2;
+  Led* ledB;
+  Led* ledC;
 
   void normalStateHandler();
   void preAlarmStateHandler();
@@ -23,7 +23,7 @@ private:
   void updateState();
 
 public:
-  WaterTask(Potentiometer *pot, ServoTimer2 *servo,Led* led1,Led* led2);
+  WaterTask(Potentiometer *pot, ServoTimer2 *servo,Led* ledB,Led* ledC);
   void init(int period);
   void tick();
 };

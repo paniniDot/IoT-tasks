@@ -2,9 +2,9 @@
 #define __UTILS__
 #include "Arduino.h"
 
-#define WL1 100
-#define WL2 70
-#define WL_MAX 30
+#define WL1 30
+#define WL2 15
+#define WL_MAX 5
 #define THL 100
 #define T1 5000000
 
@@ -28,7 +28,7 @@ class Utils
 public:
   static WaterState getWaterState(double waterLevel)
   {
-    if (waterLevel > WL_MAX && waterLevel <= WL2)
+    if (waterLevel <= WL2)
     {
       return ALARM;
     }
