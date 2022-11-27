@@ -4,20 +4,21 @@
 #include "Utils.h"
 #include "Task.h"
 #include "Sonar.h"
+#include "Subject.h"
 
-class SonarTask : public Task
-{
+class SonarTask : public Task, public Subject {
 
 private:
   Sonar *sonar;
-  WaterState waterState;
   double measureWaterLevel();
-  void updateState();
+  void notify();
 
 public:
   SonarTask(Sonar *sonar);
   void init(int period);
   void tick();
+  void attach(Observer* o);
+  void detach(Observer* o);
 };
 
 #endif
