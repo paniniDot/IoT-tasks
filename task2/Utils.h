@@ -26,13 +26,13 @@ class Utils
 {
 
 public:
-  static WaterState getWaterState(double waterLevel)
+  static WaterState getWaterState()
   {
-    if (waterLevel > WL_MAX && waterLevel <= WL2)
+    if (sonarMeasure > WL_MAX && sonarMeasure <= WL2)
     {
       return ALARM;
     }
-    else if (waterLevel > WL2 && waterLevel <= WL1)
+    else if (sonarMeasure > WL2 && sonarMeasure <= WL1)
     {
       return PRE_ALARM;
     }
@@ -44,7 +44,10 @@ public:
 
   static PeopleState getPeopleState(bool pir, double light, long ms)
   {
-    if ((pir && light < THL) || (!pir && ms < T1))
+    if(sonarMeasure < WL_MAX){
+      return LIGHT_OFF;
+    }
+    else if ((pir && light < THL) || (!pir && ms < T1))
     {
       return LIGHT_ON;
     }
@@ -53,8 +56,7 @@ public:
       return LIGHT_OFF;
     }
     else
-    {
-      Serial.println("Dio cacca");
+    {      
       return LIGHT_OFF;
     }
   }

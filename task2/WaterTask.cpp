@@ -61,5 +61,5 @@ void WaterTask::alarmStateHandler()
 
 void WaterTask::updateState()
 {
-  waterState = Utils::getWaterState(sonarMeasure);
+  waterState = Utils::getWaterState();
 }
