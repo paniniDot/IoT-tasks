@@ -17,7 +17,6 @@ void LightTask::init(int period)
 
 void LightTask::tick()
 {
-  /*Serial.println(pot->measure());*/
   switch (peopleState)
   {
   case LIGHT_OFF:

@@ -24,7 +24,7 @@ void setup()
   sched.init(SCHED_PERIOD);
   ServoTimer2 *servo = new ServoTimer2();
   servo->attach(6);
-  Task *t0 = new WaterTask(new Potentiometer(A0), servo);
+  Task *t0 = new WaterTask(new Potentiometer(A0), servo, new Led(9), new Led(10));
   Task *t1 = new LightTask(new PhotoResistor(A1), new Pir(9), new Led(3));
   Task *t2 = new SonarTask(new Sonar(7, 8));
   t0->init(SCHED_PERIOD);
@@ -37,7 +37,7 @@ void setup()
 void interruptCheck()
 {
   long ts = micros();
-  if (ts - prevts > 100000)
+  if (ts - prevts > 1000000)
   {
     Serial.print("button = ");
     Serial.println(manual);

@@ -1,10 +1,13 @@
 #include "WaterTask.h"
 #include "Arduino.h"
 
-WaterTask::WaterTask(Potentiometer *pot, ServoTimer2 *servo)
+WaterTask::WaterTask(Potentiometer *pot, ServoTimer2 *servo,Led* led1,Led* led2)
 {
   this->pot = pot;
   this->servo = servo;
+  this->led1=led1;
+  this->led2=led2;
+
 }
 
 void WaterTask::init(int period)
@@ -32,6 +35,8 @@ void WaterTask::tick()
   }
   else
   {
+    Serial.print("POT = ");
+    Serial.println(pot->measure());
     servo->write(map(pot->measure(), 0, 1023, 750, 2250));
   }
 }
