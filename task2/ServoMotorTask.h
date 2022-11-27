@@ -5,7 +5,7 @@
 #include "Observer.h"
 #include "ServoTimer2.h"
 
-class ServoMotorTask : public Task, public Observer {
+class ServoMotorTask : public Task, public Observer<double> {
 
     private:
         ServoTimer2 *servo;

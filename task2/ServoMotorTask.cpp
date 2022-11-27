@@ -19,5 +19,5 @@ void ServoMotorTask::tick(){
 }
 
 void ServoMotorTask::update(Event<double> *e){
-  this->currentAngle = e->getData();
+  this->currentAngle = e->getEventArgs();
 }
