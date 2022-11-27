@@ -9,13 +9,28 @@ template <typename T>
 
 class Subject {
     private:
-        Observer* observers[INITIAL_OBSERVERS];
+        Observer<T>* observers[INITIAL_OBSERVERS];
         int nObservers;
 
     public:
-        virtual void attach(Observer* o) = 0;
-        virtual void detach(Observer* o) = 0;
+        void attach(Observer<T>* o) {
+            this->observers[this->nObservers] = o;
+            this->nObservers++;
+        }
+        void detach(Observer<T>* o) {
+            for (int i = 0; i < this->nObservers; i++) {
+                if (this->observers[i] == o) {
+                    this->observers[i] = this->observers[this->nObservers - 1];
+                    this->nObservers--;
+                    break;
+                }
+            }
+        }
         virtual void notify() = 0;
+
+        Observer<T> **getObservers() {
+            return this->observers;
+        }
 };
 
 #endif
