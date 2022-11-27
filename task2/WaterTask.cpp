@@ -59,7 +59,7 @@ void WaterTask::preAlarmStateHandler()
   } else {
     this->ledC->switchOn();
   }
-  servo->write(750);
+  //servo->write(750);
   updateState();
 }
 
@@ -68,7 +68,7 @@ void WaterTask::alarmStateHandler()
   Serial.println("ALARM");
   this->ledB->switchOff();
   this->ledC->switchOn();
-  servo->write(map(sonarMeasure, 30, 70, 750, 2250));
+  //servo->write(map(sonarMeasure, 30, 70, 750, 2250));
   updateState();
 }
 
