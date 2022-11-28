@@ -4,8 +4,10 @@
 #include "Task.h"
 #include "Observer.h"
 #include "ServoTimer2.h"
+#include "Subject.h"
+#include "LcdEventArg.h"
 
-class ServoMotorTask : public Task, public Observer<double> {
+class ServoMotorTask : public Task, public Observer<double>, public Subject<LcdEventArg> {
 
     private:
         ServoTimer2 *servo;
