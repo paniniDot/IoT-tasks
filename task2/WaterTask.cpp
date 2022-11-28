@@ -1,13 +1,11 @@
 #include "WaterTask.h"
 #include "Arduino.h"
 
-WaterTask::WaterTask(Potentiometer *pot, ServoTimer2 *servo,Led* ledB,Led* ledC)
+WaterTask::WaterTask(Potentiometer *pot, Led* ledB,Led* ledC)
 {
   this->pot = pot;
-  this->servo = servo;
   this->ledB=ledB;
   this->ledC=ledC;
-
 }
 
 void WaterTask::init(int period)
@@ -33,12 +31,6 @@ void WaterTask::tick()
       break;
     }
   }
-  else
-  {
-    Serial.print("POT = ");
-    Serial.println(pot->measure());
-    servo->write(map(pot->measure(), 0, 1023, 750, 2250));
-  }
 }
 
 void WaterTask::normalStateHandler()
@@ -46,7 +38,6 @@ void WaterTask::normalStateHandler()
   Serial.println("NORMAL");
   this->ledB->switchOn();
   this->ledC->switchOff();
-  servo->write(750);
   updateState();
 }
 
@@ -59,7 +50,6 @@ void WaterTask::preAlarmStateHandler()
   } else {
     this->ledC->switchOn();
   }
-  //servo->write(750);
   updateState();
 }
 
@@ -68,7 +58,6 @@ void WaterTask::alarmStateHandler()
   Serial.println("ALARM");
   this->ledB->switchOff();
   this->ledC->switchOn();
-  //servo->write(map(sonarMeasure, 30, 70, 750, 2250));
   updateState();
 }
 
