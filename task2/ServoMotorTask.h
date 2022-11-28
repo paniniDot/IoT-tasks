@@ -9,7 +9,7 @@ class ServoMotorTask : public Task, public Observer<double> {
 
     private:
         ServoTimer2 *servo;
-        int currentAngle;
+        double currentAngle;
 
     public:
         ServoMotorTask(ServoTimer2 *servo);

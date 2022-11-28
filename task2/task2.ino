@@ -37,7 +37,7 @@ void setup()
   sched.addTask(t1);
   sched.addTask(t2);
   sched.addTask(t3);
-  (Subject*) t2->attach(t3);
+  t2->attach(t3);
 }
 void interruptCheck()
 {

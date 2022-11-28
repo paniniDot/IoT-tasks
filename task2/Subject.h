@@ -13,11 +13,11 @@ class Subject {
         int nObservers;
 
     public:
-        void attach(Observer<T>* o) {
+        virtual void attach(Observer<T>* o) {
             this->observers[this->nObservers] = o;
             this->nObservers++;
         }
-        void detach(Observer<T>* o) {
+        virtual void detach(Observer<T>* o) {
             for (int i = 0; i < this->nObservers; i++) {
                 if (this->observers[i] == o) {
                     this->observers[i] = this->observers[this->nObservers - 1];
@@ -30,6 +30,10 @@ class Subject {
 
         Observer<T> **getObservers() {
             return this->observers;
+        }
+
+        int getNObservers() {
+            return this->nObservers;
         }
 };
 

@@ -27,9 +27,9 @@ double SonarTask::measureWaterLevel()
 
 void SonarTask::notify()
 {
-  std::double *d = &this->measureWaterLevel();
-  Event<double> *e = new Event<double>(d);
-  for (auto observer : this->*getObservers()) {
-    observer->update(e);
+  Event<double> *e = new Event<double>(new double(this->measureWaterLevel()));
+
+  for(int i = 0; i < this->getNObservers(); i++) {
+    this->getObservers()[i]->update(e);
   }
 }
