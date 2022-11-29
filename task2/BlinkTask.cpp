@@ -1,15 +1,14 @@
 #include "HardwareSerial.h"
 #include "BlinkTask.h"
 
-BlinkTask::BlinkTask(int pin)
+BlinkTask::BlinkTask(Led *led)
 {
-  this->pin = pin;
+  this->led = led;
 }
 
 void BlinkTask::init(int period)
 {
   Task::init(period);
-  led = new Led(pin);
   state = OFF;
 }
 
@@ -20,21 +19,21 @@ void BlinkTask::tick()
   switch (state)
     {
     case OFF:
-      led->switchOn();
+      this->led->switchOn();
       state = ON;
       break;
     case ON:
-      led->switchOff();
+      this->led->switchOff();
       state = OFF;
       break;
     }
   }
   else if (waterState == ALARM)
   {
-    led->switchOn();
+    this->led->switchOn();
   }
   else if (waterState == NORMAL)
   {
-    led->switchOff();
+    this->led->switchOff();
   }
 }

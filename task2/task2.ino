@@ -32,7 +32,7 @@ void setup()
   t0->init(SCHED_PERIOD);
   t1->init(SCHED_PERIOD);
   t2->init(SCHED_PERIOD);
-  t3->init(2000);
+  t3->init(SCHED_PERIOD);
   sched.addTask(t0);
   sched.addTask(t1);
   sched.addTask(t2);
