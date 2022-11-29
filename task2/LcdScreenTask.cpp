@@ -3,7 +3,7 @@
 
 LcdScreenTask::LcdScreenTask(LiquidCrystal_I2C* screen) {
     this->lcd = screen;
-    this->servoMeasure = 0;
+    this->servoMeasure = 0.0;
     this->sonarMeasure = 0.0;
     this->lcd->begin();
     this->lcd->backlight();
@@ -22,9 +22,10 @@ void LcdScreenTask::tick() {
 
 void LcdScreenTask::update(Event<double> *e) {
     EventSourceType src = e->getSrcType();
+    double value = *e->getEventArgs();
     if (src == EventSourceType::SERVO) {
-        this->servoMeasure = *e->getEventArgs();
+        this->servoMeasure = value;
     } else if (src == EventSourceType::SONAR) {
-        this->sonarMeasure = *e->getEventArgs();
+        this->sonarMeasure = value;
     }
 }
