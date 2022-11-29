@@ -11,6 +11,7 @@
 #include "Led.h"
 #include "SonarTask.h"
 #include "ServoMotorTask.h"
+#include "LcdScreenTask.h"
 #include <EnableInterrupt.h>
 
 #define SCHED_PERIOD 1000 // da aggiornare
@@ -24,20 +25,25 @@ void setup()
   enableInterrupt(2, interruptCheck, RISING);
   sched.init(SCHED_PERIOD);
   ServoTimer2 *servo = new ServoTimer2();
-  servo->attach(6);
-  Task *t0 = new WaterTask(new Potentiometer(A0), new Led(4), new Led(11));
-  Task *t1 = new LightTask(new PhotoResistor(A1), new Pir(9), new Led(3));
+  servo->attach(5);
+  Task *t0 = new WaterTask(new Potentiometer(A3), new Led(6), new Led(9));
+  Task *t1 = new LightTask(new PhotoResistor(A2), new Pir(11), new Led(10));
   SonarTask *t2 = new SonarTask(new Sonar(7, 8));
   ServoMotorTask *t3 = new ServoMotorTask(servo);
+  LcdScreenTask *t4 = new LcdScreenTask(new LiquidCrystal_I2C(0x3F, 16, 2));
   t0->init(SCHED_PERIOD);
   t1->init(SCHED_PERIOD);
   t2->init(SCHED_PERIOD);
   t3->init(SCHED_PERIOD);
+  t4->init(SCHED_PERIOD);
   sched.addTask(t0);
   sched.addTask(t1);
   sched.addTask(t2);
   sched.addTask(t3);
+  sched.addTask(t4);
   t2->attach(t3);
+  t2->attach(t4);
+  t3->attach(t4);
 }
 void interruptCheck()
 {
