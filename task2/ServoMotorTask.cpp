@@ -16,8 +16,16 @@ void ServoMotorTask::init(int period){
 
 void ServoMotorTask::tick(){
     this->servo->write(map(this->currentAngle, WL2, WL_MAX, MIN_ANGLE, MAX_ANGLE));
+    this->notify();
 }
 
 void ServoMotorTask::update(Event<double> *e){
   this->currentAngle = *e->getEventArgs();
+}
+
+void ServoMotorTask::notify() {
+  Event<double> *e = new Event<double>(EventSourceType::SERVO, new double(this->servo->read()));
+  for(int i = 0; i < this->getNObservers(); i++) {
+    this->getObservers()[i]->update(e);
+  }
 }

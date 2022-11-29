@@ -5,13 +5,14 @@
 #include "Observer.h"
 #include "ServoTimer2.h"
 #include "Subject.h"
-#include "LcdEventArg.h"
+#include "EventSourceType.h"
 
-class ServoMotorTask : public Task, public Observer<double>, public Subject<LcdEventArg> {
+class ServoMotorTask : public Task, public Observer<double>, public Subject<double> {
 
     private:
         ServoTimer2 *servo;
         double currentAngle;
+        void notify();
 
     public:
         ServoMotorTask(ServoTimer2 *servo);
