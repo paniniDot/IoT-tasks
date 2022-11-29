@@ -4,11 +4,11 @@
 #include "Task.h"
 #include "Observer.h"
 #include "LiquidCrystal_I2C.h"
-#include "LcdEventArg.h"
+#include "EventSourceType.h"
 
-class LcdScreenTask : public Task, public Observer<LcdEventArg> {
+class LcdScreenTask : public Task, public Observer<double> {
     private:
-        LiquidCrystal_I2C *lcdScreen;
+        LiquidCrystal_I2C *lcd;
         double sonarMeasure;
         double servoMeasure;
 
@@ -16,7 +16,7 @@ class LcdScreenTask : public Task, public Observer<LcdEventArg> {
         LcdScreenTask(LiquidCrystal_I2C *lcdScreen);
         void init(int period);
         void tick();
-        void update(Event<LcdEventArg> *e);
+        void update(Event<double> *e);
 };
 
 #endif
