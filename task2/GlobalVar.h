@@ -3,7 +3,7 @@
 #include "Utils.h"
 extern bool manual;
 extern double sonarMeasure;
-extern WaterState waterstate;
+extern WaterState waterState;
 extern PeopleState peopleState;
 
 #endif

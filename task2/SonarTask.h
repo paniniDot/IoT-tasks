@@ -11,7 +11,6 @@ class SonarTask : public Task
 
 private:
   Sonar *sonar;
-  WaterState waterState;
   double measureWaterLevel();
   void updateState();
 

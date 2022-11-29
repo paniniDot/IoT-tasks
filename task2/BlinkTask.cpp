@@ -11,7 +11,7 @@ void BlinkTask::init(int period){
 }
   
 void BlinkTask::tick(){
-  if(waterstate==PRE_ALARM)
+  if(waterState==PRE_ALARM)
   switch (state){
     case OFF:
       led->switchOn();

@@ -5,6 +5,7 @@
 #include "Task.h"
 #include "Potentiometer.h"
 #include "ServoTimer2.h"
+#include "GlobalVar.h"
 
 #include "Led.h"
 
@@ -14,7 +15,6 @@ class WaterTask : public Task
 private:
   Potentiometer *pot;
   ServoTimer2 *servo;
-  WaterState waterState;
   Led *ledB;
   Led *ledC;
 

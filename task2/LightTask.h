@@ -14,7 +14,6 @@ class LightTask : public Task
 private:
   PhotoResistor *pho;
   Pir *pir;
-  PeopleState peopleState;
   Led *ledA;
   long prevs_time;
   void lightOn();
