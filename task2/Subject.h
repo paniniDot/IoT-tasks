@@ -5,17 +5,19 @@
 
 template <typename T>
 
-#define INITIAL_OBSERVERS 10
+#define MAX_OBSERVERS 10
 
 class Subject {
     private:
-        Observer<T>* observers[INITIAL_OBSERVERS];
-        int nObservers;
+        Observer<T>* observers[MAX_OBSERVERS];
+        int nObservers = 0;
 
     public:
         virtual void attach(Observer<T>* o) {
-            this->observers[this->nObservers] = o;
-            this->nObservers++;
+            if (this->nObservers < MAX_OBSERVERS - 1) {
+                this->observers[this->nObservers] = o;
+                this->nObservers++;
+            }
         }
         virtual void detach(Observer<T>* o) {
             for (int i = 0; i < this->nObservers; i++) {
