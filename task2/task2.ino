@@ -14,6 +14,8 @@
 #include "LcdScreenTask.h"
 #include <EnableInterrupt.h>
 
+#include "MemoryFree.h"
+
 #define SCHED_PERIOD 1000 // da aggiornare
 
 Scheduler sched;
@@ -66,6 +68,9 @@ void interruptCheck()
 
 void loop()
 {
+  Serial.print("Free memory = ");
+  Serial.println(freeMemory());
+
   // noInterrupts();
   sched.schedule();
   // interrupts();
