@@ -57,7 +57,7 @@ public class App {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				if (portList.getItemCount() > 0 && e.getSource().equals(connectBtn) & !connected) {
+				if (portList.getItemCount() > 0 && !connected) {
 					connected = true;
 					port = SerialPort.getCommPort(portList.getSelectedItem().toString());
 					port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
@@ -75,7 +75,8 @@ public class App {
 									String line = scanner.nextLine();
 									System.out.println(line);
 									double number = Double.parseDouble(line);
-									series.add(x++, 1023 - number);
+									System.err.println(number);
+									series.add(x++, number);
 									win.repaint();
 								} catch(Exception e) {}
 							}
