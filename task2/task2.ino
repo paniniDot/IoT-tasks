@@ -11,6 +11,7 @@
 #include "Button.h"
 #include "Led.h"
 #include "SonarTask.h"
+#include "PrintTask.h"
 #include <EnableInterrupt.h>
 
 #define SCHED_PERIOD 1000 // da aggiornare
@@ -29,14 +30,17 @@ void setup()
   Task *t1 = new LightTask(new PhotoResistor(A1), new Pir(9), new Led(3));
   Task *t2 = new SonarTask(new Sonar(7, 8));
   Task *t3 = new BlinkTask(new Led(11));
+  Task *t4 = new PrintTask();
   t0->init(SCHED_PERIOD);
   t1->init(SCHED_PERIOD);
   t2->init(SCHED_PERIOD);
   t3->init(SCHED_PERIOD);
+  t4->init(SCHED_PERIOD);
   sched.addTask(t0);
   sched.addTask(t1);
   sched.addTask(t2);
   sched.addTask(t3);
+  sched.addTask(t4);
 }
 void interruptCheck()
 {

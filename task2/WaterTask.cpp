@@ -1,8 +1,6 @@
 #include "WaterTask.h"
 #include "Arduino.h"
 #include "GlobalVar.h"
-#include "LiquidCrystal_I2C.h"
-LiquidCrystal_I2C lcd(0x3F, 16, 2);
 WaterTask::WaterTask(Potentiometer *pot, ServoTimer2 *servo, Led *led)
 {
   this->pot = pot;
@@ -14,15 +12,11 @@ void WaterTask::init(int period)
 {
   Task::init(period);
   waterState = NORMAL;
-  lcd.begin();
-  lcd.backlight();
-  lcd.setCursor(0, 1);
-  lcd.print("Hello, world!");
 }
 
 void WaterTask::tick()
 {
-  lcd.clear();
+  
   if (manual == false)
   {
     switch (waterState)
@@ -56,8 +50,6 @@ void WaterTask::normalStateHandler()
 
 void WaterTask::preAlarmStateHandler()
 {
-  lcd.setCursor(0, 0);
-  lcd.print(sonarMeasure);
   Serial.println("PRE_ALARM");
   this->led->switchOn();
   servo->write(750);
@@ -66,10 +58,6 @@ void WaterTask::preAlarmStateHandler()
 
 void WaterTask::alarmStateHandler()
 {
-  lcd.setCursor(0, 0);
-  lcd.print(sonarMeasure);
-  lcd.setCursor(0, 1);
-  lcd.print(map(sonarMeasure, WL_MAX, WL2, 750, 2250));
   Serial.println("ALARM");
   this->led->switchOff();
   servo->write(map(sonarMeasure, WL_MAX, WL2, 750, 2250));
