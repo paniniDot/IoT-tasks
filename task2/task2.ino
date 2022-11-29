@@ -22,14 +22,14 @@ long prevts = 0;
 void setup()
 {
   Serial.begin(9600);
-  enableInterrupt(2, interruptCheck, RISING);
+  enableInterrupt(4, interruptCheck, RISING);
   sched.init(SCHED_PERIOD);
   ServoTimer2 *servo = new ServoTimer2();
-  servo->attach(6);
-  Task *t0 = new WaterTask(new Potentiometer(A0), servo, new Led(4));
-  Task *t1 = new LightTask(new PhotoResistor(A1), new Pir(9), new Led(3));
+  servo->attach(5);
+  Task *t0 = new WaterTask(new Potentiometer(A3), servo, new Led(6));
+  Task *t1 = new LightTask(new PhotoResistor(A2), new Pir(11), new Led(10));
   Task *t2 = new SonarTask(new Sonar(7, 8));
-  Task *t3 = new BlinkTask(new Led(11));
+  Task *t3 = new BlinkTask(new Led(9));
   Task *t4 = new PrintTask();
   t0->init(SCHED_PERIOD);
   t1->init(SCHED_PERIOD);
