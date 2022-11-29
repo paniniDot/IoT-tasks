@@ -52,10 +52,13 @@ public class App {
     		
     		SerialPort port;
     		int x;
+    		boolean connected = false;
+    		
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				if (portList.getItemCount() > 0 && e.getSource().equals(connectBtn)) {
+				if (portList.getItemCount() > 0 && e.getSource().equals(connectBtn) & !connected) {
+					connected = true;
 					port = SerialPort.getCommPort(portList.getSelectedItem().toString());
 					port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
 					if(port.openPort()) {
@@ -70,10 +73,10 @@ public class App {
 							while(scanner.hasNextLine()) {
 								try {
 									String line = scanner.nextLine();
-									int number = Integer.parseInt(line);
+									System.out.println(line);
+									double number = Double.parseDouble(line);
 									series.add(x++, 1023 - number);
 									win.repaint();
-									System.out.println(line);
 								} catch(Exception e) {}
 							}
 							scanner.close();
@@ -87,6 +90,7 @@ public class App {
 					connectBtn.setText("Connect");
 					series.clear();
 					x = 0;
+					connected = false;
 				}
 			}
     		
