@@ -1,6 +1,6 @@
 #ifndef __GLOBALVAR__
 #define __GLOBALVAR__
-#include "State.h"
+#include "Utils.h"
 extern bool manual;
 extern double sonarMeasure;
 extern WaterState waterstate;
