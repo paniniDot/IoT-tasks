@@ -26,13 +26,13 @@ class Utils
 {
 
 public:
-  static WaterState getWaterState()
+  static WaterState getWaterState(double currentWaterLevel)
   {
-    if (sonarMeasure <= WL2)
+    if (currentWaterLevel <= WL2)
     {
       return ALARM;
     }
-    else if (sonarMeasure > WL2 && sonarMeasure <= WL1)
+    else if (currentWaterLevel > WL2 && currentWaterLevel <= WL1)
     {
       return PRE_ALARM;
     }
