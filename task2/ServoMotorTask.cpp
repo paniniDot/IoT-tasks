@@ -1,5 +1,4 @@
 #include "ServoMotorTask.h"
-#include "Arduino.h"
 #include "Utils.h"
 
 #define MIN_ANGLE 750
@@ -28,4 +27,5 @@ void ServoMotorTask::notify() {
   for(int i = 0; i < this->getNObservers(); i++) {
     this->getObservers()[i]->update(e);
   }
+  delete e;
 }
