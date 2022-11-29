@@ -29,7 +29,7 @@ void setup() {
   sched.addTask(t1);
 }
 void interruptCheck() {
-  Serial.print("button = ");
+  //Serial.print("button = ");
   Serial.println(manual);
   if(manual == false){
     manual = true;

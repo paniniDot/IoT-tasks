@@ -5,8 +5,8 @@ Pir::Pir(int pin){
   this->pin = pin;
   pinMode(pin,INPUT);
     for (int i = 0; i < 5; i++) {
-    Serial.print(i);
-    Serial.print(" ");
+    //Serial.print(i);
+    //Serial.print(" ");
     delay(1000);
   }
 }
