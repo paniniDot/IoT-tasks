@@ -65,5 +65,5 @@ void LightTask::updateState()
   long ts = micros();
   Serial.print("Time elapsed: ");
   Serial.println(ts - this->prevs_time);
-  peopleState = Utils::getPeopleState(LightTask::CheckPeopleLevel(), LightTask::CheckLightLevel(), ts - this->prevs_time);
+  peopleState = Utils::getPeopleState(LightTask::CheckPeopleLevel(), LightTask::CheckLightLevel(), ts - this->prevs_time, sonarMeasure);
 }

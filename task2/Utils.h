@@ -7,9 +7,6 @@
 #define WL_MAX 5
 #define THL 100
 #define T1 5000000
-
-extern bool manual;
-extern double sonarMeasure;
 enum WaterState
 {
   NORMAL,
@@ -26,7 +23,7 @@ class Utils
 {
 
 public:
-  static WaterState getWaterState()
+  static WaterState getWaterState(double sonarMeasure)
   {
     if (sonarMeasure <= WL2)
     {
@@ -42,7 +39,7 @@ public:
     }
   }
 
-  static PeopleState getPeopleState(bool pir, double light, long ms)
+  static PeopleState getPeopleState(bool pir, double light, long ms,double sonarMeasure)
   {
     if(sonarMeasure < WL_MAX){
       return LIGHT_OFF;

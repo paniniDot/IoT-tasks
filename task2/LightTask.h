@@ -4,6 +4,7 @@
 #include "Utils.h"
 #include "Task.h"
 #include "PhotoResistor.h"
+#include "GlobalVar.h"
 #include "Pir.h"
 #include "Led.h"
 
