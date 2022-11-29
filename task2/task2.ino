@@ -22,7 +22,7 @@ long prevts = 0;
 void setup()
 {
   Serial.begin(9600);
-  enableInterrupt(2, interruptCheck, RISING);
+  enableInterrupt(4, interruptCheck, RISING);
   sched.init(SCHED_PERIOD);
   ServoTimer2 *servo = new ServoTimer2();
   servo->attach(5);
