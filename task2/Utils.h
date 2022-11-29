@@ -39,9 +39,10 @@ public:
     }
   }
 
-  static PeopleState getPeopleState(bool pir, double light, long ms,double sonarMeasure)
+  static PeopleState getPeopleState(bool pir, double light, long ms, double sonarMeasure)
   {
-    if(sonarMeasure < WL_MAX){
+    if (sonarMeasure < WL_MAX)
+    {
       return LIGHT_OFF;
     }
     else if ((pir && light < THL) || (!pir && ms < T1))
@@ -53,7 +54,7 @@ public:
       return LIGHT_OFF;
     }
     else
-    {      
+    {
       return LIGHT_OFF;
     }
   }

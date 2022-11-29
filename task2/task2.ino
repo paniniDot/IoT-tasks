@@ -4,6 +4,7 @@
 #include "PhotoResistor.h"
 #include "WaterTask.h"
 #include "LightTask.h"
+#include "BlinkTask.h"
 #include "Pir.h"
 #include "Arduino.h"
 #include "ServoTimer2.h"
@@ -24,15 +25,18 @@ void setup()
   sched.init(SCHED_PERIOD);
   ServoTimer2 *servo = new ServoTimer2();
   servo->attach(6);
-  Task *t0 = new WaterTask(new Potentiometer(A0), servo, new Led(4), new Led(11));
+  Task *t0 = new WaterTask(new Potentiometer(A0), servo, new Led(4));
   Task *t1 = new LightTask(new PhotoResistor(A1), new Pir(9), new Led(3));
   Task *t2 = new SonarTask(new Sonar(7, 8));
+  Task *t3 = new BlinkTask(new Led(11));
   t0->init(SCHED_PERIOD);
   t1->init(SCHED_PERIOD);
   t2->init(SCHED_PERIOD);
+  t3->init(SCHED_PERIOD);
   sched.addTask(t0);
   sched.addTask(t1);
   sched.addTask(t2);
+  sched.addTask(t3);
 }
 void interruptCheck()
 {

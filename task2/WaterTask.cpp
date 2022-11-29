@@ -3,12 +3,11 @@
 #include "GlobalVar.h"
 #include "LiquidCrystal_I2C.h"
 LiquidCrystal_I2C lcd(0x3F, 16, 2);
-WaterTask::WaterTask(Potentiometer *pot, ServoTimer2 *servo, Led *ledB, Led *ledC)
+WaterTask::WaterTask(Potentiometer *pot, ServoTimer2 *servo, Led *led)
 {
   this->pot = pot;
   this->servo = servo;
-  this->ledB = ledB;
-  this->ledC = ledC;
+  this->led = led;
 }
 
 void WaterTask::init(int period)
@@ -50,8 +49,7 @@ void WaterTask::tick()
 void WaterTask::normalStateHandler()
 {
   Serial.println("NORMAL");
-  this->ledB->switchOn();
-  this->ledC->switchOff();
+  this->led->switchOn();
   servo->write(750);
   updateState();
 }
@@ -61,15 +59,7 @@ void WaterTask::preAlarmStateHandler()
   lcd.setCursor(0, 0);
   lcd.print(sonarMeasure);
   Serial.println("PRE_ALARM");
-  this->ledB->switchOn();
-  if (this->ledC->isOn())
-  {
-    this->ledC->switchOff();
-  }
-  else
-  {
-    this->ledC->switchOn();
-  }
+  this->led->switchOn();
   servo->write(750);
   updateState();
 }
@@ -81,8 +71,7 @@ void WaterTask::alarmStateHandler()
   lcd.setCursor(0, 1);
   lcd.print(map(sonarMeasure, WL_MAX, WL2, 750, 2250));
   Serial.println("ALARM");
-  this->ledB->switchOff();
-  this->ledC->switchOn();
+  this->led->switchOff();
   servo->write(map(sonarMeasure, WL_MAX, WL2, 750, 2250));
   updateState();
 }

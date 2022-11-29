@@ -1,11 +1,13 @@
 #include "Button.h"
 #include "Arduino.h"
 
-Button::Button(int pin){
+Button::Button(int pin)
+{
   this->pin = pin;
-  pinMode(pin,INPUT);
+  pinMode(pin, INPUT);
 }
 
- bool Button::press(){
+bool Button::press()
+{
   return digitalRead(pin);
 };
