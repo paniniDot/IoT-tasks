@@ -288,8 +288,4 @@ void LiquidCrystal_I2C::printstr(const char c[])
 	// This function is not identical to the function used for "real" I2C displays
 	// it's here so the user sketch doesn't have to be changed
 	print(c);
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> develop/observer

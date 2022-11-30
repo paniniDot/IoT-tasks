@@ -16,11 +16,8 @@ void WaterTask::init(int period)
 
 void WaterTask::tick()
 {
-  
-  if (manual == false)
+  switch (this->waterState)
   {
-    switch (this->waterState)
-    {
     case NORMAL:
       normalStateHandler();
       break;
@@ -30,8 +27,23 @@ void WaterTask::tick()
     case ALARM:
       alarmStateHandler();
       break;
-    }
   }
+
+  // if (manual == false)
+  // {
+  //   switch (this->waterState)
+  //   {
+  //   case NORMAL:
+  //     normalStateHandler();
+  //     break;
+  //   case PRE_ALARM:
+  //     preAlarmStateHandler();
+  //     break;
+  //   case ALARM:
+  //     alarmStateHandler();
+  //     break;
+  //   }
+  // }
   this->notify();
 }
 

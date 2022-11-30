@@ -3,6 +3,7 @@
 #include "Potentiometer.h"
 #include "PhotoResistor.h"
 #include "WaterTask.h"
+#include "LightTask.h"
 #include "Pir.h"
 #include "Arduino.h"
 #include "ServoTimer2.h"
@@ -20,6 +21,8 @@
 
 Scheduler sched;
 long prevts = 0;
+/* temporary solution to avoid errors */
+bool manual = false;
 
 void setup()
 {
