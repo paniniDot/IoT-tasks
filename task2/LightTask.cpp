@@ -13,18 +13,23 @@ void LightTask::init(int period)
   Task::init(period);
   this->prevs_time = 0;
   peopleState = LIGHT_OFF;
+  this->waterState = WaterState::NORMAL;
 }
 
 void LightTask::tick()
 {
-  switch (peopleState)
-  {
-  case LIGHT_OFF:
+  if(this->waterState != ALARM) {
+    switch (peopleState)
+    {
+      case LIGHT_OFF:
+        lightOff();
+        break;
+      case LIGHT_ON:
+        lightOn();
+        break;
+    }
+  } else {
     lightOff();
-    break;
-  case LIGHT_ON:
-    lightOn();
-    break;
   }
 }
 
@@ -66,4 +71,9 @@ void LightTask::updateState()
   Serial.print("Time elapsed: ");
   Serial.println(ts - this->prevs_time);
   peopleState = Utils::getPeopleState(LightTask::CheckPeopleLevel(), LightTask::CheckLightLevel(), ts - this->prevs_time);
+}
+
+void LightTask::update(Event<WaterState> *e)
+{
+  this->waterState = *e->getEventArgs();
 }
