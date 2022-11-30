@@ -14,6 +14,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeListener;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -26,59 +28,83 @@ import org.jfree.data.xy.XYSeriesCollection;
 import com.fazecast.jSerialComm.SerialPort;
 
 public class App {
-    public static void main(String[] args) {
-    	JFrame win = new JFrame();
-    	win.setTitle("Arduino UI");
-    	win.setSize(600, 400);
-    	win.setLayout(new BorderLayout());
-    	win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	
-    	JComboBox<String> portList = new JComboBox<>();
-    	JButton connectBtn = new JButton("Connect");
-    	JPanel topPanel = new JPanel();
-    	topPanel.add(portList);
-    	topPanel.add(connectBtn);
-    	win.add(topPanel, BorderLayout.NORTH); 
-    	
-    	Arrays.stream(SerialPort.getCommPorts())
-		.map(SerialPort::getSystemPortName)
-		.forEach(name -> portList.addItem(name));
-    	
-    	XYSeries series = new XYSeries("Water Level Readings");
-    	XYDataset dataset = new XYSeriesCollection(series);
-    	JFreeChart chart = ChartFactory.createXYLineChart("Water Level Readings", "Time (Seconds)",  "Water Level (cm)", dataset, PlotOrientation.VERTICAL, true, false, false);
-    	
-    	connectBtn.addActionListener(new ActionListener() {
-    		
-    		SerialPort port;
-    		int x;
-    		boolean connected = false;
-    		
+	public static void main(String[] args) {
+		JFrame win = new JFrame();
+		win.setTitle("Arduino UI");
+		win.setSize(600, 400);
+		win.setLayout(new BorderLayout());
+		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		JComboBox<String> portList = new JComboBox<>();
+		JButton connectBtn = new JButton("Connect");
+		JPanel topPanel = new JPanel();
+		JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 180, 0);
+		topPanel.add(portList);
+		topPanel.add(connectBtn);
+		topPanel.add(slider);
+		win.add(topPanel, BorderLayout.NORTH);
+
+		Arrays.stream(SerialPort.getCommPorts())
+				.map(SerialPort::getSystemPortName)
+				.forEach(name -> portList.addItem(name));
+
+		XYSeries series = new XYSeries("Water Level Readings");
+		XYDataset dataset = new XYSeriesCollection(series);
+		JFreeChart chart = ChartFactory.createXYLineChart("Water Level Readings", "Time (Seconds)", "Water Level (cm)",
+				dataset, PlotOrientation.VERTICAL, true, false, false);
+
+		connectBtn.addActionListener(new ActionListener() {
+
+			SerialPort port;
+			int x;
+			boolean connected = false;
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				if (portList.getItemCount() > 0 && !connected) {
 					connected = true;
 					port = SerialPort.getCommPort(portList.getSelectedItem().toString());
 					port.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
-					if(port.openPort()) {
+					if (port.openPort()) {
 						connectBtn.setText("Disconnect");
 						portList.setEnabled(false);
 					}
-					
+					slider.addChangeListener(new ChangeListener() {
+						@Override
+						public void stateChanged(javax.swing.event.ChangeEvent e) {
+							System.out.println("slider " + slider.getValue());
+							String msg = Integer.toString(slider.getValue());
+							char[] array = (msg + "a\n").toCharArray();
+							byte[] bytes = new byte[array.length];
+							for (int i = 0; i < array.length; i++) {
+								bytes[i] = (byte) array[i];
+							}
+							try {
+								synchronized (port) {
+									port.writeBytes(bytes, bytes.length);
+								}
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
+						}
+					});
+
 					// create a new thread that listens for incoming text and populates the graph
-					Thread thread = new Thread(){
-						@Override public void run() {
+					Thread thread = new Thread() {
+						@Override
+						public void run() {
 							Scanner scanner = new Scanner(port.getInputStream());
-							while(scanner.hasNextLine()) {
+							while (scanner.hasNextLine()) {
 								try {
 									String line = scanner.nextLine();
-									System.out.println(line);
+									System.out.println("line " + line);
 									double number = Double.parseDouble(line);
-									System.err.println(number);
+									System.out.println("number " + number);
 									series.add(x++, number);
 									win.repaint();
-								} catch(Exception e) {}
+								} catch (Exception e) {
+								}
 							}
 							scanner.close();
 						}
@@ -94,11 +120,11 @@ public class App {
 					connected = false;
 				}
 			}
-    		
-    	});
-    	
-    	win.add(new ChartPanel(chart), BorderLayout.CENTER);
-    	
-    	win.setVisible(true);
+
+		});
+
+		win.add(new ChartPanel(chart), BorderLayout.CENTER);
+
+		win.setVisible(true);
 	}
 }

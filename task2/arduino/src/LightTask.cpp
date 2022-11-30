@@ -73,3 +73,13 @@ void LightTask::update(Event<WaterState> *e)
 {
   this->waterState = *e->getEventArgs();
 }
+
+void LightTask::notify()
+{
+  Event<PeopleState> *e = new Event<PeopleState>(EventSourceType::LIGHT_TASK, new PeopleState(this->peopleState));
+  for (int i = 0; i < this->getNObservers(); i++)
+  {
+    this->getObservers()[i]->update(e);
+  }
+  delete e;
+}
