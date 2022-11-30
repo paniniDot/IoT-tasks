@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
@@ -37,11 +39,18 @@ public class App {
 
 		JComboBox<String> portList = new JComboBox<>();
 		JButton connectBtn = new JButton("Connect");
+		JCheckBox overridejcb = new JCheckBox("Auto");
 		JPanel topPanel = new JPanel();
 		JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 180, 0);
+		JLabel labelwater = new JLabel("water : ");
+		JLabel labellight = new JLabel("light : ");
+
 		topPanel.add(portList);
 		topPanel.add(connectBtn);
 		topPanel.add(slider);
+		topPanel.add(overridejcb);
+		topPanel.add(labelwater);
+		topPanel.add(labellight);
 		win.add(topPanel, BorderLayout.NORTH);
 
 		Arrays.stream(SerialPort.getCommPorts())
@@ -73,7 +82,6 @@ public class App {
 					slider.addChangeListener(new ChangeListener() {
 						@Override
 						public void stateChanged(javax.swing.event.ChangeEvent e) {
-							System.out.println("slider " + slider.getValue());
 							String msg = Integer.toString(slider.getValue());
 							char[] array = (msg + "a\n").toCharArray();
 							byte[] bytes = new byte[array.length];
@@ -89,7 +97,24 @@ public class App {
 							}
 						}
 					});
-
+					overridejcb.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							String msg = overridejcb.isSelected() ? "YES" : "NO";
+							char[] array = (msg + "a\n").toCharArray();
+							byte[] bytes = new byte[array.length];
+							for (int i = 0; i < array.length; i++) {
+								bytes[i] = (byte) array[i];
+							}
+							try {
+								synchronized (port) {
+									port.writeBytes(bytes, bytes.length);
+								}
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
+						}
+					});
 					// create a new thread that listens for incoming text and populates the graph
 					Thread thread = new Thread() {
 						@Override
@@ -99,8 +124,18 @@ public class App {
 								try {
 									String line = scanner.nextLine();
 									System.out.println("line " + line);
+									if (line.equals("ALARM")) {
+										labelwater.setText("water : ALARM");
+									} else if (line.equals("PRE_ALARM")) {
+										labelwater.setText("water : PRE ALARM");
+									} else if (line.equals("NORMAL")) {
+										labelwater.setText("water : NORMAL");
+									} else if (line.equals("LIGHT_ON")) {
+										labellight.setText("light : LIGHT ON");
+									} else if (line.equals("LIGHT_OFF")) {
+										labellight.setText("light : LIGHT OFF");
+									}
 									double number = Double.parseDouble(line);
-									System.out.println("number " + number);
 									series.add(x++, number);
 									win.repaint();
 								} catch (Exception e) {

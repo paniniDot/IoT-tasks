@@ -21,8 +21,6 @@ void SerialComunicationTask::tick()
 {
     if (isMsgAvailable())
     {
-        Serial.println(receiveMsg());
-        delay(50);
     }
 }
 void serialEvent()
@@ -33,6 +31,7 @@ void serialEvent()
         char ch = (char)Serial.read();
         if (ch == 'a')
         {
+            Serial.print(content);
             serialComunicationTask.currentMsg = content;
             serialComunicationTask.msgAvailable = true;
         }

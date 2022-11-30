@@ -45,7 +45,7 @@ void setup()
   t3->init(SCHED_PERIOD);
   t4->init(SCHED_PERIOD);
   t5->init(SCHED_PERIOD);
-  t6->init(10);
+  t6->init(SCHED_PERIOD);
   sched.addTask(t0);
   sched.addTask(t1);
   sched.addTask(t2);
