@@ -163,4 +163,8 @@ private:
 	uint8_t _backlightval;
 };
 
+<<<<<<< HEAD
 #endif // FDB_LIQUID_CRYSTAL_I2C_H
+=======
+#endif // FDB_LIQUID_CRYSTAL_I2C_H
+>>>>>>> develop/observer

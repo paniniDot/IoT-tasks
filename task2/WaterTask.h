@@ -7,24 +7,31 @@
 #include "ServoTimer2.h"
 #include "GlobalVar.h"
 #include "Led.h"
+#include "Observer.h"
+#include "Subject.h"
+#include "Event.h"
+#include "EventSourceType.h"
 
-class WaterTask : public Task
+class WaterTask : public Task, public Observer<double>, public Subject<WaterState>
 {
 
 private:
   Potentiometer *pot;
-  ServoTimer2 *servo;
-  Led *led;
+  WaterState waterState;
+  double currentWaterLevel;
+  Led* ledB;
 
   void normalStateHandler();
   void preAlarmStateHandler();
   void alarmStateHandler();
   void updateState();
+  void notify();
 
 public:
-  WaterTask(Potentiometer *pot, ServoTimer2 *servo, Led *led);
+  WaterTask(Potentiometer *pot, Led* ledB);
   void init(int period);
   void tick();
+  void update(Event<double> *e);
 };
 
 #endif
