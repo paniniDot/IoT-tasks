@@ -1,12 +1,15 @@
 #ifndef __SONARTASK__
 #define __SONARTASK__
 
-#include "Utils.h"
+#include "sensor/Utils.h"
 #include "Task.h"
-#include "Sonar.h"
-#include "Subject.h"
+#include "sensor/Sonar.h"
+#include "observer/Subject.h"
+#include "Arduino.h"
+#include "observer/Event.h"
 
-class SonarTask : public Task, public Subject<double> {
+class SonarTask : public Task, public Subject<double>
+{
 
 private:
   Sonar *sonar;

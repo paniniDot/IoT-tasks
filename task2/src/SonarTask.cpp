@@ -1,6 +1,4 @@
 #include "SonarTask.h"
-#include "Arduino.h"
-#include "Event.h"
 
 SonarTask::SonarTask(Sonar *sonar)
 {
@@ -25,7 +23,8 @@ double SonarTask::measureWaterLevel()
 void SonarTask::notify()
 {
   Event<double> *e = new Event<double>(EventSourceType::SONAR, new double(this->measureWaterLevel()));
-  for(int i = 0; i < this->getNObservers(); i++) {
+  for (int i = 0; i < this->getNObservers(); i++)
+  {
     this->getObservers()[i]->update(e);
   }
   delete e;

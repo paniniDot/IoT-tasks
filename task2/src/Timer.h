@@ -1,6 +1,6 @@
 #ifndef __TIMER__
 #define __TIMER__
-
+#include "Arduino.h"
 class Timer
 {
 

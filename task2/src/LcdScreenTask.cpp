@@ -1,11 +1,12 @@
 #include "LcdScreenTask.h"
-#include "LiquidCrystal_I2C.h"
 
-LcdScreenTask::LcdScreenTask(LiquidCrystal_I2C* screen) {
+LcdScreenTask::LcdScreenTask(LiquidCrystal_I2C *screen)
+{
     this->lcd = screen;
 }
 
-void LcdScreenTask::init(int period) {
+void LcdScreenTask::init(int period)
+{
     Task::init(period);
     this->servoMeasure = 0.0;
     this->sonarMeasure = 0.0;
@@ -13,15 +14,16 @@ void LcdScreenTask::init(int period) {
     this->lcd->begin();
 }
 
-void LcdScreenTask::tick() {
+void LcdScreenTask::tick()
+{
     this->lcd->clear();
-    switch (this->waterState )
+    switch (this->waterState)
     {
     case WaterState::ALARM:
         this->lcd->print("Servo: ");
         this->lcd->print(String(this->servoMeasure));
     case WaterState::PRE_ALARM:
-        this->lcd->setCursor(0,1);
+        this->lcd->setCursor(0, 1);
         this->lcd->print("Sonar: ");
         this->lcd->print(String(this->sonarMeasure));
         this->lcd->backlight();
@@ -33,17 +35,22 @@ void LcdScreenTask::tick() {
 }
 
 // Update called from SonarTask and ServoTask
-void LcdScreenTask::update(Event<double> *e) {
+void LcdScreenTask::update(Event<double> *e)
+{
     EventSourceType src = e->getSrcType();
     double value = *e->getEventArgs();
-    if (src == EventSourceType::SERVO) {
+    if (src == EventSourceType::SERVO)
+    {
         this->servoMeasure = value;
-    } else if (src == EventSourceType::SONAR) {
+    }
+    else if (src == EventSourceType::SONAR)
+    {
         this->sonarMeasure = value;
     }
 }
 
 // Update called from WaterTask
-void LcdScreenTask::update(Event<WaterState> *e) {
+void LcdScreenTask::update(Event<WaterState> *e)
+{
     this->waterState = *e->getEventArgs();
 }

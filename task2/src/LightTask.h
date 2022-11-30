@@ -1,13 +1,14 @@
 #ifndef __LIGHTTASK__
 #define __LIGHTTASK__
 
-#include "Utils.h"
+#include "sensor/Utils.h"
 #include "Task.h"
-#include "PhotoResistor.h"
-#include "Pir.h"
-#include "Led.h"
-#include "Observer.h"
-#include "Event.h"
+#include "sensor/PhotoResistor.h"
+#include "sensor/Pir.h"
+#include "sensor/Led.h"
+#include "observer/Observer.h"
+#include "observer/Event.h"
+#include "Arduino.h"
 
 class LightTask : public Task, public Observer<WaterState>
 {

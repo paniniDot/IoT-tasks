@@ -2,18 +2,22 @@
 #define __BLINKINGTASK__
 
 #include "Task.h"
-#include "Led.h"
-#include "Observer.h"
-#include "Utils.h"
-#include "Event.h"
+#include "sensor/Led.h"
+#include "observer/Observer.h"
+#include "sensor/Utils.h"
+#include "observer/Event.h"
 
 class BlinkingTask : public Task, public Observer<WaterState>
 {
-private:  
+private:
   Led *led;
-  enum { ON, OFF } state;
+  enum
+  {
+    ON,
+    OFF
+  } state;
   WaterState waterState;
-  
+
 public:
   BlinkingTask(Led *led);
   void init(int period);

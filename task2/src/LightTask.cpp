@@ -1,5 +1,4 @@
 #include "LightTask.h"
-#include "Arduino.h"
 
 LightTask::LightTask(PhotoResistor *pho, Pir *pir, Led *ledA)
 {
@@ -18,17 +17,20 @@ void LightTask::init(int period)
 
 void LightTask::tick()
 {
-  if(this->waterState != ALARM) {
+  if (this->waterState != ALARM)
+  {
     switch (peopleState)
     {
-      case LIGHT_OFF:
-        lightOff();
-        break;
-      case LIGHT_ON:
-        lightOn();
-        break;
+    case LIGHT_OFF:
+      lightOff();
+      break;
+    case LIGHT_ON:
+      lightOn();
+      break;
     }
-  } else {
+  }
+  else
+  {
     lightOff();
   }
 }
