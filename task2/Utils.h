@@ -40,7 +40,7 @@ public:
     }
   }
 
-  static PeopleState getPeopleState(bool pir, double light, long ms, double sonarMeasure)
+  static PeopleState getPeopleState(bool pir, double light, long ms)
   {
     if ((pir && light < THL) || (!pir && ms < T1))
     {
