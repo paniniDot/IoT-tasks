@@ -77,8 +77,8 @@ void interruptCheck()
 
 void loop()
 {
-  Serial.print("Free memory = ");
-  Serial.println(freeMemory());
+  // Serial.print("Free memory = ");
+  // Serial.println(freeMemory());
 
   // noInterrupts();
   sched.schedule();

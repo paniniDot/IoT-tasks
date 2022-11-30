@@ -48,21 +48,18 @@ void WaterTask::tick()
 
 void WaterTask::normalStateHandler()
 {
-  Serial.println("NORMAL");
   this->ledB->switchOn();
   updateState();
 }
 
 void WaterTask::preAlarmStateHandler()
 {
-  Serial.println("PRE_ALARM");
   this->ledB->switchOn();
   updateState();
 }
 
 void WaterTask::alarmStateHandler()
 {
-  Serial.println("ALARM");
   this->ledB->switchOff();
   updateState();
 }

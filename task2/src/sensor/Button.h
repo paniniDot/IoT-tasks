@@ -6,10 +6,12 @@ class Button
 
 private:
   int pin;
+  bool manual;
+  long prevts;
 
 public:
   Button(int pin);
-  bool press();
+  void press();
 };
 
 #endif

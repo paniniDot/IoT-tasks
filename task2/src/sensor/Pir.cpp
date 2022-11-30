@@ -6,8 +6,7 @@ Pir::Pir(int pin)
   pinMode(pin, INPUT);
   for (int i = 0; i < 5; i++)
   {
-    Serial.print(i);
-    Serial.print(" ");
+    Serial.println(i);
     delay(1000);
   }
 }
