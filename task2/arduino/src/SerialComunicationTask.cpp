@@ -1,6 +1,4 @@
 #include "SerialComunicationTask.h"
-#define MIN_ANGLE 750
-#define MAX_ANGLE 2250
 SerialComunicationTask serialComunicationTask;
 
 String content;

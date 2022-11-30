@@ -17,7 +17,7 @@
 #include "src/SerialComunicationTask.h"
 #include "src/debug/MemoryFree.h"
 
-#define SCHED_PERIOD 1000 // da aggiornare
+#define SCHED_PERIOD 500 // da aggiornare
 #define TIME 1000000
 
 Scheduler sched;

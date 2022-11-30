@@ -131,7 +131,7 @@ public class App {
 							while (scanner.hasNextLine()) {
 								try {
 									String line = scanner.nextLine();
-									System.out.println("line " + line);
+									System.out.println("Serial Arduino " + line);
 									if (line.equals("ALARM")) {
 										labelwater.setText("water : ALARM");
 									} else if (line.equals("PRE_ALARM")) {
