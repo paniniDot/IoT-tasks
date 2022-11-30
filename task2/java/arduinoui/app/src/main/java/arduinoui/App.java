@@ -39,9 +39,16 @@ public class App {
 
 		JComboBox<String> portList = new JComboBox<>();
 		JButton connectBtn = new JButton("Connect");
-		JCheckBox overridejcb = new JCheckBox("Auto");
+		JCheckBox overridejcb = new JCheckBox("Manual Servo");
 		JPanel topPanel = new JPanel();
+		JPanel bottomPanel = new JPanel();
 		JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 180, 0);
+		slider.setPaintTrack(true);
+		slider.setPaintTicks(true);
+		slider.setPaintLabels(true);
+		slider.setMajorTickSpacing(50);
+		slider.setMinorTickSpacing(5);
+
 		JLabel labelwater = new JLabel("water : ");
 		JLabel labellight = new JLabel("light : ");
 
@@ -49,9 +56,10 @@ public class App {
 		topPanel.add(connectBtn);
 		topPanel.add(slider);
 		topPanel.add(overridejcb);
-		topPanel.add(labelwater);
-		topPanel.add(labellight);
+		bottomPanel.add(labelwater);
+		bottomPanel.add(labellight);
 		win.add(topPanel, BorderLayout.NORTH);
+		win.add(bottomPanel, BorderLayout.SOUTH);
 
 		Arrays.stream(SerialPort.getCommPorts())
 				.map(SerialPort::getSystemPortName)
