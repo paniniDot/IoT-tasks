@@ -1,7 +1,7 @@
 #ifndef __SONARTASK__
 #define __SONARTASK__
 
-#include "sensor/Utils.h"
+#include "task/Utils.h"
 #include "task/Task.h"
 #include "sensor/Sonar.h"
 #include "observer/Subject.h"

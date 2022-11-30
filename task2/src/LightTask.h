@@ -1,7 +1,7 @@
 #ifndef __LIGHTTASK__
 #define __LIGHTTASK__
 
-#include "sensor/Utils.h"
+#include "task/Utils.h"
 #include "task/Task.h"
 #include "sensor/PhotoResistor.h"
 #include "sensor/Pir.h"

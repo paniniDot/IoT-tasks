@@ -1,7 +1,7 @@
 #ifndef __WATERTASK__
 #define __WATERTASK__
 
-#include "sensor/Utils.h"
+#include "task/Utils.h"
 #include "task/Task.h"
 #include "sensor/Potentiometer.h"
 #include "sensor/ServoTimer2.h"

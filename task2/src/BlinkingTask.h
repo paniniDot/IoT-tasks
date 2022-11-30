@@ -4,7 +4,7 @@
 #include "task/Task.h"
 #include "sensor/Led.h"
 #include "observer/Observer.h"
-#include "sensor/Utils.h"
+#include "task/Utils.h"
 #include "observer/Event.h"
 
 class BlinkingTask : public Task, public Observer<WaterState>

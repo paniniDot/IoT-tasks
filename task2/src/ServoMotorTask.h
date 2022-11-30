@@ -6,7 +6,7 @@
 #include "sensor/ServoTimer2.h"
 #include "observer/Subject.h"
 #include "observer/EventSourceType.h"
-#include "sensor/Utils.h"
+#include "task/Utils.h"
 
 class ServoMotorTask : public Task, public Observer<double>, public Subject<double>
 {

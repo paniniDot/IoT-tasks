@@ -5,7 +5,7 @@
 #include "observer/Observer.h"
 #include "sensor/LiquidCrystal_I2C.h"
 #include "observer/EventSourceType.h"
-#include "sensor/Utils.h"
+#include "task/Utils.h"
 
 class LcdScreenTask : public Task, public Observer<double>, public Observer<WaterState>
 {
