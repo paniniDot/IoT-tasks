@@ -17,6 +17,7 @@
 #include "src/debug/MemoryFree.h"
 
 #define SCHED_PERIOD 1000 // da aggiornare
+#define TIME 1000000
 
 Scheduler sched;
 long prevts = 0;
@@ -59,7 +60,7 @@ void setup()
 void interruptCheck()
 {
   long ts = micros();
-  if (ts - prevts > 1000000)
+  if (ts - prevts > TIME)
   {
     Serial.print("button = ");
     Serial.println(manual);
@@ -77,8 +78,8 @@ void interruptCheck()
 
 void loop()
 {
-  Serial.print("Free memory = ");
-  Serial.println(freeMemory());
+  // Serial.print("Free memory = ");
+  // Serial.println(freeMemory());
 
   // noInterrupts();
   sched.schedule();

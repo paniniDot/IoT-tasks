@@ -2,11 +2,26 @@
 
 Button::Button(int pin)
 {
-  this->pin = pin;
-  pinMode(pin, INPUT);
+  pin = pin;
+  manual = false;
+  prevts = 0;
 }
 
-bool Button::press()
+void Button::press()
 {
-  return digitalRead(pin);
+  long ts = micros();
+  if (ts - prevts > 1000000)
+  {
+    Serial.print("button = ");
+    Serial.println(manual);
+    if (manual == false)
+    {
+      manual = true;
+    }
+    else
+    {
+      manual = false;
+    }
+    prevts = ts;
+  }
 };

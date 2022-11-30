@@ -55,23 +55,17 @@ void LightTask::lightOff()
 
 bool LightTask::CheckPeopleLevel()
 {
-  Serial.print("Pir = ");
-  Serial.println(pir->getMotion());
   return pir->getMotion();
 }
 
 double LightTask::CheckLightLevel()
 {
-  Serial.print("Pho = ");
-  Serial.println(pho->measure());
   return pho->measure();
 }
 
 void LightTask::updateState()
 {
   long ts = micros();
-  Serial.print("Time elapsed: ");
-  Serial.println(ts - this->prevs_time);
   peopleState = Utils::getPeopleState(LightTask::CheckPeopleLevel(), LightTask::CheckLightLevel(), ts - this->prevs_time);
 }
 
