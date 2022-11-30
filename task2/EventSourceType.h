@@ -3,7 +3,8 @@
 
 enum EventSourceType {
     SONAR,
-    SERVO
+    SERVO,
+    WATER_TASK
 };
 
 #endif
