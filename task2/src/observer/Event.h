@@ -5,29 +5,34 @@
 #include "Arduino.h"
 template <typename T>
 
-class Event {
+class Event
+{
 
-    private:
-        EventSourceType srcType;
-        T* eventArgs;
+private:
+    EventSourceType srcType;
+    T *eventArgs;
 
-    public:
-        Event(EventSourceType srctype, T* eventArgs) {
-            this->srcType = srctype;
-            this->eventArgs = eventArgs;
-        }
-        
-        EventSourceType getSrcType() {
-            return srcType;
-        }
+public:
+    Event(EventSourceType srctype, T *eventArgs)
+    {
+        this->srcType = srctype;
+        this->eventArgs = eventArgs;
+    }
 
-        T* getEventArgs() {
-            return eventArgs;
-        }
+    EventSourceType getSrcType()
+    {
+        return srcType;
+    }
 
-        ~Event() {
-            delete this->eventArgs;
-        }
+    T *getEventArgs()
+    {
+        return eventArgs;
+    }
+
+    ~Event()
+    {
+        delete this->eventArgs;
+    }
 };
 
 #endif

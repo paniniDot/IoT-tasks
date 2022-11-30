@@ -1,5 +1,5 @@
 #include "Sonar.h"
-#include "Arduino.h"
+
 const float vs = 331.45 + 0.62 * 20;
 Sonar::Sonar(int triggerPin, int echoPin)
 {

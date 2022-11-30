@@ -1,6 +1,6 @@
 #ifndef __PIR__
 #define __PIR__
-
+#include "Arduino.h"
 class Pir
 {
 

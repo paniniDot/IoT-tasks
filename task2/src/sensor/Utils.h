@@ -23,7 +23,6 @@ class Utils
 {
 
 public:
-
   static WaterState getWaterState(double currentWaterLevel)
   {
     if (currentWaterLevel <= WL2)
@@ -51,29 +50,28 @@ public:
       return LIGHT_OFF;
     }
     else
-    {     
+    {
       return LIGHT_OFF;
     }
   }
 
   static void print_bytes(const void *object, size_t size)
-{
+  {
 #ifdef __cplusplus
-  const unsigned char * const bytes = static_cast<const unsigned char *>(object);
-#else // __cplusplus
-  const unsigned char * const bytes = object;
+    const unsigned char *const bytes = static_cast<const unsigned char *>(object);
+#else  // __cplusplus
+    const unsigned char *const bytes = object;
 #endif // __cplusplus
 
-  size_t i;
+    size_t i;
 
-  Serial.print("[ ");
-  for(i = 0; i < size; i++)
-  {
-    Serial.print(bytes[i]);
+    Serial.print("[ ");
+    for (i = 0; i < size; i++)
+    {
+      Serial.print(bytes[i]);
+    }
+    Serial.println("]");
   }
-  Serial.println("]");
-}
-
 };
 
 #endif
