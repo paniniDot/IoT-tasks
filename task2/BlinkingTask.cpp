@@ -46,6 +46,4 @@ void BlinkingTask::tick()
 void BlinkingTask::update(Event<WaterState> *e)
 {
   this->waterState = *e->getEventArgs();
-  Serial.print("BLINKING TASK: update() - ");
-  Utils::displayEnum(this->waterState);
 }
