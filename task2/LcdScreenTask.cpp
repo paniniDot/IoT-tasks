@@ -14,7 +14,7 @@ void LcdScreenTask::init(int period) {
 }
 
 void LcdScreenTask::tick() {
-    this->lcd->setCursor(0,0);
+    this->lcd->clear();
     this->lcd->print("Servo: ");
     this->lcd->print(String(this->servoMeasure));
     this->lcd->setCursor(0,1);

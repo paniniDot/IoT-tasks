@@ -10,12 +10,22 @@
 
 extern bool manual;
 extern double sonarMeasure;
+
+#define stringify( name ) #name
+
 enum WaterState
 {
   NORMAL,
   PRE_ALARM,
   ALARM
 };
+
+const char* convert_enum[] =
+  {
+stringify( NORMAL ),
+stringify( PRE_ALARM ),
+stringify( ALARM )
+  };
 
 enum PeopleState
 {
@@ -26,6 +36,11 @@ class Utils
 {
 
 public:
+
+  static void displayEnum(WaterState waterState) {
+    Serial.println(convert_enum[waterState]);
+  }
+
   static WaterState getWaterState(double currentWaterLevel)
   {
     if (currentWaterLevel <= WL2)

@@ -6,8 +6,12 @@
 #include "Potentiometer.h"
 #include "ServoTimer2.h"
 #include "Led.h"
+#include "Observer.h"
+#include "Subject.h"
+#include "Event.h"
+#include "EventSourceType.h"
 
-class WaterTask : public Task, public Observer<double> 
+class WaterTask : public Task, public Observer<double>, public Subject<WaterState>
 {
 
 private:
@@ -15,15 +19,15 @@ private:
   WaterState waterState;
   double currentWaterLevel;
   Led* ledB;
-  Led* ledC;
 
   void normalStateHandler();
   void preAlarmStateHandler();
   void alarmStateHandler();
   void updateState();
+  void notify();
 
 public:
-  WaterTask(Potentiometer *pot, Led* ledB, Led* ledC);
+  WaterTask(Potentiometer *pot, Led* ledB);
   void init(int period);
   void tick();
   void update(Event<double> *e);
