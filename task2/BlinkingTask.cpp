@@ -1,5 +1,4 @@
 #include "BlinkingTask.h"
-#include "Arduino.h"
 
 BlinkingTask::BlinkingTask(Led *led)
 {
@@ -15,11 +14,13 @@ void BlinkingTask::init(int period)
 
 void BlinkingTask::tick()
 {
-    Serial.println("BLINKING TASK: tick()");
-  if (this->waterState == PRE_ALARM)
+  switch (this->waterState)
   {
-    Serial.println("BLINKING TASK: PRE_ALARM");
-  switch (state)
+  case NORMAL:
+    this->led->switchOff();
+    break;
+  case PRE_ALARM:
+    switch (state)
     {
     case OFF:
       this->led->switchOn();
@@ -30,16 +31,10 @@ void BlinkingTask::tick()
       state = OFF;
       break;
     }
-  }
-  else if (this->waterState == ALARM)
-  {
-    Serial.println("BLINKING TASK: ALARM");
+    break;
+  case ALARM:
     this->led->switchOn();
-  }
-  else if (this->waterState == NORMAL)
-  {
-    Serial.println("BLINKING TASK: NORMAL");
-    this->led->switchOff();
+    break;
   }
 }
 
