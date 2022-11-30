@@ -2,7 +2,6 @@
 #define __SONARTASK__
 
 #include "Utils.h"
-#include "GlobalVar.h"
 #include "Task.h"
 #include "Sonar.h"
 #include "Subject.h"

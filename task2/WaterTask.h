@@ -5,7 +5,6 @@
 #include "Task.h"
 #include "Potentiometer.h"
 #include "ServoTimer2.h"
-#include "GlobalVar.h"
 #include "Led.h"
 #include "Observer.h"
 #include "Subject.h"
