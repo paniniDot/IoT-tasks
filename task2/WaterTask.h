@@ -7,12 +7,13 @@
 #include "ServoTimer2.h"
 #include "Led.h"
 
-class WaterTask : public Task
+class WaterTask : public Task, public Observer<double> 
 {
 
 private:
   Potentiometer *pot;
   WaterState waterState;
+  double currentWaterLevel;
   Led* ledB;
   Led* ledC;
 
@@ -25,6 +26,7 @@ public:
   WaterTask(Potentiometer *pot, Led* ledB, Led* ledC);
   void init(int period);
   void tick();
+  void update(Event<double> *e);
 };
 
 #endif

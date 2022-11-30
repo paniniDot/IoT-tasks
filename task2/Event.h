@@ -2,6 +2,7 @@
 #define __EVENT__
 
 #include "EventSourceType.h"
+#include "Arduino.h"
 template <typename T>
 
 class Event {
@@ -15,7 +16,7 @@ class Event {
             this->srcType = srctype;
             this->eventArgs = eventArgs;
         }
-
+        
         EventSourceType getSrcType() {
             return srcType;
         }
@@ -24,6 +25,9 @@ class Event {
             return eventArgs;
         }
 
+        ~Event() {
+            delete this->eventArgs;
+        }
 };
 
 #endif

@@ -6,19 +6,20 @@ WaterTask::WaterTask(Potentiometer *pot, Led* ledB,Led* ledC)
   this->pot = pot;
   this->ledB=ledB;
   this->ledC=ledC;
+  this->currentWaterLevel = 0.0;
 }
 
 void WaterTask::init(int period)
 {
   Task::init(period);
-  waterState = NORMAL;
+  this->waterState = NORMAL;
 }
 
 void WaterTask::tick()
 {
   if (manual == false)
   {
-    switch (waterState)
+    switch (this->waterState)
     {
     case NORMAL:
       normalStateHandler();
@@ -63,5 +64,10 @@ void WaterTask::alarmStateHandler()
 
 void WaterTask::updateState()
 {
-  waterState = Utils::getWaterState();
+  waterState = Utils::getWaterState(this->currentWaterLevel);
+}
+
+void WaterTask::update(Event<double> *e)
+{
+  this->currentWaterLevel = *e->getEventArgs();
 }

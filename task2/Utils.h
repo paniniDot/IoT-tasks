@@ -26,13 +26,13 @@ class Utils
 {
 
 public:
-  static WaterState getWaterState()
+  static WaterState getWaterState(double currentWaterLevel)
   {
-    if (sonarMeasure <= WL2)
+    if (currentWaterLevel <= WL2)
     {
       return ALARM;
     }
-    else if (sonarMeasure > WL2 && sonarMeasure <= WL1)
+    else if (currentWaterLevel > WL2 && currentWaterLevel <= WL1)
     {
       return PRE_ALARM;
     }
@@ -60,6 +60,25 @@ public:
       return LIGHT_OFF;
     }
   }
+
+  static void print_bytes(const void *object, size_t size)
+{
+#ifdef __cplusplus
+  const unsigned char * const bytes = static_cast<const unsigned char *>(object);
+#else // __cplusplus
+  const unsigned char * const bytes = object;
+#endif // __cplusplus
+
+  size_t i;
+
+  Serial.print("[ ");
+  for(i = 0; i < size; i++)
+  {
+    Serial.print(bytes[i]);
+  }
+  Serial.println("]");
+}
+
 };
 
 #endif

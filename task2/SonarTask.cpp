@@ -19,17 +19,14 @@ void SonarTask::tick()
 
 double SonarTask::measureWaterLevel()
 {
-  Serial.print("Sonar = ");
-  Serial.println(sonar->measure());
-  sonarMeasure = sonar->measure();
   return this->sonar->measure();
 }
 
 void SonarTask::notify()
 {
   Event<double> *e = new Event<double>(EventSourceType::SONAR, new double(this->measureWaterLevel()));
-
   for(int i = 0; i < this->getNObservers(); i++) {
     this->getObservers()[i]->update(e);
   }
+  delete e;
 }
