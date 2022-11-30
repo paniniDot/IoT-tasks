@@ -8,9 +8,6 @@
 #define THL 100
 #define T1 5000000
 
-extern bool manual;
-extern double sonarMeasure;
-
 enum WaterState
 {
   NORMAL,
@@ -46,10 +43,7 @@ public:
 
   static PeopleState getPeopleState(bool pir, double light, long ms)
   {
-    if(sonarMeasure < WL_MAX){
-      return LIGHT_OFF;
-    }
-    else if ((pir && light < THL) || (!pir && ms < T1))
+    if ((pir && light < THL) || (!pir && ms < T1))
     {
       return LIGHT_ON;
     }
@@ -58,7 +52,7 @@ public:
       return LIGHT_OFF;
     }
     else
-    {      
+    {     
       return LIGHT_OFF;
     }
   }
