@@ -30,7 +30,7 @@ void setup()
   ServoTimer2 *servo = new ServoTimer2();
   servo->attach(5);
   WaterTask *t0 = new WaterTask(new Potentiometer(A3), new Led(9));
-  Task *t1 = new LightTask(new PhotoResistor(A2), new Pir(11), new Led(10));
+  LightTask *t1 = new LightTask(new PhotoResistor(A2), new Pir(11), new Led(10));
   SonarTask *t2 = new SonarTask(new Sonar(7, 8));
   ServoMotorTask *t3 = new ServoMotorTask(servo);
   LcdScreenTask *t4 = new LcdScreenTask(new LiquidCrystal_I2C(0x3F, 16, 2));
@@ -47,6 +47,7 @@ void setup()
   sched.addTask(t3);
   sched.addTask(t4);
   sched.addTask(t5);
+  t0->attach(t1);
   t0->attach(t4);
   t0->attach(t5);
   t2->attach(t0);
