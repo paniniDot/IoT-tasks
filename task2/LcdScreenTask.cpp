@@ -11,7 +11,6 @@ void LcdScreenTask::init(int period) {
     this->sonarMeasure = 0.0;
     this->waterState = WaterState::NORMAL;
     this->lcd->begin();
-    //this->lcd->backlight();
 }
 
 void LcdScreenTask::tick() {
