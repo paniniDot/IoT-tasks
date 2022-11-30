@@ -33,7 +33,7 @@ public class App {
 	public static void main(String[] args) {
 		JFrame win = new JFrame();
 		win.setTitle("Arduino UI");
-		win.setSize(600, 400);
+		win.setSize(800, 600);
 		win.setLayout(new BorderLayout());
 		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
