@@ -1,7 +1,7 @@
 #ifndef __BLINKINGTASK__
 #define __BLINKINGTASK__
 
-#include "Task.h"
+#include "task/Task.h"
 #include "sensor/Led.h"
 #include "observer/Observer.h"
 #include "sensor/Utils.h"

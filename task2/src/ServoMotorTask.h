@@ -1,7 +1,7 @@
 #ifndef __SERVOMOTORTASK__
 #define __SERVOMOTORTASK__
 
-#include "Task.h"
+#include "task/Task.h"
 #include "observer/Observer.h"
 #include "sensor/ServoTimer2.h"
 #include "observer/Subject.h"

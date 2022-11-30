@@ -2,7 +2,7 @@
 #define __LIGHTTASK__
 
 #include "sensor/Utils.h"
-#include "Task.h"
+#include "task/Task.h"
 #include "sensor/PhotoResistor.h"
 #include "sensor/Pir.h"
 #include "sensor/Led.h"

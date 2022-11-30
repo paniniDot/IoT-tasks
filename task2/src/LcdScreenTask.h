@@ -1,7 +1,7 @@
 #ifndef __LCDSCREENTASK__
 #define __LCDSCREENTASK__
 
-#include "Task.h"
+#include "task/Task.h"
 #include "observer/Observer.h"
 #include "sensor/LiquidCrystal_I2C.h"
 #include "observer/EventSourceType.h"
