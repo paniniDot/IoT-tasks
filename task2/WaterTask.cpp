@@ -67,7 +67,7 @@ void WaterTask::update(Event<double> *e)
 
 void WaterTask::notify()
 {
-  Event<WaterState> *e = new Event<WaterState>(EventSourceType::WATER_TASK, &this->waterState);
+  Event<WaterState> *e = new Event<WaterState>(EventSourceType::WATER_TASK, new WaterState(this->waterState));
   for(int i = 0; i < this->getNObservers(); i++) {
     this->getObservers()[i]->update(e);
   }
