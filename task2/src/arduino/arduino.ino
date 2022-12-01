@@ -31,6 +31,7 @@ void setup()
   enableInterrupt(4, interruptCheck, RISING);
   sched.init(SCHED_PERIOD);
   ServoTimer2 *servo = new ServoTimer2();
+  Button *btn = new Button();
   servo->attach(5);
   WaterTask *t0 = new WaterTask(new Potentiometer(A3), new Led(9));
   LightTask *t1 = new LightTask(new PhotoResistor(A2), new Pir(11), new Led(10));
@@ -64,29 +65,10 @@ void setup()
 }
 void interruptCheck()
 {
-  long ts = micros();
-  if (ts - prevts > TIME)
-  {
-    Serial.print("button = ");
-    Serial.println(manual);
-    if (manual == false)
-    {
-      manual = true;
-    }
-    else
-    {
-      manual = false;
-    }
-    prevts = ts;
-  }
+  btn->press();
 }
 
 void loop()
 {
-  // Serial.print("Free memory = ");
-  // Serial.println(freeMemory());
-
-  // noInterrupts();
   sched.schedule();
-  // interrupts();
 }

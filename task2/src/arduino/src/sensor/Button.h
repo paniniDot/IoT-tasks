@@ -5,11 +5,11 @@ class Button
 {
 
 private:
-  int pin;
   long prevts;
+  bool manual;
 
 public:
-  Button(int pin);
+  Button();
   bool press();
 };
 

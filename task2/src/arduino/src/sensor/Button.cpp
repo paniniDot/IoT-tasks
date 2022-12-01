@@ -1,19 +1,27 @@
 #include "Button.h"
 
-Button::Button(int pin)
+Button::Button()
 {
-  pin = pin;
-  prevts = 0;
+  this->prevts = 0;
 }
 
-void Button::press()
+bool Button::press()
 {
-  long ts = micros();
-  if (ts - prevts > 1000000)
+  long ts = millis();
+  if (ts - this->prevts > 1000)
   {
+    Serial.print("button = ");
+    Serial.println(manual);
+    if (manual == false)
+    {
+      manual = true;
+    }
+    else
+    {
+      manual = false;
+    }
     prevts = ts;
     return true;
-  }else {
-    return false;
   }
-};
+  return false;
+}
