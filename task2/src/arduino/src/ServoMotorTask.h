@@ -8,12 +8,13 @@
 #include "observer/EventSourceType.h"
 #include "task/Utils.h"
 
-class ServoMotorTask : public Task, public Observer<double>, public Subject<double>
+class ServoMotorTask : public Task, public Observer<double>, public Observer<bool>, public Subject<double>
 {
 
 private:
     ServoTimer2 *servo;
     double currentAngle;
+    bool manual;
     void notify();
 
 public:
@@ -21,6 +22,7 @@ public:
     void init(int period);
     void tick();
     void update(Event<double> *e);
+    void update(Event<bool> *e);
 };
 
 #endif

@@ -38,6 +38,7 @@ void setup()
   LcdScreenTask *t4 = new LcdScreenTask(new LiquidCrystal_I2C(0x3F, 16, 2));
   BlinkingTask *t5 = new BlinkingTask(new Led(6));
   SerialComunicationTask *t6 = new SerialComunicationTask();
+  ManualControlTask *t7 = new ManualControlTask(btn);
   t0->init(SCHED_PERIOD);
   t1->init(SCHED_PERIOD);
   t2->init(SCHED_PERIOD);
@@ -60,6 +61,7 @@ void setup()
   t2->attach(t3);
   t2->attach(t4);
   t3->attach(t4);
+  t7->attach(t3);
 }
 void interruptCheck()
 {

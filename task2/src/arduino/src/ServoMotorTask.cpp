@@ -7,6 +7,7 @@ ServoMotorTask::ServoMotorTask(ServoTimer2 *servo)
 {
   this->servo = servo;
   this->currentAngle = MIN_ANGLE;
+  this->manual = false;
 }
 
 void ServoMotorTask::init(int period)
@@ -23,6 +24,11 @@ void ServoMotorTask::tick()
 void ServoMotorTask::update(Event<double> *e)
 {
   this->currentAngle = *e->getEventArgs();
+}
+
+void ServoMotorTask::update(Event<bool> *e)
+{
+  this->manual = *e->getEventArgs();
 }
 
 void ServoMotorTask::notify()

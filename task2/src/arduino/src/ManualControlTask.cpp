@@ -15,7 +15,7 @@ void ManualControlTask::tick()
 {
     if (button->press())
     {
-        manual = !manual;
+        this->manual = !this->manual;
         notify();
     }
 }
