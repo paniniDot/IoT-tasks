@@ -3,9 +3,10 @@
 #define MIN_ANGLE 750
 #define MAX_ANGLE 2250
 
-ServoMotorTask::ServoMotorTask(ServoTimer2 *servo)
+ServoMotorTask::ServoMotorTask(ServoTimer2 *servo, Potentiometer *pot)
 {
   this->servo = servo;
+  this->pot = pot;
   this->currentAngle = MIN_ANGLE;
   this->manual = false;
 }

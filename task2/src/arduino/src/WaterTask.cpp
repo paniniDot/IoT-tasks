@@ -1,8 +1,7 @@
 #include "WaterTask.h"
 
-WaterTask::WaterTask(Potentiometer *pot, Led *ledB)
+WaterTask::WaterTask(Led *ledB)
 {
-  this->pot = pot;
   this->ledB = ledB;
   this->currentWaterLevel = 0.0;
 }
@@ -27,22 +26,6 @@ void WaterTask::tick()
     alarmStateHandler();
     break;
   }
-
-  // if (manual == false)
-  // {
-  //   switch (this->waterState)
-  //   {
-  //   case NORMAL:
-  //     normalStateHandler();
-  //     break;
-  //   case PRE_ALARM:
-  //     preAlarmStateHandler();
-  //     break;
-  //   case ALARM:
-  //     alarmStateHandler();
-  //     break;
-  //   }
-  // }
   this->notify();
 }
 
