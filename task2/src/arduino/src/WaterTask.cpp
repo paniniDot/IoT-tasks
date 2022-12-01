@@ -27,22 +27,6 @@ void WaterTask::tick()
     alarmStateHandler();
     break;
   }
-
-  // if (manual == false)
-  // {
-  //   switch (this->waterState)
-  //   {
-  //   case NORMAL:
-  //     normalStateHandler();
-  //     break;
-  //   case PRE_ALARM:
-  //     preAlarmStateHandler();
-  //     break;
-  //   case ALARM:
-  //     alarmStateHandler();
-  //     break;
-  //   }
-  // }
   this->notify();
 }
 

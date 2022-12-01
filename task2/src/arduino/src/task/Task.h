@@ -28,6 +28,10 @@ public:
       return false;
     }
   }
+  virtual void updatePeriod(int period)
+  {
+    myPeriod = period;
+  }
 };
 
 #endif
