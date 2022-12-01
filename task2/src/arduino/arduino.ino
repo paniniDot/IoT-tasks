@@ -17,7 +17,7 @@
 #include "src/SerialComunicationTask.h"
 #include "src/debug/MemoryFree.h"
 
-#define SCHED_PERIOD 500 // da aggiornare
+#define SCHED_PERIOD 1000 // da aggiornare
 #define TIME 1000000
 
 Scheduler sched;
@@ -38,13 +38,13 @@ void setup()
   LcdScreenTask *t4 = new LcdScreenTask(new LiquidCrystal_I2C(0x3F, 16, 2));
   BlinkingTask *t5 = new BlinkingTask(new Led(6));
   SerialComunicationTask *t6 = new SerialComunicationTask();
-  t0->init(SCHED_PERIOD);
-  t1->init(SCHED_PERIOD);
-  t2->init(SCHED_PERIOD);
-  t3->init(SCHED_PERIOD);
-  t4->init(SCHED_PERIOD);
-  t5->init(2000);
-  t6->init(SCHED_PERIOD);
+  t0->init(SCHED_PERIOD / 2);
+  t1->init(SCHED_PERIOD / 2);
+  t2->init(SCHED_PERIOD / 2);
+  t3->init(SCHED_PERIOD / 2);
+  t4->init(SCHED_PERIOD / 2);
+  t5->init(SCHED_PERIOD * 2);
+  t6->init(SCHED_PERIOD / 2);
   sched.addTask(t0);
   sched.addTask(t1);
   sched.addTask(t2);
