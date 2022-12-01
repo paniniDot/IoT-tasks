@@ -6,7 +6,10 @@ enum EventSourceType
     SONAR,
     SERVO,
     WATER_TASK,
-    LIGHT_TASK
+    LIGHT_TASK,
+    SLIDER,
+    CHECKBOX
+
 };
 
 #endif

@@ -13,9 +13,10 @@ void ManualControlTask::init(int period)
 
 void ManualControlTask::tick()
 {
-    if (button->press())
+    if (button->isPressed())
     {
         this->manual = !this->manual;
+        button->resetPressed();
         notify();
     }
 }

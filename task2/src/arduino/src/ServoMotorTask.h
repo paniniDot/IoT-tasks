@@ -16,7 +16,9 @@ private:
     Potentiometer *pot;
     ServoTimer2 *servo;
     double currentAngle;
+    double currentAngleGui;
     bool manual;
+    bool guicontrol;
     void notify();
 
 public:

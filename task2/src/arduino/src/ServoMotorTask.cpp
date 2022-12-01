@@ -8,7 +8,9 @@ ServoMotorTask::ServoMotorTask(ServoTimer2 *servo, Potentiometer *pot)
   this->servo = servo;
   this->pot = pot;
   this->currentAngle = MIN_ANGLE;
+  this->currentAngleGui = MIN_ANGLE;
   this->manual = false;
+  this->guicontrol = false;
 }
 
 void ServoMotorTask::init(int period)
@@ -18,12 +20,29 @@ void ServoMotorTask::init(int period)
 
 void ServoMotorTask::tick()
 {
-  this->servo->write(map(this->currentAngle, WL2, WL_MAX, MIN_ANGLE, MAX_ANGLE));
+  if (this->guicontrol) {
+    Serial.println("gui mode");
+    this->servo->write(map(this->currentAngleGui, 0, 180, MIN_ANGLE, MAX_ANGLE));
+  } else {
+    if(!this->manual) {
+      Serial.println("Automatic mode");
+      this->servo->write(map(this->currentAngle, WL2, WL_MAX, MIN_ANGLE, MAX_ANGLE));
+    } else {
+      Serial.println("Manual mode");
+      this->servo->write(map(this->pot->measure(), 0, 1023, MIN_ANGLE, MAX_ANGLE));
+    }
+  }
   this->notify();
 }
 
 void ServoMotorTask::update(Event<double> *e)
 {
+  if(e->getSrcType() == EventSourceType::CHECKBOX){
+    Serial.println("checkbox");
+    this->guicontrol = !this->guicontrol;
+  } else if(e->getSrcType() == EventSourceType::SLIDER){
+    this->currentAngleGui = *e->getEventArgs();
+  }
   this->currentAngle = *e->getEventArgs();
 }
 

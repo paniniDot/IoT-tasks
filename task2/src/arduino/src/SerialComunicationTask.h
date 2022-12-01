@@ -9,8 +9,12 @@
 #include "Arduino.h"
 #include "observer/Subject.h"
 
-class SerialComunicationTask : public Task
+class SerialComunicationTask : public Task, public Subject<double> 
 {
+
+private:
+    void notify();
+
 public:
     String content;
     String currentMsg;

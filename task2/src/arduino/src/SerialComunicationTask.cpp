@@ -17,9 +17,7 @@ void SerialComunicationTask::init(int period)
 
 void SerialComunicationTask::tick()
 {
-    if (isMsgAvailable())
-    {
-    }
+    this->notify();
 }
 void serialEvent()
 {
@@ -29,7 +27,6 @@ void serialEvent()
         char ch = (char)Serial.read();
         if (ch == 'a')
         {
-            Serial.print(content);
             serialComunicationTask.currentMsg = content;
             serialComunicationTask.msgAvailable = true;
         }
@@ -41,13 +38,13 @@ void serialEvent()
 }
 bool SerialComunicationTask::isMsgAvailable()
 {
-    return msgAvailable;
+    return serialComunicationTask.msgAvailable;
 }
 String SerialComunicationTask::receiveMsg()
 {
-    String str = currentMsg;
-    msgAvailable = false;
-    currentMsg = "";
+    String str = serialComunicationTask.currentMsg;
+    serialComunicationTask.msgAvailable = false;
+    serialComunicationTask.currentMsg = "";
     content = "";
     return str;
 }
@@ -55,4 +52,25 @@ String SerialComunicationTask::receiveMsg()
 // Update called from SonarTask and ServoTask
 void SerialComunicationTask::update(Event<double> *e)
 {
+}
+
+void SerialComunicationTask::notify()
+{
+    // if(this->isMsgAvailable()){
+    //     String msg = this->receiveMsg();
+    //     if(msg == "YES" || msg == "NO"){
+    //         Event<double> *e = new Event<double>(EventSourceType::CHECKBOX, new double(0));
+    //         for (int i = 0; i < this->getNObservers(); i++)
+    //         {
+    //             this->getObservers()[i]->update(e);
+    //         }
+    //         delete e;
+    //     }
+    //     Event<double> *e = new Event<double>(EventSourceType::SLIDER, new double(msg.toDouble()));
+    //     for (int i = 0; i < this->getNObservers(); i++)
+    //     {
+    //         this->getObservers()[i]->update(e);
+    //     }
+    //     delete e;    
+    // }
 }

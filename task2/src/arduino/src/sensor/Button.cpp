@@ -3,26 +3,26 @@
 Button::Button()
 {
   this->prevts = 0;
-  this->manual = false;
+  this->pressed = false;
 }
 
-bool Button::press()
+void Button::press()
 {
   long ts = millis();
   if (ts - this->prevts > 1000)
   {
-    Serial.print("button = ");
-    Serial.println(this->manual);
-    if (this->manual == false)
-    {
-      this->manual = true;
-    }
-    else
-    {
-      this->manual = false;
-    }
+      this->pressed = true;
     this->prevts = ts;
-    return true;
   }
-  return false;
+}
+
+bool Button::isPressed()
+{
+  return this->pressed;
+}
+
+
+void Button::resetPressed()
+{
+    this->pressed = false;
 }

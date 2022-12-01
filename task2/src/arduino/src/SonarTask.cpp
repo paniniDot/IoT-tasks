@@ -3,6 +3,7 @@
 SonarTask::SonarTask(Sonar *sonar)
 {
   this->sonar = sonar;
+  this->currentWaterState = WaterState::NORMAL;
 }
 
 void SonarTask::init(int period)
@@ -12,6 +13,17 @@ void SonarTask::init(int period)
 
 void SonarTask::tick()
 {
+  switch (this->currentWaterState) {
+    case WaterState::NORMAL:
+      Task::updatePeriod(1500);
+      break;
+    case WaterState::PRE_ALARM:
+      Task::updatePeriod(1000);
+      break;
+    case WaterState::ALARM:
+      Task::updatePeriod(500);
+      break;
+  }
   this->notify();
 }
 
@@ -28,4 +40,9 @@ void SonarTask::notify()
     this->getObservers()[i]->update(e);
   }
   delete e;
+}
+
+void SonarTask::update(Event<WaterState> *e)
+{
+  this->currentWaterState = *e->getEventArgs();
 }

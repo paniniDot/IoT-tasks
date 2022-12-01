@@ -6,11 +6,13 @@ class Button
 
 private:
   long prevts;
-  bool manual;
+  bool pressed;
 
 public:
   Button();
-  bool press();
+  void press();
+  bool isPressed();
+  void resetPressed();
 };
 
 #endif

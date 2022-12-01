@@ -10,7 +10,7 @@ class ManualControlTask : public Task, public Subject<bool>
     private:
         Button *button;
         bool manual;
-
+        
         void notify();
 
     public:
