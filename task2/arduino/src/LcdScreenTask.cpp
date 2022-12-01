@@ -13,6 +13,7 @@ void LcdScreenTask::init(int period)
     this->servoMeasure = 0.0;
     this->sonarMeasure = 0.0;
     this->waterState = WaterState::NORMAL;
+    this->peopleState = PeopleState::LIGHT_OFF;
     this->lcd->begin();
 }
 
@@ -25,6 +26,9 @@ void LcdScreenTask::tick()
     case WaterState::ALARM:
         Serial.println("ALARM");
         this->lcd->setCursor(0, 0);
+        this->lcd->print("Sonar: ");
+        this->lcd->print(this->sonarMeasure);
+        this->lcd->setCursor(0, 1);
         this->lcd->print("Servo: ");
         this->lcd->print(angle);
         this->lcd->backlight();
@@ -32,9 +36,6 @@ void LcdScreenTask::tick()
     case WaterState::PRE_ALARM:
         Serial.println("PRE_ALARM");
         this->lcd->setCursor(0, 0);
-        this->lcd->print("Servo: ");
-        this->lcd->print(angle);
-        this->lcd->setCursor(0, 1);
         this->lcd->print("Sonar: ");
         this->lcd->print(this->sonarMeasure);
         this->lcd->backlight();
@@ -44,7 +45,15 @@ void LcdScreenTask::tick()
         this->lcd->noBacklight();
         break;
     }
-    Serial.println(angle);
+    switch (this->peopleState)
+    {
+    case PeopleState::LIGHT_OFF:
+        Serial.println("LIGHT_OFF");
+        break;
+    case PeopleState::LIGHT_ON:
+        Serial.println("LIGHT_ON");
+        break;
+    }
     Serial.println(this->sonarMeasure);
 }
 
@@ -67,4 +76,10 @@ void LcdScreenTask::update(Event<double> *e)
 void LcdScreenTask::update(Event<WaterState> *e)
 {
     this->waterState = *e->getEventArgs();
+}
+
+// update called from lightTask
+void LcdScreenTask::update(Event<PeopleState> *e)
+{
+    this->peopleState = *e->getEventArgs();
 }

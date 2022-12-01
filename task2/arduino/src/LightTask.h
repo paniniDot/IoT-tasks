@@ -9,8 +9,9 @@
 #include "observer/Observer.h"
 #include "observer/Event.h"
 #include "Arduino.h"
-
-class LightTask : public Task, public Observer<WaterState>
+#include "observer/EventSourceType.h"
+#include "observer/Subject.h"
+class LightTask : public Task, public Observer<WaterState>, public Subject<PeopleState>
 {
 
 private:
@@ -25,6 +26,7 @@ private:
   bool CheckPeopleLevel();
   double CheckLightLevel();
   void updateState();
+  void notify();
 
 public:
   LightTask(PhotoResistor *pho, Pir *pir, Led *ledA);

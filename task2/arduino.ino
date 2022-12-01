@@ -14,9 +14,10 @@
 #include "src/LcdScreenTask.h"
 #include <EnableInterrupt.h>
 #include "src/BlinkingTask.h"
+#include "src/SerialComunicationTask.h"
 #include "src/debug/MemoryFree.h"
 
-#define SCHED_PERIOD 1000 // da aggiornare
+#define SCHED_PERIOD 500 // da aggiornare
 #define TIME 1000000
 
 Scheduler sched;
@@ -37,21 +38,25 @@ void setup()
   ServoMotorTask *t3 = new ServoMotorTask(servo);
   LcdScreenTask *t4 = new LcdScreenTask(new LiquidCrystal_I2C(0x3F, 16, 2));
   BlinkingTask *t5 = new BlinkingTask(new Led(6));
+  SerialComunicationTask *t6 = new SerialComunicationTask();
   t0->init(SCHED_PERIOD);
   t1->init(SCHED_PERIOD);
   t2->init(SCHED_PERIOD);
   t3->init(SCHED_PERIOD);
   t4->init(SCHED_PERIOD);
   t5->init(SCHED_PERIOD);
+  t6->init(SCHED_PERIOD);
   sched.addTask(t0);
   sched.addTask(t1);
   sched.addTask(t2);
   sched.addTask(t3);
   sched.addTask(t4);
   sched.addTask(t5);
+  sched.addTask(t6);
   t0->attach(t1);
   t0->attach(t4);
   t0->attach(t5);
+  t1->attach(t4);
   t2->attach(t0);
   t2->attach(t3);
   t2->attach(t4);
