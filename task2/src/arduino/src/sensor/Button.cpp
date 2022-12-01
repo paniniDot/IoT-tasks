@@ -3,6 +3,7 @@
 Button::Button()
 {
   this->prevts = 0;
+  this->manual = false;
 }
 
 bool Button::press()
@@ -11,16 +12,16 @@ bool Button::press()
   if (ts - this->prevts > 1000)
   {
     Serial.print("button = ");
-    Serial.println(manual);
-    if (manual == false)
+    Serial.println(this->manual);
+    if (this->manual == false)
     {
-      manual = true;
+      this->manual = true;
     }
     else
     {
-      manual = false;
+      this->manual = false;
     }
-    prevts = ts;
+    this->prevts = ts;
     return true;
   }
   return false;

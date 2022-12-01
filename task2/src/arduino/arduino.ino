@@ -21,9 +21,7 @@
 #define TIME 1000000
 
 Scheduler sched;
-long prevts = 0;
-/* temporary solution to avoid errors */
-bool manual = false;
+Button *btn = new Button();
 
 void setup()
 {
@@ -31,7 +29,7 @@ void setup()
   enableInterrupt(4, interruptCheck, RISING);
   sched.init(SCHED_PERIOD);
   ServoTimer2 *servo = new ServoTimer2();
-  Button *btn = new Button();
+
   servo->attach(5);
   WaterTask *t0 = new WaterTask(new Potentiometer(A3), new Led(9));
   LightTask *t1 = new LightTask(new PhotoResistor(A2), new Pir(11), new Led(10));
