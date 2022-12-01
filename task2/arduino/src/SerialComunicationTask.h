@@ -6,7 +6,7 @@
 #include "sensor/LiquidCrystal_I2C.h"
 #include "observer/EventSourceType.h"
 #include "task/Utils.h"
-#include "arduino.h"
+#include "Arduino.h"
 #include "observer/Subject.h"
 
 class SerialComunicationTask : public Task
