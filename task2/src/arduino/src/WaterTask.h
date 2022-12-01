@@ -3,7 +3,7 @@
 
 #include "task/Utils.h"
 #include "task/Task.h"
-#include "sensor/Potentiometer.h"
+
 #include "sensor/ServoTimer2.h"
 #include "sensor/Led.h"
 #include "observer/Observer.h"
@@ -16,7 +16,6 @@ class WaterTask : public Task, public Observer<double>, public Subject<WaterStat
 {
 
 private:
-  Potentiometer *pot;
   WaterState waterState;
   double currentWaterLevel;
   Led *ledB;
@@ -28,7 +27,7 @@ private:
   void notify();
 
 public:
-  WaterTask(Potentiometer *pot, Led *ledB);
+  WaterTask(Led *ledB);
   void init(int period);
   void tick();
   void update(Event<double> *e);

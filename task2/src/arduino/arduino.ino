@@ -31,10 +31,10 @@ void setup()
   ServoTimer2 *servo = new ServoTimer2();
 
   servo->attach(5);
-  WaterTask *t0 = new WaterTask(new Potentiometer(A3), new Led(9));
+  WaterTask *t0 = new WaterTask(new Led(9));
   LightTask *t1 = new LightTask(new PhotoResistor(A2), new Pir(11), new Led(10));
   SonarTask *t2 = new SonarTask(new Sonar(7, 8));
-  ServoMotorTask *t3 = new ServoMotorTask(servo);
+  ServoMotorTask *t3 = new ServoMotorTask(servo, new Potentiometer(A3));
   LcdScreenTask *t4 = new LcdScreenTask(new LiquidCrystal_I2C(0x3F, 16, 2));
   BlinkingTask *t5 = new BlinkingTask(new Led(6));
   SerialComunicationTask *t6 = new SerialComunicationTask();

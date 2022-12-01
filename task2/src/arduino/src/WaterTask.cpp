@@ -1,8 +1,7 @@
 #include "WaterTask.h"
 
-WaterTask::WaterTask(Potentiometer *pot, Led *ledB)
+WaterTask::WaterTask(Led *ledB)
 {
-  this->pot = pot;
   this->ledB = ledB;
   this->currentWaterLevel = 0.0;
 }
