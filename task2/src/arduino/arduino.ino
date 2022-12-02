@@ -51,8 +51,8 @@ void setup()
   sched.addTask(t7);
   sched.addTask(t3);
   sched.addTask(t1);
-  sched.addTask(t4);
   sched.addTask(t5);
+  sched.addTask(t4);
   t0->attach(t1);
   t0->attach(t4);
   t0->attach(t5);
