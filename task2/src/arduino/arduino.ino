@@ -45,6 +45,11 @@ void setup()
   t5->init(20 * SCHED_PERIOD);
   t6->init(SCHED_PERIOD);
   t7->init(SCHED_PERIOD);
+  /*
+    the order in which the tasks are added to the scheduler is important
+    because the scheduler will execute the tasks in the same order by calling tick()
+    we decided to let the sensors tasks to be executed first because others tasks depend on them.
+  */ 
   sched.addTask(t2);
   sched.addTask(t0);
   sched.addTask(t6);
