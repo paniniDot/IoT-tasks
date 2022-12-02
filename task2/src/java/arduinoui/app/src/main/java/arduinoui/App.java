@@ -134,7 +134,7 @@ public class App {
 									System.out.println("Serial Arduino " + line);
 									if (line.equals("ALARM")) {
 										labelwater.setText("water : ALARM");
-									} else if (line.equals("PRE_ALARM")) {
+									} else if (line.equals("PRE_ALARM")) {	
 										labelwater.setText("water : PRE ALARM");
 									} else if (line.equals("NORMAL")) {
 										labelwater.setText("water : NORMAL");

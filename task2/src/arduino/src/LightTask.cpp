@@ -33,6 +33,7 @@ void LightTask::tick()
   {
     lightOff();
   }
+  this->notify();
 }
 
 void LightTask::lightOn()
