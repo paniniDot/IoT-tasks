@@ -13,7 +13,7 @@ void LcdScreenTask::init(int period)
     this->servoMeasure = 0.0;
     this->sonarMeasure = 0.0;
     this->waterState = WaterState::NORMAL;
-    this->peopleState = PeopleState::LIGHT_OFF;
+    this->lightState = LightState::LIGHT_OFF;
     this->lcd->begin();
 }
 
@@ -45,12 +45,12 @@ void LcdScreenTask::tick()
         this->lcd->noBacklight();
         break;
     }
-    switch (this->peopleState)
+    switch (this->lightState)
     {
-    case PeopleState::LIGHT_OFF:
+    case LightState::LIGHT_OFF:
         Serial.println("LIGHT_OFF");
         break;
-    case PeopleState::LIGHT_ON:
+    case LightState::LIGHT_ON:
         Serial.println("LIGHT_ON");
         break;
     }
@@ -79,7 +79,7 @@ void LcdScreenTask::update(Event<WaterState> *e)
 }
 
 // update called from lightTask
-void LcdScreenTask::update(Event<PeopleState> *e)
+void LcdScreenTask::update(Event<LightState> *e)
 {
-    this->peopleState = *e->getEventArgs();
+    this->lightState = *e->getEventArgs();
 }

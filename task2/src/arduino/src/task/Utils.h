@@ -14,11 +14,12 @@ enum WaterState
   ALARM
 };
 
-enum PeopleState
+enum LightState
 {
   LIGHT_ON,
   LIGHT_OFF
 };
+
 class Utils
 {
 
@@ -39,7 +40,7 @@ public:
     }
   }
 
-  static PeopleState getPeopleState(bool pir, double light, long ms)
+  static LightState getLightState(bool pir, double light, long ms)
   {
     if ((pir && light < THL) || (!pir && ms < T1))
     {

@@ -11,13 +11,13 @@
 #include "Arduino.h"
 #include "observer/EventSourceType.h"
 #include "observer/Subject.h"
-class LightTask : public Task, public Observer<WaterState>, public Subject<PeopleState>
+class LightTask : public Task, public Observer<WaterState>, public Subject<LightState>
 {
 
 private:
   PhotoResistor *pho;
   Pir *pir;
-  PeopleState peopleState;
+  LightState lightState;
   Led *ledA;
   long prevs_time;
   WaterState waterState;

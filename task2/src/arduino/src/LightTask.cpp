@@ -11,7 +11,7 @@ void LightTask::init(int period)
 {
   Task::init(period);
   this->prevs_time = 0;
-  peopleState = LIGHT_OFF;
+  this->lightState = LIGHT_OFF;
   this->waterState = WaterState::NORMAL;
 }
 
@@ -19,7 +19,7 @@ void LightTask::tick()
 {
   if (this->waterState != ALARM)
   {
-    switch (peopleState)
+    switch (this->lightState)
     {
     case LIGHT_OFF:
       lightOff();
@@ -66,7 +66,7 @@ double LightTask::CheckLightLevel()
 void LightTask::updateState()
 {
   long ts = micros();
-  peopleState = Utils::getPeopleState(LightTask::CheckPeopleLevel(), LightTask::CheckLightLevel(), ts - this->prevs_time);
+  this->lightState = Utils::getLightState(LightTask::CheckPeopleLevel(), LightTask::CheckLightLevel(), ts - this->prevs_time);
 }
 
 void LightTask::update(Event<WaterState> *e)
@@ -76,7 +76,7 @@ void LightTask::update(Event<WaterState> *e)
 
 void LightTask::notify()
 {
-  Event<PeopleState> *e = new Event<PeopleState>(EventSourceType::LIGHT_TASK, new PeopleState(this->peopleState));
+  Event<LightState> *e = new Event<LightState>(EventSourceType::LIGHT_TASK, new LightState(this->lightState));
   for (int i = 0; i < this->getNObservers(); i++)
   {
     this->getObservers()[i]->update(e);

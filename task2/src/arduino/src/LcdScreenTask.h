@@ -8,14 +8,14 @@
 #include "task/Utils.h"
 #include "Arduino.h"
 
-class LcdScreenTask : public Task, public Observer<double>, public Observer<WaterState>, public Observer<PeopleState>
+class LcdScreenTask : public Task, public Observer<double>, public Observer<WaterState>, public Observer<LightState>
 {
 private:
     LiquidCrystal_I2C *lcd;
     double sonarMeasure;
     double servoMeasure;
     WaterState waterState;
-    PeopleState peopleState;
+    LightState lightState;
 
 public:
     LcdScreenTask(LiquidCrystal_I2C *lcdScreen);
@@ -23,7 +23,7 @@ public:
     void tick();
     void update(Event<double> *e);
     void update(Event<WaterState> *e);
-    void update(Event<PeopleState> *e);
+    void update(Event<LightState> *e);
 };
 
 #endif
