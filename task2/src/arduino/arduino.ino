@@ -18,9 +18,7 @@
 #include "src/debug/MemoryFree.h"
 #include "src/ManualControlTask.h"
 
-#define SCHED_PERIOD 1000 // da aggiornare
-#define TIME 1000000
-
+#define SCHED_PERIOD 100
 Scheduler sched;
 Button *btn = new Button();
 
@@ -34,27 +32,27 @@ void setup()
   WaterTask *t0 = new WaterTask(new Led(9));
   LightTask *t1 = new LightTask(new PhotoResistor(A2), new Pir(11), new Led(10));
   SonarTask *t2 = new SonarTask(new Sonar(7, 8));
-  ServoMotorTask *t3 = new ServoMotorTask(servo,new Potentiometer(A3));
+  ServoMotorTask *t3 = new ServoMotorTask(servo, new Potentiometer(A3));
   LcdScreenTask *t4 = new LcdScreenTask(new LiquidCrystal_I2C(0x3F, 16, 2));
   BlinkingTask *t5 = new BlinkingTask(new Led(6));
   SerialComunicationTask *t6 = new SerialComunicationTask();
   ManualControlTask *t7 = new ManualControlTask(btn);
   t0->init(SCHED_PERIOD);
-  t1->init(SCHED_PERIOD);
+  t1->init(5 * SCHED_PERIOD);
   t2->init(SCHED_PERIOD);
   t3->init(SCHED_PERIOD);
-  t4->init(200);
-  t5->init(2*SCHED_PERIOD);
+  t4->init(10 * SCHED_PERIOD);
+  t5->init(20 * SCHED_PERIOD);
   t6->init(SCHED_PERIOD);
   t7->init(SCHED_PERIOD);
-  sched.addTask(t0);
-  sched.addTask(t1);
   sched.addTask(t2);
-  sched.addTask(t3);
-  sched.addTask(t4);
-  sched.addTask(t5);
+  sched.addTask(t0);
   sched.addTask(t6);
   sched.addTask(t7);
+  sched.addTask(t3);
+  sched.addTask(t1);
+  sched.addTask(t4);
+  sched.addTask(t5);
   t0->attach(t1);
   t0->attach(t4);
   t0->attach(t5);
@@ -68,12 +66,11 @@ void setup()
 }
 void interruptCheck()
 {
-  Serial.println("bottone premutoooooo");
   btn->press();
 }
 
 void loop()
 {
-  Serial.println(freeMemory());
+  // Serial.println(freeMemory());
   sched.schedule();
 }

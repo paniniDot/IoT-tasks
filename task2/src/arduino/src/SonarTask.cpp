@@ -13,16 +13,17 @@ void SonarTask::init(int period)
 
 void SonarTask::tick()
 {
-  switch (this->currentWaterState) {
-    case WaterState::NORMAL:
-      Task::updatePeriod(1500);
-      break;
-    case WaterState::PRE_ALARM:
-      Task::updatePeriod(1000);
-      break;
-    case WaterState::ALARM:
-      Task::updatePeriod(500);
-      break;
+  switch (this->currentWaterState)
+  {
+  case WaterState::NORMAL:
+    Task::updatePeriod(2000);
+    break;
+  case WaterState::PRE_ALARM:
+    Task::updatePeriod(1000);
+    break;
+  case WaterState::ALARM:
+    Task::updatePeriod(100);
+    break;
   }
   this->notify();
 }
