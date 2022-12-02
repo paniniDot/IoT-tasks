@@ -9,7 +9,7 @@
 #include "Arduino.h"
 #include "observer/Subject.h"
 
-class SerialComunicationTask : public Task, public Subject<double> 
+class SerialComunicationTask : public Task, public Subject<double>
 {
 
 private:

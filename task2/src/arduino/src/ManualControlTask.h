@@ -7,17 +7,16 @@
 
 class ManualControlTask : public Task, public Subject<bool>
 {
-    private:
-        Button *button;
-        bool manual;
-        
-        void notify();
+private:
+    Button *button;
+    bool manual;
 
-    public:
-        ManualControlTask(Button *button);
-        void init(int period);
-        void tick();
+    void notify();
 
+public:
+    ManualControlTask(Button *button);
+    void init(int period);
+    void tick();
 };
 
 #endif

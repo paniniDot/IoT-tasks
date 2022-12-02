@@ -20,15 +20,18 @@ void ServoMotorTask::init(int period)
 
 void ServoMotorTask::tick()
 {
-  if (this->guicontrol) {
-    Serial.println("gui mode");
+  if (this->guicontrol)
+  {
     this->servo->write(map(this->currentAngleGui, 0, 180, MIN_ANGLE, MAX_ANGLE));
-  } else {
-    if(!this->manual) {
-      Serial.println("Automatic mode");
+  }
+  else
+  {
+    if (!this->manual)
+    {
       this->servo->write(map(this->currentAngle, WL2, WL_MAX, MIN_ANGLE, MAX_ANGLE));
-    } else {
-      Serial.println("Manual mode");
+    }
+    else
+    {
       this->servo->write(map(this->pot->measure(), 0, 1023, MIN_ANGLE, MAX_ANGLE));
     }
   }
@@ -37,10 +40,12 @@ void ServoMotorTask::tick()
 
 void ServoMotorTask::update(Event<double> *e)
 {
-  if(e->getSrcType() == EventSourceType::CHECKBOX){
-    Serial.println("checkbox");
+  if (e->getSrcType() == EventSourceType::CHECKBOX)
+  {
     this->guicontrol = !this->guicontrol;
-  } else if(e->getSrcType() == EventSourceType::SLIDER){
+  }
+  else if (e->getSrcType() == EventSourceType::SLIDER)
+  {
     this->currentAngleGui = *e->getEventArgs();
   }
   this->currentAngle = *e->getEventArgs();

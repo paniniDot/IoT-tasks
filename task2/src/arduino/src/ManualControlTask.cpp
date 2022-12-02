@@ -26,7 +26,7 @@ void ManualControlTask::notify()
     Event<bool> *e = new Event<bool>(EventSourceType::SERVO, new bool(this->manual));
     for (int i = 0; i < this->getNObservers(); i++)
     {
-    this->getObservers()[i]->update(e);
+        this->getObservers()[i]->update(e);
     }
     delete e;
 }

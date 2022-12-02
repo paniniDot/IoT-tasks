@@ -71,6 +71,6 @@ void SerialComunicationTask::notify()
     //     {
     //         this->getObservers()[i]->update(e);
     //     }
-    //     delete e;    
+    //     delete e;
     // }
 }
