@@ -16,10 +16,10 @@ void SonarTask::tick()
   switch (this->currentWaterState)
   {
   case WaterState::NORMAL:
-    Task::updatePeriod(2000);
+    Task::updatePeriod(1000);
     break;
   case WaterState::PRE_ALARM:
-    Task::updatePeriod(1000);
+    Task::updatePeriod(500);
     break;
   case WaterState::ALARM:
     Task::updatePeriod(100);
