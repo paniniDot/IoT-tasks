@@ -29,7 +29,7 @@ void loop() {
     } else if (msg == "on") {
       Serial.println("accendo");
       ledstatus = true;
-    } else if (msg == "of") {
+    } else if (msg == "off") {
       Serial.println("spengo");
       ledstatus = false;
     } else {
