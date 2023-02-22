@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".ControllerActivity">
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="135dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginBottom="15dp"
+        android:text="servo: 0"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="305dp"
@@ -25,7 +39,7 @@
         android:layout_marginTop="84dp"
         android:layout_marginEnd="120dp"
         android:layout_marginBottom="145dp"
-        android:text="Led"
+        android:text="Led: off"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

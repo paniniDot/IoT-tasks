@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -26,6 +27,8 @@ public class ControllerActivity extends AppCompatActivity {
     private boolean ledState;
     private SeekBar seekBar;
     private int servoState;
+
+    private TextView textView;
     private BluetoothClientConnectionThread connectionThread;
 
 
@@ -39,6 +42,7 @@ public class ControllerActivity extends AppCompatActivity {
     }
 
     private void initUI() {
+        textView= findViewById(R.id.textView3);
         remoteButton = findViewById(R.id.remotebutton);
         remoteButton.setEnabled(false);
         remoteButton.setOnClickListener((v) -> sendMessage());
@@ -47,6 +51,7 @@ public class ControllerActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                textView.setText("servo: "+String.valueOf(progress));
             }
 
             @Override
@@ -73,6 +78,7 @@ public class ControllerActivity extends AppCompatActivity {
             try {
                 String message = ledState ? "off\n" : "on\n";
                 bluetoothOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
+                remoteButton.setText("led: "+ (ledState ? "off" : "on"));
                 ledState = !ledState;
             } catch (IOException e) {
                 e.printStackTrace();
