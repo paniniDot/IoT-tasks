@@ -4,11 +4,13 @@
 
 Servo myservo;            // create servo object to control a servo
 SoftwareSerial bt(2, 3);  // RX pin, TX pin
+bool ledstatus = false;
+int servo = 0;
 
 void setup() {
   Serial.begin(9600);
-  bt.begin(9600);
   while (!Serial) {};
+  bt.begin(9600);
   Serial.println("ready to go.");
   myservo.attach(6);
 }
@@ -18,16 +20,24 @@ void loop() {
     //Serial.write(bt.read());
     String msg = bt.readStringUntil('\n');
     Serial.println(msg);
-    if (msg == "on") {
+    if (msg == "connesso") {
+      bt.print("ledstatus");
+      bt.println(ledstatus);
+      delay(100);
+      bt.print("servo");
+      bt.println(servo);
+    } else if (msg == "on") {
       Serial.println("accendo");
-    }else if (msg == "of") {
+      ledstatus = true;
+    } else if (msg == "of") {
       Serial.println("spengo");
-    }else {
+      ledstatus = false;
+    } else {
       myservo.write(map(msg.toInt(), 0, 100, 0, 1023));
+      servo = msg.toInt();
     }
   }
 
   if (Serial.available()) {
-    bt.write(Serial.read());
   }
 }

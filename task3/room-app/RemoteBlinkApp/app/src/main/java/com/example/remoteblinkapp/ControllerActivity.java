@@ -13,8 +13,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -23,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 public class ControllerActivity extends AppCompatActivity {
 
     private OutputStream bluetoothOutputStream;
-    private Button remoteButton;
+    private Switch remoteButton;
     private boolean ledState;
     private SeekBar seekBar;
     private int servoState;
@@ -42,7 +45,7 @@ public class ControllerActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-        textView= findViewById(R.id.textView3);
+        textView = findViewById(R.id.textView3);
         remoteButton = findViewById(R.id.remotebutton);
         remoteButton.setEnabled(false);
         remoteButton.setOnClickListener((v) -> sendMessage());
@@ -51,7 +54,7 @@ public class ControllerActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                textView.setText("servo: "+String.valueOf(progress));
+                textView.setText("servo: " + String.valueOf(progress));
             }
 
             @Override
@@ -78,7 +81,7 @@ public class ControllerActivity extends AppCompatActivity {
             try {
                 String message = ledState ? "off\n" : "on\n";
                 bluetoothOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
-                remoteButton.setText("led: "+ (ledState ? "off" : "on"));
+                remoteButton.setText("led: " + (ledState ? "off" : "on"));
                 ledState = !ledState;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -101,14 +104,40 @@ public class ControllerActivity extends AppCompatActivity {
         try {
             bluetoothOutputStream = socket.getOutputStream();
             Log.i(C.TAG, "Connection successful!");
+
+            // Thread per la lettura dei messaggi in entrata
+            bluetoothOutputStream.write("connesso".getBytes(StandardCharsets.UTF_8));
+            new Thread(() -> {
+                try {
+                    while (true) {
+                        BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        String message = input.readLine();
+                        Log.i(C.TAG, "Message received: " + message);
+                        if (message.startsWith("ledstatus")) {
+                            if (message.substring("ledstatus".length()).equals("1")) {
+                                ledState = true;
+                            } else if (message.substring("ledstatus".length()).equals("0")) {
+                                ledState = false;
+                            }
+                        } else if (message.startsWith("servo")) {
+                            servoState = Integer.parseInt(message.substring("servo".length()));
+                        }
+                        runOnUiThread(() -> {
+                            remoteButton.setEnabled(true);
+                            remoteButton.setChecked(ledState);
+                            seekBar.setEnabled(true);
+                            seekBar.setProgress(servoState);
+                        });
+                    }
+                } catch (IOException e) {
+                    Log.e(C.TAG, "Error occurred when reading input stream", e);
+                }
+            }).start();
+
         } catch (IOException e) {
             Log.e(C.TAG, "Error occurred when creating output stream", e);
         }
-        runOnUiThread(() -> {
-            remoteButton.setEnabled(true);
-            seekBar.setEnabled(true);
-            seekBar.setProgress(servoState);
-        });
+
     }
 
     @Override
