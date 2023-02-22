@@ -92,7 +92,9 @@ public class ScanActivity extends AppCompatActivity {
         findViewById(R.id.emulator).setOnClickListener(v -> {
             startActivity(new Intent(this, LedSwitchEmulatedActivity.class));
         });
-
+        findViewById(R.id.emulator2).setOnClickListener(v -> {
+            startActivity(new Intent(this, ServoControllerEmulatedActivity.class));
+        });
         scannedListView = findViewById(R.id.scannedView);
 
         //the adapter will let you update the view notifying changes to the data source

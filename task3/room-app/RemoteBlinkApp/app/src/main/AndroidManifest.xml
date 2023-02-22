@@ -57,6 +57,20 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".ServoControllerEmulatedActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ServoControllerActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ScanActivity"
             android:exported="true">
             <intent-filter>
