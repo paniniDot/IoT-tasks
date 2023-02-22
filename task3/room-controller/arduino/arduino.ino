@@ -1,5 +1,6 @@
 #include "SoftwareSerial.h"
 #include <Servo.h>
+#include <String.h>
 
 Servo myservo;            // create servo object to control a servo
 SoftwareSerial bt(2, 3);  // RX pin, TX pin
@@ -17,12 +18,12 @@ void loop() {
     //Serial.write(bt.read());
     String msg = bt.readStringUntil('\n');
     Serial.println(msg);
-    if (msg == "180") {
-      Serial.println("1023");
-      myservo.write(1023);
-    } else if (msg == "0") {
-      Serial.println("0");
-      myservo.write(0);
+    if (msg == "on") {
+      Serial.println("accendo");
+    }else if (msg == "of") {
+      Serial.println("spengo");
+    }else {
+      myservo.write(map(msg.toInt(), 0, 100, 0, 1023));
     }
   }
 
