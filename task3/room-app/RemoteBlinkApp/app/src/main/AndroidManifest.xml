@@ -43,28 +43,14 @@
         android:theme="@style/Theme.RemoteBlinkApp"
         tools:targetApi="31">
         <activity
-            android:name=".LedSwitchEmulatedActivity"
+            android:name=".ControllerEmulatedActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".LedSwitchActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ServoControllerEmulatedActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ServoControllerActivity"
+            android:name=".ControllerActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

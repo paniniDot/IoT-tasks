@@ -90,10 +90,7 @@ public class ScanActivity extends AppCompatActivity {
     private void initUI() {
         //shortcut to avoid bluetooth scanning if using emulator
         findViewById(R.id.emulator).setOnClickListener(v -> {
-            startActivity(new Intent(this, LedSwitchEmulatedActivity.class));
-        });
-        findViewById(R.id.emulator2).setOnClickListener(v -> {
-            startActivity(new Intent(this, ServoControllerEmulatedActivity.class));
+            startActivity(new Intent(this, ControllerEmulatedActivity.class));
         });
         scannedListView = findViewById(R.id.scannedView);
 
@@ -177,7 +174,7 @@ public class ScanActivity extends AppCompatActivity {
     @SuppressLint("MissingPermission")
     private void onDeviceClicked(BluetoothDevice device) {
         logMessage(device.getName());
-        Intent intent = new Intent(this, LedSwitchActivity.class);
+        Intent intent = new Intent(this, ControllerActivity.class);
         intent.putExtra(X_BLUETOOTH_DEVICE_EXTRA, device);
         startActivity(intent);
     }
