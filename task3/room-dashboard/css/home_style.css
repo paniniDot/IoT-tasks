@@ -1,3 +1,38 @@
-body{
+body {
     background-color: #EFD9CE;
+}
+
+h1 {
+    font-family: 'Lobster';
+    font-size: 50px;
+    text-align: center;
+}
+
+form {
+    background-color: #fff6ed;
+    text-align: center;
+    margin-left: 200px;
+}
+
+aside {
+    background-color: #B4A6AB; 
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top:10px;
+    left: 5px;
+    bottom:10px;
+    overflow-x: hidden;
+    padding-top: 20px;
+    float:left;
+}
+
+ul {
+    list-style-type: none;
+    text-align: center;
+    padding: 5%;
+}
+ul>li{
+    padding-bottom:5%;
+    font-size:20px;
 }
