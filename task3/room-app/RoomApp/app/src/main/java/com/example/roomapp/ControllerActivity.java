@@ -3,7 +3,6 @@ package com.example.roomapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -11,14 +10,12 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.SeekBar;
-import android.widget.Switch;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.google.android.material.color.DynamicColors;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -30,13 +27,15 @@ import java.nio.charset.StandardCharsets;
 public class ControllerActivity extends AppCompatActivity {
 
     private OutputStream bluetoothOutputStream;
-    private SwitchMaterial remoteButton;
+    private MaterialSwitch remoteButton;
+
+    private RadioGroup ledRadioButton;
     private boolean ledState;
     private Slider seekBar;
+
+    private RadioGroup servoRadioButton;
     private int servoState;
-
     private Thread rcv;
-
     private TextView textView;
     private BluetoothClientConnectionThread connectionThread;
 
@@ -62,15 +61,20 @@ public class ControllerActivity extends AppCompatActivity {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            runOnUiThread(() -> remoteButton.setText("led: " + (ledState ? "off" : "on")));
             ledState = !ledState;
+            runOnUiThread(() -> remoteButton.setText("led: " + (ledState ? "on" : "off")));
+        });
+        ledRadioButton =findViewById(R.id.radioGroup);
+        ledRadioButton.setOnCheckedChangeListener((group, checkId)->{
+            String text = ((RadioButton) group.findViewById(group.getCheckedRadioButtonId())).getText().toString();
+            Log.d(C.TAG, "click: "+text);
         });
         seekBar = findViewById(R.id.seekBar);
         seekBar.setEnabled(false);
         seekBar.addOnChangeListener((slider, value, fromUser) -> {
-            servoState = (int) slider.getValue();
+            servoState = (int) seekBar.getValue();
             try {
-                bluetoothOutputStream.write(String.valueOf(servoState).getBytes(StandardCharsets.UTF_8));
+                bluetoothOutputStream.write(String.valueOf(seekBar.getValue()).getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -78,6 +82,11 @@ public class ControllerActivity extends AppCompatActivity {
                 textView.setText("servo: " + String.valueOf(seekBar.getValue()));
                 seekBar.setValue(servoState);
             });
+        });
+        servoRadioButton =findViewById(R.id.radioGroup2);
+        servoRadioButton.setOnCheckedChangeListener((group, checkId)->{
+            String text = ((RadioButton) group.findViewById(group.getCheckedRadioButtonId())).getText().toString();
+            Log.d(C.TAG, "click: "+text);
         });
     }
 
@@ -116,6 +125,7 @@ public class ControllerActivity extends AppCompatActivity {
                         runOnUiThread(() -> {
                             remoteButton.setEnabled(true);
                             remoteButton.setChecked(ledState);
+                            remoteButton.setText("led: " + (ledState ? "on" : "off"));
                             seekBar.setEnabled(true);
                             seekBar.setValue(servoState);
                         });

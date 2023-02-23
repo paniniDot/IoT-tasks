@@ -1,21 +1,16 @@
 package com.example.roomapp;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
-import com.google.android.material.switchmaterial.SwitchMaterial;
-
-import java.io.OutputStream;
 
 public class ControllerEmulatedActivity extends AppCompatActivity {
 
-    private SwitchMaterial remoteButton;
+    private MaterialSwitch remoteButton;
     private boolean ledState;
     private Slider seekBar;
     private int servoState;
