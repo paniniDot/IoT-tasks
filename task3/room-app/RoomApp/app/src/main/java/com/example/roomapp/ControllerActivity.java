@@ -10,9 +10,13 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.google.android.material.slider.Slider;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,9 +28,9 @@ import java.nio.charset.StandardCharsets;
 public class ControllerActivity extends AppCompatActivity {
 
     private OutputStream bluetoothOutputStream;
-    private Switch remoteButton;
+    private SwitchMaterial remoteButton;
     private boolean ledState;
-    private SeekBar seekBar;
+    private Slider seekBar;
     private int servoState;
 
     private Thread rcv;
@@ -49,39 +53,28 @@ public class ControllerActivity extends AppCompatActivity {
         remoteButton = findViewById(R.id.remotebutton);
         remoteButton.setEnabled(false);
         remoteButton.setOnClickListener((v) -> {
+            String message = ledState ? "off\n" : "on\n";
             try {
-                String message = ledState ? "off\n" : "on\n";
                 bluetoothOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
-                runOnUiThread(() -> remoteButton.setText("led: " + (ledState ? "off" : "on")));
-                ledState = !ledState;
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
+            runOnUiThread(() -> remoteButton.setText("led: " + (ledState ? "off" : "on")));
+            ledState = !ledState;
         });
         seekBar = findViewById(R.id.seekBar);
         seekBar.setEnabled(false);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                runOnUiThread(() -> textView.setText("servo: " + String.valueOf(progress)));
+        seekBar.addOnChangeListener((slider, value, fromUser) -> {
+            servoState = (int) slider.getValue();
+            try {
+                bluetoothOutputStream.write(String.valueOf(servoState).getBytes(StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                new Thread(() -> {
-                    try {
-                        servoState = seekBar.getProgress();
-                        bluetoothOutputStream.write(String.valueOf(servoState).getBytes(StandardCharsets.UTF_8));
-                        runOnUiThread(() -> seekBar.setProgress(servoState));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-            }
+            runOnUiThread(() -> {
+                textView.setText("servo: " + String.valueOf(seekBar.getValue()));
+                seekBar.setValue(servoState);
+            });
         });
     }
 
@@ -121,7 +114,7 @@ public class ControllerActivity extends AppCompatActivity {
                             remoteButton.setEnabled(true);
                             remoteButton.setChecked(ledState);
                             seekBar.setEnabled(true);
-                            seekBar.setProgress(servoState);
+                            seekBar.setValue(servoState);
                         });
                     }
                 } catch (IOException e) {

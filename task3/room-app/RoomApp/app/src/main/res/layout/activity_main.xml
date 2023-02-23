@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ScanActivity">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/scan_button"
         android:layout_width="249dp"
         android:layout_height="53dp"
@@ -32,7 +32,7 @@
 
     </ListView>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
 
     </ListView>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/emulator"
         android:layout_width="119dp"
         android:layout_height="51dp"
