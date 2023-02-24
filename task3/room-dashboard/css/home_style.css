@@ -62,18 +62,95 @@ ul > li:hover {
     float: left;
     padding: 2%;
     border-radius: 25px;
+    height:200px;
+    width:400px;
 }
 
 .tenda {
     background-color: #fff6ed;
     margin-top: 10px;
-    margin-left: 25%;
+    margin-left:250px;
     float: left;
     padding: 2%;
     border-radius: 25px;
+    height: 200px;
+    width: 400px;
 }
 
 a{
     text-decoration:none;
     color:black;
+}
+
+.btnLuce {
+    height: 100px;
+    width: 100px;
+    margin-top: 10px;
+    background-color: #EFD9CE;
+    color: #B4A6AB;
+    font-size:40px;
+    font-weight:bold;
+}
+
+.range {
+    margin-top: 80px;
+    -webkit-appearance: none;
+    width: 100%;
+    border-radius:10px;
+    background: #EFD9CE;
+    opacity:0.7;
+    outline:none;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+ 
+}
+
+.range:hover{
+    opacity:1;
+}
+
+.range::-moz-range-thumb{
+    cursor: pointer;
+    background:#B4A6AB;
+    border-radius:10px;
+    border: 0px solid #000000;
+    width:20px;
+    height:20px;
+}
+
+/*Da qui la parte in cui le luci sono spente*/
+body.dark {
+    background-color: #696773;
+}
+
+aside.dark {
+    background-color: #C9B9BF;
+}
+.check.dark {
+    background-color: #B4A6AB;
+}
+
+.luce.dark {
+    background-color: #B4A6AB;
+}
+
+.tenda.dark {
+    background-color: #B4A6AB;
+}
+.range.dark {
+    background: #696773;
+}
+.range.dark::-moz-range-thumb{
+    background:white;
+}
+ul > li.dark:hover {
+    background-color: #696773;
+}
+a.dark:hover{
+    color:white;
+}
+
+.btnLuce.dark {
+    background-color: #696773;
+    color: white;
 }

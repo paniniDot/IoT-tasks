@@ -6,28 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet'>
     <link rel="stylesheet" href="css/home_style.css">
+    <script src="home.js"></script>
 
 </head>
     <body>
-        <h1> ROOM - DASHBOARD</h1>
+        <h1> DASHBOARD</h1>
         <main>
             <form>
                 <!-- Avvio Controllo Manuale-->
                 <div class="check">
-                    <input type="checkbox" id="chkManual" name="chkManual" value="manual" />
+                    <input type="checkbox" onclick="enable()" id ="chkManual" name="chkManual" value="manual" />
                     <label for="chkManual">Avvia Controllo Manuale</label>
                 </div>
                 <!-- Controllo Luce-->
                 <div class="luce">
                     <label>Accendi/Spegni Luce:</label>
                     <br />
-                    <button>ON</button>
+                    <input id="btnLuce" class="btnLuce" onclick="change()" type="button" value="ON"/>
                 </div>
                 <!-- Controllo Tenda-->
                 <div class="tenda">
                     <label>Regola la tenda:</label>
                     <br />
-                    <input type="range" />
+                    <input id="rgTenda" class="range" min="0" max="100" type="range" oninput="rangevalue.value=value" />
+                    <output id="rangevalue">0</output>
+
                 </div>
 
             </form>
