@@ -10,8 +10,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -27,16 +26,13 @@ import java.nio.charset.StandardCharsets;
 public class ControllerActivity extends AppCompatActivity {
 
     private OutputStream bluetoothOutputStream;
-    private MaterialSwitch remoteButton;
-
-    private RadioGroup ledRadioButton;
-    private boolean ledState;
-    private Slider seekBar;
-
-    private RadioGroup servoRadioButton;
-    private int servoState;
-    private Thread rcv;
-    private TextView textView;
+    private MaterialSwitch lightSwitch;
+    private CheckBox lightCheckBox;
+    private boolean lightState;
+    private Slider rollSlider;
+    private CheckBox rollCheckBox;
+    private int rollState;
+    private TextView rollText;
     private BluetoothClientConnectionThread connectionThread;
 
 
@@ -45,49 +41,67 @@ public class ControllerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //DynamicColors.applyToActivitiesIfAvailable(this);
         setContentView(R.layout.activity_controller);
-        ledState = false;
-        servoState = 0;
+        lightState = false;
+        rollState = 0;
         initUI();
     }
 
     private void initUI() {
-        textView = findViewById(R.id.textView3);
-        remoteButton = findViewById(R.id.remotebutton);
-        remoteButton.setEnabled(false);
-        remoteButton.setOnClickListener((v) -> {
-            String message = ledState ? "off\n" : "on\n";
+        rollText = findViewById(R.id.textView3);
+        lightSwitch = findViewById(R.id.remotebutton);
+        lightSwitch.setOnClickListener((v) -> {
+            String message = lightState ? "off\n" : "on\n";
             try {
                 bluetoothOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            ledState = !ledState;
-            runOnUiThread(() -> remoteButton.setText("led: " + (ledState ? "on" : "off")));
+            lightState = !lightState;
+            runOnUiThread(() -> lightSwitch.setText("led: " + (lightState ? "on" : "off")));
         });
-        ledRadioButton =findViewById(R.id.radioGroup);
-        ledRadioButton.setOnCheckedChangeListener((group, checkId)->{
-            String text = ((RadioButton) group.findViewById(group.getCheckedRadioButtonId())).getText().toString();
-            Log.d(C.TAG, "click: "+text);
-        });
-        seekBar = findViewById(R.id.seekBar);
-        seekBar.setEnabled(false);
-        seekBar.addOnChangeListener((slider, value, fromUser) -> {
-            servoState = (int) seekBar.getValue();
+        lightCheckBox = findViewById(R.id.checkBox2);
+        lightCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                runOnUiThread(() -> lightSwitch.setEnabled(true));
+            } else {
+                runOnUiThread(() -> lightSwitch.setEnabled(false));
+            }
             try {
-                bluetoothOutputStream.write(String.valueOf(seekBar.getValue()).getBytes(StandardCharsets.UTF_8));
+                bluetoothOutputStream.write(("led: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        rollSlider = findViewById(R.id.seekBar);
+        rollSlider.addOnChangeListener((slider, value, fromUser) -> {
+            rollState = (int) rollSlider.getValue();
+            try {
+                bluetoothOutputStream.write((rollSlider.getValue() + "\n").getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             runOnUiThread(() -> {
-                textView.setText("servo: " + String.valueOf(seekBar.getValue()));
-                seekBar.setValue(servoState);
+                rollText.setText("servo: " + String.valueOf(rollSlider.getValue()));
+                rollSlider.setValue(rollState);
             });
         });
-        servoRadioButton =findViewById(R.id.radioGroup2);
-        servoRadioButton.setOnCheckedChangeListener((group, checkId)->{
-            String text = ((RadioButton) group.findViewById(group.getCheckedRadioButtonId())).getText().toString();
-            Log.d(C.TAG, "click: "+text);
+        rollCheckBox = findViewById(R.id.checkBox);
+        rollCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                runOnUiThread(() -> rollSlider.setEnabled(true));
+            } else {
+                runOnUiThread(() -> rollSlider.setEnabled(false));
+            }
+            try {
+                bluetoothOutputStream.write(("servo: " + isChecked  + "\n").getBytes(StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
+        lightSwitch.setEnabled(false);
+        rollSlider.setEnabled(false);
+        rollCheckBox.setEnabled(false);
+        lightCheckBox.setEnabled(false);
     }
 
     @Override
@@ -107,7 +121,7 @@ public class ControllerActivity extends AppCompatActivity {
             Log.i(C.TAG, "Connection successful!");
             // Thread per la lettura dei messaggi in entrata
             bluetoothOutputStream.write("connesso".getBytes(StandardCharsets.UTF_8));
-            rcv = new Thread(() -> {
+            new Thread(() -> {
                 try {
                     while (bluetoothOutputStream != null) {
                         BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -115,26 +129,25 @@ public class ControllerActivity extends AppCompatActivity {
                         Log.i(C.TAG, "Message received: " + message);
                         if (message.startsWith("ledstatus")) {
                             if (message.substring("ledstatus".length()).equals("1")) {
-                                ledState = true;
+                                lightState = true;
                             } else if (message.substring("ledstatus".length()).equals("0")) {
-                                ledState = false;
+                                lightState = false;
                             }
                         } else if (message.startsWith("servo")) {
-                            servoState = Integer.parseInt(message.substring("servo".length()));
+                            rollState = Integer.parseInt(message.substring("servo".length()));
                         }
                         runOnUiThread(() -> {
-                            remoteButton.setEnabled(true);
-                            remoteButton.setChecked(ledState);
-                            remoteButton.setText("led: " + (ledState ? "on" : "off"));
-                            seekBar.setEnabled(true);
-                            seekBar.setValue(servoState);
+                            lightSwitch.setChecked(lightState);
+                            lightSwitch.setText("led: " + (lightState ? "on" : "off"));
+                            rollSlider.setValue(rollState);
+                            rollCheckBox.setEnabled(true);
+                            lightCheckBox.setEnabled(true);
                         });
                     }
                 } catch (IOException e) {
                     Log.e(C.TAG, "Error occurred when reading input stream", e);
                 }
-            });
-            rcv.start();
+            }).start();
         } catch (IOException e) {
             Log.e(C.TAG, "Error occurred when creating output stream", e);
         }
@@ -144,7 +157,6 @@ public class ControllerActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        rcv.interrupt();
         connectionThread.cancel();
     }
 
