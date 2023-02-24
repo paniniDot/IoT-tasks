@@ -1,41 +1,80 @@
 #include <WiFi.h>
 #include "PubSubClient.h"
+#define MSG_BUFFER_SIZE  50
 
-//define wifi
-const char* ssid = "iPhone di Mattia";
-const char* password = "qqqqqqqq";
+/* wifi network info */
 
-//forse la room service
-const char* mqtt_server = "broker";
+const char* ssid = "OPPO Find X2 Neo";
+const char* password = "eleemiaa";
+
+/* MQTT server address */
+const char* mqtt_server = "broker.mqtt-dashboard.com";
 
 //define topics 
 const char* topic_light = "esp32/light";
 const char* topic_motion = "esp32/motion";
 
-//initialize this client
-WiFiClient client;
-PubSubClient publisher(client);
+/* MQTT client management */
 
-void setup() {
+WiFiClient espClient;
+PubSubClient publisher(espClient);
+
+void setup_wifi() {
+
+  delay(10);
+
+  Serial.println(String("Connecting to ") + ssid);
+
+  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-  }
-  publisher.setServer(mqtt_server, 1883);
 
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+
+void reconnect() {
+  
+  // Loop until we're reconnected
+  
   while (!publisher.connected()) {
-    if (publisher.connect("ESP32_room_sensor_board")) {
-      Serial.println("Connected to MQTT broker succesfully!");
+    Serial.print("Attempting MQTT connection...");
+    
+    // Attempt to connect
+    if (publisher.connect("ESP32 room sensor board")) {
+      Serial.println("connected");
     } else {
+      Serial.print("failed, rc=");
+      Serial.print(publisher.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
       delay(5000);
     }
   }
+}
 
+void setup() {
+  Serial.begin(115200);
+  setup_wifi();
+  publisher.setServer(mqtt_server, 1883);
 }
 
 void loop() {
-  publisher.publish(topic_light, topic_light);
-  publisher.publish(topic_motion, topic_motion);
 
-  delay(5000);
+  if (!publisher.connected()) {
+    reconnect();
+  }
+
+  publisher.loop();
+
+  /* publishing the msg */
+  publisher.publish(topic_light, topic_light);
+  publisher.publish(topic_motion, topic_motion);  
 }
