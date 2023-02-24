@@ -36,11 +36,11 @@ public class ScanActivity extends AppCompatActivity {
     public static final String X_BLUETOOTH_DEVICE_EXTRA = "X_BLUETOOTH_DEVICE_EXTRA";
 
 
-    private List<BluetoothDevice> scannedDevices = new ArrayList<>();
-    private List<String> scannedNameList = new ArrayList<>();
+    private final List<BluetoothDevice> scannedDevices = new ArrayList<>();
+    private final List<String> scannedNameList = new ArrayList<>();
 
-    private List<BluetoothDevice> pairedDevices = new ArrayList<>();
-    private List<String> pairedNameList = new ArrayList<>();
+    private final List<BluetoothDevice> pairedDevices = new ArrayList<>();
+    private final List<String> pairedNameList = new ArrayList<>();
     private BluetoothAdapter btAdapter;
 
     private ListView scannedListView;
@@ -48,7 +48,7 @@ public class ScanActivity extends AppCompatActivity {
     private Button scanButton;
     private ArrayAdapter<String> scannedListAdapter;
     private ArrayAdapter<String> pairedListAdapter;
-    private boolean bluetoothEnabled = false;
+    private final boolean bluetoothEnabled = false;
 
     //When new bluetooth devices are discovered Bluetooth the system sends out an event.
     //A broadcast receiver is needed to capture system events and react accordingly

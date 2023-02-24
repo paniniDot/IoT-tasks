@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 @SuppressLint("MissingPermission")
 public class BluetoothClientConnectionThread extends Thread {
     private final BluetoothSocket socket;
-    private BluetoothAdapter btAdapter;
+    private final BluetoothAdapter btAdapter;
     Consumer<BluetoothSocket> handler;
 
     public BluetoothClientConnectionThread(BluetoothDevice device, BluetoothAdapter btAdapter, Consumer<BluetoothSocket> handler) {

@@ -81,7 +81,7 @@ public class ControllerActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
             runOnUiThread(() -> {
-                rollText.setText("servo: " + String.valueOf(rollSlider.getValue()));
+                rollText.setText("servo: " + rollSlider.getValue());
                 rollSlider.setValue(rollState);
             });
         });
