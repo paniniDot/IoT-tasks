@@ -88,8 +88,8 @@ a{
     margin-top: 10px;
     background-color: #EFD9CE;
     color: #B4A6AB;
-    font-size:40px;
-    font-weight:bold;
+    font-size: 40px;
+    font-weight: bold;
 }
 
 .range {
@@ -154,3 +154,4 @@ a.dark:hover{
     background-color: #696773;
     color: white;
 }
+/*Input disabilitati da fare*/

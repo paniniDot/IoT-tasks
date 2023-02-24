@@ -15,20 +15,22 @@
             <form>
                 <!-- Avvio Controllo Manuale-->
                 <div class="check">
-                    <input type="checkbox" onclick="enable()" id ="chkManual" name="chkManual" value="manual" />
-                    <label for="chkManual">Avvia Controllo Manuale</label>
+                    <input type="checkbox" id="manualLuce" name="chkLuce" value="luce" />
+                    <label for="chkLuce">Avvia Controllo Manuale Luce</label>
+                    <input type="checkbox" id="manualTenda" name="chkTenda" value="tenda" />
+                    <label for="chkTenda">Avvia Controllo Manuale Tenda</label>
                 </div>
                 <!-- Controllo Luce-->
                 <div class="luce">
                     <label>Accendi/Spegni Luce:</label>
                     <br />
-                    <input id="btnLuce" class="btnLuce" onclick="change()" type="button" value="ON"/>
+                    <input id="btnLuce" class="btnLuce" onclick="change()" type="button" value="OFF" disabled/>
                 </div>
                 <!-- Controllo Tenda-->
                 <div class="tenda">
                     <label>Regola la tenda:</label>
                     <br />
-                    <input id="rgTenda" class="range" min="0" max="100" type="range" oninput="rangevalue.value=value" />
+                    <input id="rgTenda" class="range" min="0" max="100" type="range" oninput="rangevalue.value=value" disabled/>
                     <output id="rangevalue">0</output>
 
                 </div>
@@ -40,7 +42,7 @@
             <nav>
                 <ul>
                     <li><a href="#">Home Dashboard</a></li>
-                    <li><img class="info" src="#" alt="icona per informazioni"/><a href="info.html">Info</a></li>
+                    <li><a href="info.html"><img class="info" src="info.png" alt="icona per informazioni" />Info</a></li>
                 </ul>
             </nav>
         </aside>
