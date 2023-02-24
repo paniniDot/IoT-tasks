@@ -119,34 +119,44 @@ public class ControllerActivity extends AppCompatActivity {
         try {
             bluetoothOutputStream = socket.getOutputStream();
             Log.i(C.TAG, "Connection successful!");
-            // Thread per la lettura dei messaggi in entrata
             bluetoothOutputStream.write("connesso".getBytes(StandardCharsets.UTF_8));
             new Thread(() -> {
+                BufferedReader input = null;
                 try {
-                    while (bluetoothOutputStream != null) {
-                        BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        String message = input.readLine();
-                        Log.i(C.TAG, "Message received: " + message);
-                        if (message.startsWith("ledstatus")) {
-                            if (message.substring("ledstatus".length()).equals("1")) {
-                                lightState = true;
-                            } else if (message.substring("ledstatus".length()).equals("0")) {
-                                lightState = false;
-                            }
-                        } else if (message.startsWith("servo")) {
-                            rollState = Integer.parseInt(message.substring("servo".length()));
-                        }
-                        runOnUiThread(() -> {
-                            lightSwitch.setChecked(lightState);
-                            lightSwitch.setText("led: " + (lightState ? "on" : "off"));
-                            rollSlider.setValue(rollState);
-                            rollCheckBox.setEnabled(true);
-                            lightCheckBox.setEnabled(true);
-                        });
-                    }
+                    input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 } catch (IOException e) {
-                    Log.e(C.TAG, "Error occurred when reading input stream", e);
+                    throw new RuntimeException(e);
                 }
+                while (socket.isConnected()) {
+                    String message;
+                    try {
+                        message = input.readLine();
+                        if (message == null) {
+                            socket.close();
+                            return;
+                        }
+                    } catch (IOException e) {
+                        return;
+                    }
+                    Log.i(C.TAG, "Message received: " + message);
+                    if (message.startsWith("ledstatus")) {
+                        if (message.substring("ledstatus".length()).equals("1")) {
+                            lightState = true;
+                        } else if (message.substring("ledstatus".length()).equals("0")) {
+                            lightState = false;
+                        }
+                    } else if (message.startsWith("servo")) {
+                        rollState = Integer.parseInt(message.substring("servo".length()));
+                    }
+                    runOnUiThread(() -> {
+                        lightSwitch.setChecked(lightState);
+                        lightSwitch.setText("led: " + (lightState ? "on" : "off"));
+                        rollSlider.setValue(rollState);
+                        rollCheckBox.setEnabled(true);
+                        lightCheckBox.setEnabled(true);
+                    });
+                }
+                Log.i(C.TAG, "Socket closed");
             }).start();
         } catch (IOException e) {
             Log.e(C.TAG, "Error occurred when creating output stream", e);

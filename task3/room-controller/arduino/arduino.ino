@@ -39,5 +39,6 @@ void loop() {
   }
 
   if (Serial.available()) {
+     bt.write(Serial.read());
   }
 }
