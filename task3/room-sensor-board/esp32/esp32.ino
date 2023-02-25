@@ -1,11 +1,10 @@
 #include <WiFi.h>
 #include "PubSubClient.h"
-#define MSG_BUFFER_SIZE  50
 
 /* wifi network info */
 
-const char* ssid = "OPPO Find X2 Neo";
-const char* password = "eleemiaa";
+const char* ssid = "iphone";
+const char* password = "eleeleele";
 
 /* MQTT server address */
 const char* mqtt_server = "broker.mqtt-dashboard.com";
