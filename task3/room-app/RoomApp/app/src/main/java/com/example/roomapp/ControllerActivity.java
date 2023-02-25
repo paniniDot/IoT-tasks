@@ -50,14 +50,13 @@ public class ControllerActivity extends AppCompatActivity {
         rollText = findViewById(R.id.textView3);
         lightSwitch = findViewById(R.id.remotebutton);
         lightSwitch.setOnClickListener((v) -> {
-            String message = lightState ? "off\n" : "on\n";
+            lightState = !lightState;
             try {
-                bluetoothOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
+                bluetoothOutputStream.write(("light: " + lightState + "\n").getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            lightState = !lightState;
-            runOnUiThread(() -> lightSwitch.setText("led: " + (lightState ? "on" : "off")));
+            runOnUiThread(() -> lightSwitch.setText(lightState ? "light: on" : "light: off"));
         });
         lightCheckBox = findViewById(R.id.checkBox2);
         lightCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -67,7 +66,7 @@ public class ControllerActivity extends AppCompatActivity {
                 runOnUiThread(() -> lightSwitch.setEnabled(false));
             }
             try {
-                bluetoothOutputStream.write(("led: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
+                bluetoothOutputStream.write(("lightcheckbox: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -81,7 +80,7 @@ public class ControllerActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
             runOnUiThread(() -> {
-                rollText.setText("servo: " + rollSlider.getValue());
+                rollText.setText("rollcheckbox: " + rollSlider.getValue());
                 rollSlider.setValue(rollState);
             });
         });
@@ -93,7 +92,7 @@ public class ControllerActivity extends AppCompatActivity {
                 runOnUiThread(() -> rollSlider.setEnabled(false));
             }
             try {
-                bluetoothOutputStream.write(("servo: " + isChecked  + "\n").getBytes(StandardCharsets.UTF_8));
+                bluetoothOutputStream.write(("rollstate: " + isChecked  + "\n").getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -139,18 +138,18 @@ public class ControllerActivity extends AppCompatActivity {
                         return;
                     }
                     Log.i(C.TAG, "Message received: " + message);
-                    if (message.startsWith("ledstatus")) {
-                        if (message.substring("ledstatus".length()).equals("1")) {
+                    if (message.startsWith("lightstate: ")) {
+                        if (message.substring("lightstate: ".length()).equals("1")) {
                             lightState = true;
-                        } else if (message.substring("ledstatus".length()).equals("0")) {
+                        } else if (message.substring("lightstate: ".length()).equals("0")) {
                             lightState = false;
                         }
-                    } else if (message.startsWith("servo")) {
-                        rollState = Integer.parseInt(message.substring("servo".length()));
+                    } else if (message.startsWith("roll: ")) {
+                        rollState = Integer.parseInt(message.substring("roll: ".length()));
                     }
                     runOnUiThread(() -> {
                         lightSwitch.setChecked(lightState);
-                        lightSwitch.setText("led: " + (lightState ? "on" : "off"));
+                        lightSwitch.setText("light: " + (lightState ? "on" : "off"));
                         rollSlider.setValue(rollState);
                         rollCheckBox.setEnabled(true);
                         lightCheckBox.setEnabled(true);
