@@ -8,13 +8,16 @@ Servo myservo;            // create servo object to control a servo
 SoftwareSerial bt(RX_PIN, TX_PIN); // RX pin, TX pin
 bool lightstate = false;
 int servo = 0;
+int servopin=6;
+int ledpin=12;
 
 void setup() {
   Serial.begin(9600);
   while (!Serial) {};
   bt.begin(9600);
   Serial.println("ready to go.");
-  myservo.attach(6);
+  myservo.attach(servopin);
+  pinMode(ledpin, OUTPUT);
 }
 
 void loop() {
@@ -30,15 +33,17 @@ void loop() {
       bt.println(servo);
     } else if (msg.startsWith("light")) {
         if (msg.endsWith("true")) {
+          digitalWrite(ledpin, HIGH);
           Serial.println("accendo");
           lightstate = true;
         } else if (msg.endsWith("false")) {
+          digitalWrite(ledpin, LOW);
           Serial.println("spengo");
           lightstate = false;
         }
     } else {
-      myservo.write(map(msg.toInt(), 0, 100, 0, 1023));
       servo = msg.toInt();
+      myservo.write(map(servo, 0, 100, 0, 1023));
     }
   }
 
