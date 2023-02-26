@@ -1,0 +1,2 @@
+javac -cp lib/* -d bin src/main/java/*.java src/main/java/channel/*.java
+java -cp "C:\Users\ricca\Documents\Arduino\IoT-tasks\task3\room-controller\java\serial\lib\*;C:\Users\ricca\Documents\Arduino\IoT-tasks\task3\room-controller\java\serial\bin" TestExtendedPingPongEmu

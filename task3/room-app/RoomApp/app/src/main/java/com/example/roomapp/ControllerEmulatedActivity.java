@@ -2,17 +2,18 @@ package com.example.roomapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import android.os.Bundle;
 import android.util.Log;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
 
 public class ControllerEmulatedActivity extends AppCompatActivity {
     private MaterialSwitch lightSwitch;
@@ -41,6 +42,11 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         lightSwitch = findViewById(R.id.remotebutton);
         lightSwitch.setOnClickListener((v) -> {
             lightState = !lightState;
+            try {
+                emulatedBluetoothOutputStream.write(("light: " + (lightState ? "on" : "off") + "\n").getBytes(StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             runOnUiThread(() -> lightSwitch.setText("light: " + (lightState ? "on" : "off")));
         });
         lightCheckBox = findViewById(R.id.checkBox2);
@@ -54,6 +60,14 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         rollSlider = findViewById(R.id.seekBar);
         rollSlider.addOnChangeListener((slider, value, fromUser) -> {
             rollState = (int) rollSlider.getValue();
+            Log.i(C.TAG, "roll: " + rollSlider.getValue());
+            new Thread(() -> {
+            try {
+                emulatedBluetoothOutputStream.write(("roll: " + rollSlider.getValue() + "\n").getBytes(StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            }).start();
             runOnUiThread(() -> {
                 rollText.setText("roll: " + rollSlider.getValue());
                 rollSlider.setValue(rollState);
@@ -79,6 +93,7 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         connectionThread = new EmulatedClientConnectionThread(this::manageConnectedSocket);
         connectionThread.start();
     }
+
     private void manageConnectedSocket(Socket socket) {
         try {
             emulatedBluetoothOutputStream = socket.getOutputStream();
@@ -93,6 +108,28 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
             rollCheckBox.setEnabled(true);
             lightCheckBox.setEnabled(true);
         });
+        /*new Thread(() -> {
+            BufferedReader input = null;
+            try {
+                input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            while (socket.isConnected()) {
+                String message;
+                try {
+                    message = input.readLine();
+                    if (message == null) {
+                        socket.close();
+                        return;
+                    }
+                } catch (IOException e) {
+                    return;
+                }
+                Log.i(C.TAG, "Message received: " + message);
+            }
+            Log.i(C.TAG, "Socket closed");
+        }).start();*/
     }
 
     @Override

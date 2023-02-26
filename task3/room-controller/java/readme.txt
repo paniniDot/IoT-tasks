@@ -1,2 +1,0 @@
- javac -cp lib/* -d bin src/main/java/*.java src/main/java/channel/*.java
-java -cp "C:\Users\ricca\Documents\eclipse-workspaces\arduino\commserial\lib\*;C:\Users\ricca\Documents\eclipse-workspaces\arduino\commserial\bin" TestExtendedPingPongEmu
