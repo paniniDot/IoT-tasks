@@ -1,5 +1,4 @@
-import channel.CommChannel;
-import channel.ExtendedSerialCommChannel;
+package esiot;
 
 /**
  * Esempio di utilizzo del componente channel.ExtendedSerialCommChannel
@@ -25,9 +24,8 @@ public class TestExtendedPingPongEmu {
         System.out.println("Waiting Arduino for rebooting...");
         Thread.sleep(4000);
         System.out.println("Ready.");
+
         while(true){
-            System.out.println("Sending ping...");
-            channel.sendMsg("ping");
             System.out.println("received: "+channel.receiveMsg());
             Thread.sleep(500);
         }
