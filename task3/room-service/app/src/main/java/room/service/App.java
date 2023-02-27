@@ -3,9 +3,6 @@
  */
 package room.service;
 
-import javax.net.ssl.SSLSocketFactory;
-import javax.security.auth.callback.Callback;
-
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -17,32 +14,34 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 public class App {
 
     public static void main(String[] args) throws MqttException {
-        MqttClient client = new MqttClient("tcp://broker.mqtt-dashboard.com:1883", MqttClient.generateClientId(), new MemoryPersistence());
-        MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
-        mqttConnectOptions.setUserName("panini");
-        mqttConnectOptions.setPassword("eleeleele".toCharArray());
-        client.connect(mqttConnectOptions);
-        
-        client.setCallback(new MqttCallback() {
-			
-			@Override
-			public void messageArrived(String topic, MqttMessage message) throws Exception {
-				System.out.println(topic);
-				System.out.println(message);
+        try (MqttClient client = new MqttClient("tcp://broker.mqtt-dashboard.com:1883", MqttClient.generateClientId(), new MemoryPersistence())) {
+			MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
+			if(client.isConnected()) {
+				client.disconnect();
 			}
+			client.connect(mqttConnectOptions);
 			
-			@Override
-			public void deliveryComplete(IMqttDeliveryToken token) {
-			}
-			
-			@Override
-			public void connectionLost(Throwable cause) {
-			}
+			client.setCallback(new MqttCallback() {
+				
+				@Override
+				public void messageArrived(String topic, MqttMessage message) throws Exception {
+					System.out.println(topic);
+					System.out.println(message);
+				}
+				
+				@Override
+				public void deliveryComplete(IMqttDeliveryToken token) {
+				}
+				
+				@Override
+				public void connectionLost(Throwable cause) {
+				}
   
-        });
-        
-        client.subscribe("esp32/light");
-        client.subscribe("esp32/motion");
-        client.disconnect();
+			});
+			
+			client.subscribe("esp32/light");
+			client.subscribe("esp32/motion");
+			
+		}
     }
 }
