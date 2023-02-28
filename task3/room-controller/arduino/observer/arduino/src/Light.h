@@ -14,11 +14,11 @@ class Light : public Subject<LightState>, public Observer<LightState>
 private:
   LightState lightState;
   Led *ledA;
-  void notify();
 
 public:
   Light(Led *led);
   void update(Event<LightState> *e);
+  void notify();
 };
 
 #endif

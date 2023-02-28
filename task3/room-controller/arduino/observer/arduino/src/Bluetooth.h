@@ -12,8 +12,8 @@
 class Bluetooth : public Subject<LightState>, public Observer<LightState>
 {
 private:
-    SoftwareSerial *bt;
     LightState lightState;
+    SoftwareSerial *bt;
 
 public:
     Bluetooth(SoftwareSerial *bluetooth);
