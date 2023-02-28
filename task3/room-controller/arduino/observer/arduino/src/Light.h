@@ -6,15 +6,18 @@
 #include "observer/Observer.h"
 #include "Arduino.h"
 #include "observer/Subject.h"
+#include "observer/Event.h"
+#include "observer/EventSourceType.h"
 
 class Light : public Subject<LightState>, public Observer<LightState>
 {
 private:
   LightState lightState;
   Led *ledA;
+  void notify();
 
 public:
-  Light(int pin);
+  Light(Led *led);
   void update(Event<LightState> *e);
 };
 

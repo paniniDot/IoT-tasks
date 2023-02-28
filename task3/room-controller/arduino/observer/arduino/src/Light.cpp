@@ -1,8 +1,8 @@
 #include "Light.h"
 
-Light::Light(int pin)
+Light::Light(Led *led)
 {
-  this->ledA = new Led(pin);
+  this->ledA = led;
   this->lightState = LIGHT_OFF;
 }
 
