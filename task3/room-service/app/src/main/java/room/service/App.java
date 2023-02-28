@@ -3,45 +3,20 @@
  */
 package room.service;
 
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import room.service.client.Client;
 
 public class App {
 
-    public static void main(String[] args) throws MqttException {
-        try (MqttClient client = new MqttClient("tcp://broker.mqtt-dashboard.com:1883", MqttClient.generateClientId(), new MemoryPersistence())) {
-			MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
-			if(client.isConnected()) {
-				client.disconnect();
+	public static void main(String[] args) throws MqttException, InterruptedException {
+		try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
+			client.registerToTopic("esp32/light");
+			client.registerToTopic("esp32/motion");
+			while (true) {
+				//wait for data
+				Thread.sleep(100);
 			}
-			client.connect(mqttConnectOptions);
-			
-			client.setCallback(new MqttCallback() {
-				
-				@Override
-				public void messageArrived(String topic, MqttMessage message) throws Exception {
-					System.out.println(topic);
-					System.out.println(message);
-				}
-				
-				@Override
-				public void deliveryComplete(IMqttDeliveryToken token) {
-				}
-				
-				@Override
-				public void connectionLost(Throwable cause) {
-				}
-  
-			});
-			
-			client.subscribe("esp32/light");
-			client.subscribe("esp32/motion");
-			
 		}
-    }
-}
+	}
+
+}	
