@@ -140,12 +140,14 @@ public class ControllerActivity extends AppCompatActivity {
                         runOnUiThread(() -> {
                             lightCheckBox.setChecked(b);
                             lightSwitch.setEnabled(b);
+                            lightCheckBox.setEnabled(true);
                         });
                     } else if (message.startsWith("rollcheckbox: ")) {
                         boolean b = message.substring("rollcheckbox: ".length()).equals("1");
                         runOnUiThread(() -> {
                             rollCheckBox.setChecked(b);
                             rollSlider.setEnabled(b);
+                            rollCheckBox.setEnabled(true);
                         });
                     } else if (message.startsWith("roll: ")) {
                         rollState = Integer.parseInt(message.substring("roll: ".length()));
@@ -154,10 +156,6 @@ public class ControllerActivity extends AppCompatActivity {
                 }
                 Log.i(C.TAG, "Socket closed");
             }).start();
-            runOnUiThread(() -> {
-                rollCheckBox.setEnabled(true);
-                lightCheckBox.setEnabled(true);
-            });
         } catch (IOException e) {
             Log.e(C.TAG, "Error occurred when creating output stream", e);
         }
