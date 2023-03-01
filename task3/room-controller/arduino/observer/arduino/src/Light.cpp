@@ -3,16 +3,16 @@
 Light::Light(int pin)
 {
   this->ledA = new Led(pin);
-  this->lightState = false;
+  this->lightState = 0;
 }
 
-void Light::update(Event<bool> *e)
+void Light::update(Event<int> *e)
 {
   EventSourceType src = e->getSrcType();
   if (src == EventSourceType::LIGHT)
   {
     this->lightState = *e->getEventArgs();
-    if (this->lightState)
+    if (this->lightState == 1)
     {
       this->ledA->switchOn();
     }
@@ -29,7 +29,7 @@ void Light::update(Event<bool> *e)
 
 void Light::notify()
 {
-  Event<bool> *e = new Event<bool>(EventSourceType::LIGHT, new bool(this->lightState));
+  Event<int> *e = new Event<int>(EventSourceType::LIGHT, new int(this->lightState));
   for (int i = 0; i < this->getNObservers(); i++)
   {
     this->getObservers()[i]->update(e);

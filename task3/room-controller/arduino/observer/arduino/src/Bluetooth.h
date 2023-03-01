@@ -8,7 +8,7 @@
 #include "observer/Event.h"
 #include "observer/EventSourceType.h"
 
-class Bluetooth : public Observer<bool>, public Subject<bool>
+class Bluetooth : public Observer<int>, public Subject<int>
 {
 private:
     SoftwareSerial *bt;
@@ -16,7 +16,7 @@ private:
 
 public:
     Bluetooth(int rx, int tx);
-    void update(Event<bool> *e);
+    void update(Event<int> *e);
     void start();
 };
 

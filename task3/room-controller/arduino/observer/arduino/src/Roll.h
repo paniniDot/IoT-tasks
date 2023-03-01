@@ -1,22 +1,22 @@
-#ifndef __LIGHT__
-#define __LIGHT__
+#ifndef __ROLL__
+#define __ROLL__
 
-#include "sensor/Led.h"
+#include "Servo.h"
 #include "Arduino.h"
 #include "observer/Observer.h"
 #include "observer/Subject.h"
 #include "observer/Event.h"
 #include "observer/EventSourceType.h"
 
-class Light : public Subject<int>, public Observer<int>
+class Roll : public Subject<int>, public Observer<int>
 {
 private:
-  int lightState;
-  Led *ledA;
+  int rollState;
+  Servo *servo;
   void notify();
 
 public:
-  Light(int pin);
+  Roll(int pin);
   void update(Event<int> *e);
 };
 
