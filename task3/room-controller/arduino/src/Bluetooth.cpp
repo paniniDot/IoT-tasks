@@ -67,9 +67,9 @@ void Bluetooth::notify()
             }
             delete e;
         }
-        else
+        else if (msg.startsWith("roll"))
         {
-            Event<int> *e = new Event<int>(EventSourceType::SERVO, new int(msg.toInt()));
+            Event<int> *e = new Event<int>(EventSourceType::SERVO, new int(msg.substring(strlen("roll: ")).toInt()));
             for (int i = 0; i < this->getNObservers(); i++)
             {
                 this->getObservers()[i]->update(e);

@@ -70,7 +70,7 @@ public class ControllerActivity extends AppCompatActivity {
         rollSlider.addOnChangeListener((slider, value, fromUser) -> {
             rollState = (int) rollSlider.getValue();
             try {
-                bluetoothOutputStream.write((rollState + "\n").getBytes(StandardCharsets.UTF_8));
+                bluetoothOutputStream.write(("roll: " + rollState + "\n").getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
