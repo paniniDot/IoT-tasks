@@ -10,12 +10,9 @@ public class App {
 
 	public static void main(String[] args) throws MqttException, InterruptedException {
 		try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
-			client.registerToTopic("esp32/light");
-			client.registerToTopic("esp32/motion");
-			while (true) {
-				//wait for data
-				Thread.sleep(100);
-			}
+			client.registerToTopic("esp32/light", (t, m) -> System.out.println("Received message: " + new String(m.getPayload())));
+			client.registerToTopic("esp32/motion", (t, m) -> System.out.println("Received message: " + new String(m.getPayload())));
+			Thread.sleep(10000);
 		}
 	}
 
