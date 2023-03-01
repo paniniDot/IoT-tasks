@@ -3,6 +3,8 @@
 Bluetooth::Bluetooth(int rx, int tx)
 {
     this->bt = new SoftwareSerial(rx, tx);
+    this->rollmode = 0;
+    this->lightmode = 0;
     bt->begin(9600);
     Serial.println("ready to go.");
 }
@@ -20,7 +22,7 @@ void Bluetooth::update(Event<int> *e)
     {
         int value = *e->getEventArgs();
         this->bt->print("lightstate: ");
-        this->bt->println(value != 0);
+        this->bt->println(value);
     }
     else if (src == EventSourceType::SERVO)
     {
@@ -44,6 +46,33 @@ void Bluetooth::notify()
                 this->getObservers()[i]->update(e);
             }
             delete e;
+            this->bt->print("lightcheckbox: ");
+            this->bt->println(this->lightmode);
+            delay(100);
+            this->bt->print("rollcheckbox: ");
+            this->bt->println(this->rollmode);
+        }
+        else if (msg.startsWith("lightcheckbox"))
+        {
+            if (msg.endsWith("true"))
+            {
+                this->lightmode = 1;
+            }
+            else if (msg.endsWith("false"))
+            {
+                this->lightmode = 0;
+            }
+        }
+        else if (msg.startsWith("rollcheckbox"))
+        {
+            if (msg.endsWith("true"))
+            {
+                this->rollmode = 1;
+            }
+            else if (msg.endsWith("false"))
+            {
+                this->rollmode = 0;
+            }
         }
         else if (msg.startsWith("light"))
         {

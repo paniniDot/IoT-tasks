@@ -12,6 +12,8 @@ class Bluetooth : public Observer<int>, public Subject<int>
 {
 private:
     SoftwareSerial *bt;
+    int rollmode;
+    int lightmode;
     void notify();
 
 public:
