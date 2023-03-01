@@ -80,7 +80,7 @@ public class ControllerActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
             runOnUiThread(() -> {
-                rollText.setText("rollcheckbox: " + rollSlider.getValue());
+                rollText.setText("roll: " + rollSlider.getValue());
                 rollSlider.setValue(rollState);
             });
         });
@@ -92,7 +92,7 @@ public class ControllerActivity extends AppCompatActivity {
                 runOnUiThread(() -> rollSlider.setEnabled(false));
             }
             try {
-                bluetoothOutputStream.write(("rollstate: " + isChecked  + "\n").getBytes(StandardCharsets.UTF_8));
+                bluetoothOutputStream.write(("rollcheckbox: " + isChecked  + "\n").getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -144,19 +144,21 @@ public class ControllerActivity extends AppCompatActivity {
                         } else if (message.substring("lightstate: ".length()).equals("0")) {
                             lightState = false;
                         }
+                        runOnUiThread(() -> {
+                            lightSwitch.setChecked(lightState);
+                            lightSwitch.setText("light: " + (lightState ? "on" : "off"));
+                        });
                     } else if (message.startsWith("roll: ")) {
                         rollState = Integer.parseInt(message.substring("roll: ".length()));
+                        runOnUiThread(() -> rollSlider.setValue(rollState));
                     }
-                    runOnUiThread(() -> {
-                        lightSwitch.setChecked(lightState);
-                        lightSwitch.setText("light: " + (lightState ? "on" : "off"));
-                        rollSlider.setValue(rollState);
-                        rollCheckBox.setEnabled(true);
-                        lightCheckBox.setEnabled(true);
-                    });
                 }
                 Log.i(C.TAG, "Socket closed");
             }).start();
+            runOnUiThread(() -> {
+                rollCheckBox.setEnabled(true);
+                lightCheckBox.setEnabled(true);
+            });
         } catch (IOException e) {
             Log.e(C.TAG, "Error occurred when creating output stream", e);
         }

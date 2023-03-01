@@ -1,24 +1,23 @@
 #ifndef __BLUETOOTH__
 #define __BLUETOOTH__
 
-#include "task/Utils.h"
-#include "observer/Observer.h"
-#include "Arduino.h"
-#include "observer/Subject.h"
 #include "SoftwareSerial.h"
+#include "Arduino.h"
+#include "observer/Observer.h"
+#include "observer/Subject.h"
 #include "observer/Event.h"
 #include "observer/EventSourceType.h"
 
-class Bluetooth : public Subject<LightState>, public Observer<LightState>
+class Bluetooth : public Observer<bool>, public Subject<bool>
 {
 private:
-    LightState lightState;
     SoftwareSerial *bt;
+    void notify();
 
 public:
-    Bluetooth(SoftwareSerial *bluetooth);
-    void update(Event<LightState> *e);
-    void notify();
+    Bluetooth(int rx, int tx);
+    void update(Event<bool> *e);
+    void start();
 };
 
 #endif

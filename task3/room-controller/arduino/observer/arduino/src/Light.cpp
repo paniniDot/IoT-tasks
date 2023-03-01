@@ -1,28 +1,35 @@
 #include "Light.h"
 
-Light::Light(Led *led)
+Light::Light(int pin)
 {
-  this->ledA = led;
-  this->lightState = LIGHT_OFF;
+  this->ledA = new Led(pin);
+  this->lightState = false;
 }
 
-void Light::update(Event<LightState> *e)
+void Light::update(Event<bool> *e)
 {
-  this->lightState = *e->getEventArgs();
-  if (this->lightState == LIGHT_ON)
+  EventSourceType src = e->getSrcType();
+  if (src == EventSourceType::LIGHT)
   {
-    this->ledA->switchOn();
+    this->lightState = *e->getEventArgs();
+    if (this->lightState)
+    {
+      this->ledA->switchOn();
+    }
+    else
+    {
+      this->ledA->switchOff();
+    }
   }
-  else
+  else if (src == EventSourceType::BLUETOOTH)
   {
-    this->ledA->switchOff();
+    this->notify();
   }
-  this->notify();
 }
 
 void Light::notify()
 {
-  Event<LightState> *e = new Event<LightState>(EventSourceType::LIGHT, new LightState(this->lightState));
+  Event<bool> *e = new Event<bool>(EventSourceType::LIGHT, new bool(this->lightState));
   for (int i = 0; i < this->getNObservers(); i++)
   {
     this->getObservers()[i]->update(e);
