@@ -130,19 +130,19 @@ public class ControllerActivity extends AppCompatActivity {
                     }
                     Log.i(C.TAG, "Message received: " + message);
                     if (message.startsWith("lightstate: ")) {
-                        lightState = Integer.parseInt(message.substring("lightstate: ".length())) != 0;
+                        lightState = message.substring("lightstate: ".length()).equals("1");
                         runOnUiThread(() -> {
                             lightSwitch.setChecked(lightState);
                             lightSwitch.setText("light: " + (lightState ? "on" : "off"));
                         });
                     } else if (message.startsWith("lightcheckbox: ")) {
-                        boolean b = Integer.parseInt(message.substring("lightcheckbox: ".length())) != 0;
+                        boolean b = message.substring("lightcheckbox: ".length()).equals("1");
                         runOnUiThread(() -> {
                             lightCheckBox.setChecked(b);
                             lightSwitch.setEnabled(b);
                         });
                     } else if (message.startsWith("rollcheckbox: ")) {
-                        boolean b = Integer.parseInt(message.substring("rollcheckbox: ".length())) != 0;
+                        boolean b = message.substring("rollcheckbox: ".length()).equals("1");
                         runOnUiThread(() -> {
                             rollCheckBox.setChecked(b);
                             rollSlider.setEnabled(b);

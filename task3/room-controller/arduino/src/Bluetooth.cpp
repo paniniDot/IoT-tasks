@@ -20,15 +20,13 @@ void Bluetooth::update(Event<int> *e)
     EventSourceType src = e->getSrcType();
     if (src == EventSourceType::LIGHT)
     {
-        int value = *e->getEventArgs();
         this->bt->print("lightstate: ");
-        this->bt->println(value);
+        this->bt->println(*e->getEventArgs());
     }
     else if (src == EventSourceType::SERVO)
     {
-        int value = *e->getEventArgs();
         this->bt->print("roll: ");
-        this->bt->println(value);
+        this->bt->println(*e->getEventArgs());
     }
 }
 
@@ -54,51 +52,24 @@ void Bluetooth::notify()
         }
         else if (msg.startsWith("lightcheckbox"))
         {
-            if (msg.endsWith("true"))
-            {
-                this->lightmode = 1;
-            }
-            else if (msg.endsWith("false"))
-            {
-                this->lightmode = 0;
-            }
+            this->lightmode = msg.substring(strlen("lightcheckbox: ")).equals("true");
         }
         else if (msg.startsWith("rollcheckbox"))
         {
-            if (msg.endsWith("true"))
-            {
-                this->rollmode = 1;
-            }
-            else if (msg.endsWith("false"))
-            {
-                this->rollmode = 0;
-            }
+            this->rollmode = msg.substring(strlen("rollcheckbox: ")).equals("true");
         }
         else if (msg.startsWith("light"))
         {
-            if (msg.endsWith("true"))
+            Event<int> *e = new Event<int>(EventSourceType::LIGHT, new int(msg.substring(strlen("light: ")).equals("true")));
+            for (int i = 0; i < this->getNObservers(); i++)
             {
-                Event<int> *e = new Event<int>(EventSourceType::LIGHT, new int(1));
-                for (int i = 0; i < this->getNObservers(); i++)
-                {
-                    this->getObservers()[i]->update(e);
-                }
-                delete e;
+                this->getObservers()[i]->update(e);
             }
-            else if (msg.endsWith("false"))
-            {
-                Event<int> *e = new Event<int>(EventSourceType::LIGHT, new int(0));
-                for (int i = 0; i < this->getNObservers(); i++)
-                {
-                    this->getObservers()[i]->update(e);
-                }
-                delete e;
-            }
+            delete e;
         }
         else
         {
-            int value = msg.toInt();
-            Event<int> *e = new Event<int>(EventSourceType::SERVO, new int(value));
+            Event<int> *e = new Event<int>(EventSourceType::SERVO, new int(msg.toInt()));
             for (int i = 0; i < this->getNObservers(); i++)
             {
                 this->getObservers()[i]->update(e);
