@@ -2,7 +2,8 @@
 
 Light::Light(int pin)
 {
-  this->ledA = new Led(pin);
+  this->pin = pin;
+  pinMode(this->pin, OUTPUT);
   this->lightState = 0;
 }
 
@@ -14,11 +15,11 @@ void Light::update(Event<int> *e)
     this->lightState = *e->getEventArgs();
     if (this->lightState == 1)
     {
-      this->ledA->switchOn();
+      digitalWrite(this->pin, HIGH);
     }
     else
     {
-      this->ledA->switchOff();
+      digitalWrite(this->pin, LOW);
     }
   }
   else if (src == EventSourceType::BLUETOOTH)

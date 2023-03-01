@@ -1,7 +1,6 @@
 #ifndef __LIGHT__
 #define __LIGHT__
 
-#include "sensor/Led.h"
 #include "Arduino.h"
 #include "observer/Observer.h"
 #include "observer/Subject.h"
@@ -12,7 +11,7 @@ class Light : public Subject<int>, public Observer<int>
 {
 private:
   int lightState;
-  Led *ledA;
+  int pin;
   void notify();
 
 public:
