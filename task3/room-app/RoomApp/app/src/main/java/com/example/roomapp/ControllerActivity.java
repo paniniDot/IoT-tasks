@@ -92,7 +92,7 @@ public class ControllerActivity extends AppCompatActivity {
                 runOnUiThread(() -> rollSlider.setEnabled(false));
             }
             try {
-                bluetoothOutputStream.write(("rollcheckbox: " + isChecked  + "\n").getBytes(StandardCharsets.UTF_8));
+                bluetoothOutputStream.write(("rollcheckbox: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -148,6 +148,30 @@ public class ControllerActivity extends AppCompatActivity {
                             lightSwitch.setChecked(lightState);
                             lightSwitch.setText("light: " + (lightState ? "on" : "off"));
                         });
+                    } else if (message.startsWith("lightcheckbox: ")) {
+                        if (message.substring("lightcheckbox: ".length()).equals("1")) {
+                            runOnUiThread(() -> {
+                                lightCheckBox.setChecked(true);
+                                lightSwitch.setEnabled(true);
+                            });
+                        } else if (message.substring("lightcheckbox: ".length()).equals("0")) {
+                            runOnUiThread(() -> {
+                                lightCheckBox.setChecked(false);
+                                lightSwitch.setEnabled(false);
+                            });
+                        }
+                    } else if (message.startsWith("rollcheckbox: ")) {
+                        if (message.substring("rollcheckbox: ".length()).equals("1")) {
+                            runOnUiThread(() -> {
+                                rollCheckBox.setChecked(true);
+                                rollSlider.setEnabled(true);
+                            });
+                        } else if (message.substring("rollcheckbox: ".length()).equals("0")) {
+                            runOnUiThread(() -> {
+                                rollCheckBox.setChecked(false);
+                                rollSlider.setEnabled(false);
+                            });
+                        }
                     } else if (message.startsWith("roll: ")) {
                         rollState = Integer.parseInt(message.substring("roll: ".length()));
                         runOnUiThread(() -> rollSlider.setValue(rollState));
