@@ -10,16 +10,23 @@ import room.service.serial.SerialCommChannel;
 public class App {
 
 	public static void main(String[] args) throws Exception {
-		CommChannel channel = new SerialCommChannel("/dev/ttyACM0", 9600);
+		CommChannel channel = new SerialCommChannel("/dev/ttyACM2", 9600);
+		
+		/* attesa necessaria per fare in modo che Arduino completi il reboot */
+		System.out.println("Waiting Arduino for rebooting...");		
+		Thread.sleep(4000);
+		System.out.println("Ready.");	
+		
 		try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
-			client.registerToTopic("esp32/light");
-			client.registerToTopic("esp32/motion");
-			while (true) {
-				//wait for data
-				
-				Thread.sleep(500);
-			}
+			client.registerToTopic("esp32/light", (t, m) -> {
+				channel.sendMsg(new String(m.getPayload()));
+				System.out.println(new String(m.getPayload()));
+			});
+			client.registerToTopic("esp32/motion", (t, m) -> {
+				channel.sendMsg(new String(m.getPayload()));
+				System.out.println(new String(m.getPayload()));
+			});
+			Thread.sleep(500);
 		}
-	}
-
-}	
+	}	
+}

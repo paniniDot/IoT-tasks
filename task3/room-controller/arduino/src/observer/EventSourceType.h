@@ -6,7 +6,8 @@ enum EventSourceType
     SERVO,
     LIGHT,
     SLIDER,
-    CHECKBOX
+    CHECKBOX,
+    BLUETOOTH
 
 };
 
