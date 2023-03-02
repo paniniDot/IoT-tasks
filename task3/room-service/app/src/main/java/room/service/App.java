@@ -3,18 +3,21 @@
  */
 package room.service;
 
-import org.eclipse.paho.client.mqttv3.MqttException;
 import room.service.client.Client;
+import room.service.serial.CommChannel;
+import room.service.serial.SerialCommChannel;
 
 public class App {
 
-	public static void main(String[] args) throws MqttException, InterruptedException {
+	public static void main(String[] args) throws Exception {
+		CommChannel channel = new SerialCommChannel("/dev/ttyACM0", 9600);
 		try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
 			client.registerToTopic("esp32/light");
 			client.registerToTopic("esp32/motion");
 			while (true) {
 				//wait for data
-				Thread.sleep(100);
+				
+				Thread.sleep(500);
 			}
 		}
 	}
