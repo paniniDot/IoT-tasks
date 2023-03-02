@@ -25,6 +25,10 @@ dependencies {
     
     // https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
+    
+    // https://mvnrepository.com/artifact/io.github.java-native/jssc
+	implementation("io.github.java-native:jssc:2.9.4")
+    
 }
 
 application {
