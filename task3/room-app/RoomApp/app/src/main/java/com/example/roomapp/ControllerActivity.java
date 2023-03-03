@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.CheckBox;
@@ -55,7 +56,10 @@ public class ControllerActivity extends AppCompatActivity {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            runOnUiThread(() -> lightSwitch.setText(lightState ? "light: on" : "light: off"));
+            runOnUiThread(() -> {
+                lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px):getResources().getDrawable(R.drawable.lightbulb_48px));
+                lightSwitch.setText(lightState ? "light: on" : "light: off");
+            });
         });
         lightCheckBox = findViewById(R.id.checkBox2);
         lightCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
