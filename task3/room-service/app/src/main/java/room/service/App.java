@@ -10,7 +10,7 @@ import room.service.serial.SerialCommChannel;
 public class App {
 
 	public static void main(String[] args) throws Exception {
-		CommChannel channel = new SerialCommChannel("/dev/ttyACM2", 9600);
+		CommChannel channel = new SerialCommChannel("COM3", 9600);
 		
 		/* attesa necessaria per fare in modo che Arduino completi il reboot */
 		System.out.println("Waiting Arduino for rebooting...");		

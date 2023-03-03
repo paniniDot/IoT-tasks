@@ -2,8 +2,12 @@
 #include "src/Light.h"
 #include "src/Bluetooth.h"
 #include "src/Roll.h"
+#include "src/MsgService.h"
+#include "Arduino.h"
+
 void setup() {
-  Serial.begin(9600);
+  //MsgServiceBT.init();
+  MsgService.init();
   while (!Serial) {};
   Bluetooth *bluetooth = new Bluetooth(2,3);
   Light *light = new Light(9);
@@ -16,4 +20,9 @@ void setup() {
 }
 
 void loop() {
+  if (MsgService.isMsgAvailable()) {
+    Serial.println("messaggio arrivato!");
+    Msg* msg = MsgService.receiveMsg();
+    Serial.println(msg->getContent());
+  }
 }
