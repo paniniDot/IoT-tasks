@@ -25,6 +25,15 @@ dependencies {
     
     // https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
+    
+    // https://mvnrepository.com/artifact/io.github.java-native/jssc
+	implementation("io.github.java-native:jssc:2.9.4")
+	
+	// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+	implementation("org.slf4j:slf4j-api:2.0.6")
+	
+	// https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl
+	implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")	
 }
 
 application {

@@ -3,17 +3,30 @@
  */
 package room.service;
 
-import org.eclipse.paho.client.mqttv3.MqttException;
 import room.service.client.Client;
+import room.service.serial.CommChannel;
+import room.service.serial.SerialCommChannel;
 
 public class App {
 
-	public static void main(String[] args) throws MqttException, InterruptedException {
+	public static void main(String[] args) throws Exception {
+		CommChannel channel = new SerialCommChannel("/dev/ttyACM2", 9600);
+		
+		/* attesa necessaria per fare in modo che Arduino completi il reboot */
+		System.out.println("Waiting Arduino for rebooting...");		
+		Thread.sleep(4000);
+		System.out.println("Ready.");	
+		
 		try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
-			client.registerToTopic("esp32/light", (t, m) -> System.out.println("Received message: " + new String(m.getPayload())));
-			client.registerToTopic("esp32/motion", (t, m) -> System.out.println("Received message: " + new String(m.getPayload())));
-			Thread.sleep(10000);
+			client.registerToTopic("esp32/light", (t, m) -> {
+				channel.sendMsg(new String(m.getPayload()));
+				System.out.println(new String(m.getPayload()));
+			});
+			client.registerToTopic("esp32/motion", (t, m) -> {
+				channel.sendMsg(new String(m.getPayload()));
+				System.out.println(new String(m.getPayload()));
+			});
+			Thread.sleep(500);
 		}
-	}
-
-}	
+	}	
+}
