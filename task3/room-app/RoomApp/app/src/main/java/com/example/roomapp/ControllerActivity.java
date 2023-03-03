@@ -59,11 +59,14 @@ public class ControllerActivity extends AppCompatActivity {
         });
         lightCheckBox = findViewById(R.id.checkBox2);
         lightCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            runOnUiThread(() -> lightSwitch.setEnabled(isChecked));
-            try {
-                bluetoothOutputStream.write(("lightcheckbox: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (buttonView.isPressed())
+            {
+                runOnUiThread(() -> lightSwitch.setEnabled(isChecked));
+                try {
+                    bluetoothOutputStream.write(("lightcheckbox: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         rollSlider = findViewById(R.id.seekBar);
@@ -81,12 +84,16 @@ public class ControllerActivity extends AppCompatActivity {
         });
         rollCheckBox = findViewById(R.id.checkBox);
         rollCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            runOnUiThread(() -> rollSlider.setEnabled(isChecked));
-            try {
-                bluetoothOutputStream.write(("rollcheckbox: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (buttonView.isPressed())
+            {
+                runOnUiThread(() -> rollSlider.setEnabled(isChecked));
+                try {
+                    bluetoothOutputStream.write(("rollcheckbox: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
+
         });
         lightSwitch.setEnabled(false);
         rollSlider.setEnabled(false);
