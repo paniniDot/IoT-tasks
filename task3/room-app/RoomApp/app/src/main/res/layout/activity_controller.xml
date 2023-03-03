@@ -34,14 +34,31 @@
             android:layout_height="wrap_content"
             android:text="Roll: 0" />
 
-        <com.google.android.material.slider.Slider
-            android:id="@+id/seekBar"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="roller"
-            android:stepSize="10"
-            android:valueFrom="0"
-            android:valueTo="100" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/blinds_48px" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/seekBar"
+                android:layout_width="256dp"
+                android:layout_height="match_parent"
+                android:contentDescription="roller"
+                android:stepSize="10"
+                android:valueFrom="0"
+                android:valueTo="100" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/blinds_closed_48px"
+                android:visibility="visible" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -70,7 +87,9 @@
             android:id="@+id/remotebutton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Light: off" />
+            android:text="Light: off"
+            app:thumbIcon="@drawable/lightbulb_48px"
+            />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
