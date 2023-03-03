@@ -35,7 +35,7 @@
             android:text="Roll: 0" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
@@ -50,7 +50,7 @@
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/seekBar"
-                android:layout_width="254dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:contentDescription="roller"
                 android:stepSize="10"
@@ -109,8 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Light: off"
-            app:thumbIcon="@drawable/lightbulb_48px"
-            />
+            app:thumbIcon="@drawable/lightbulb_48px" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
