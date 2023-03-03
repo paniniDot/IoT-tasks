@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.RoomApp" parent="Theme.Material3.DynamicColors.DayNight">
+    <style name="Theme.RoomApp" parent="Theme.Material3.DayNight.NoActionBar">
+
     </style>
 </resources>

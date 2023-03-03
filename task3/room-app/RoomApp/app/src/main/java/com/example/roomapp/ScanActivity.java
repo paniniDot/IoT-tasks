@@ -22,6 +22,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.android.material.color.DynamicColors;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +80,7 @@ public class ScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DynamicColors.applyToActivityIfAvailable(this);
         setContentView(R.layout.activity_main);
 
         //You need to register your receiver to the proper Intent filter

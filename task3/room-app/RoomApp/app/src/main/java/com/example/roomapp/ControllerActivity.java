@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
 
@@ -40,6 +41,7 @@ public class ControllerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DynamicColors.applyToActivityIfAvailable(this);
         setContentView(R.layout.activity_controller);
         lightState = false;
         rollState = 0;
