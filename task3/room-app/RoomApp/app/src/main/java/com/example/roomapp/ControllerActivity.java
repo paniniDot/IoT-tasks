@@ -57,14 +57,13 @@ public class ControllerActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
             runOnUiThread(() -> {
-                lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px):getResources().getDrawable(R.drawable.lightbulb_48px));
+                lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
                 lightSwitch.setText(lightState ? "light: on" : "light: off");
             });
         });
         lightCheckBox = findViewById(R.id.checkBox2);
         lightCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (buttonView.isPressed())
-            {
+            if (buttonView.isPressed()) {
                 runOnUiThread(() -> lightSwitch.setEnabled(isChecked));
                 try {
                     bluetoothOutputStream.write(("lightcheckbox: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
@@ -88,8 +87,7 @@ public class ControllerActivity extends AppCompatActivity {
         });
         rollCheckBox = findViewById(R.id.checkBox);
         rollCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (buttonView.isPressed())
-            {
+            if (buttonView.isPressed()) {
                 runOnUiThread(() -> rollSlider.setEnabled(isChecked));
                 try {
                     bluetoothOutputStream.write(("rollcheckbox: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
@@ -143,6 +141,7 @@ public class ControllerActivity extends AppCompatActivity {
                     if (message.startsWith("lightstate: ")) {
                         lightState = message.substring("lightstate: ".length()).equals("1");
                         runOnUiThread(() -> {
+                            lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
                             lightSwitch.setChecked(lightState);
                             lightSwitch.setText("light: " + (lightState ? "on" : "off"));
                         });
