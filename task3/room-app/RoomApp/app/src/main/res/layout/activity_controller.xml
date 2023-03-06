@@ -35,7 +35,9 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:scaleX="1"
+                android:scaleY="1"
                 android:text="Roll: 0" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,6 +48,7 @@
                     android:id="@+id/imageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:scaleX="1"
                     android:scaleY="1"
                     android:src="@drawable/blinds_48px"
@@ -58,7 +61,6 @@
                     android:id="@+id/seekBar"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:contentDescription="roller"
                     android:orientation="horizontal"
                     android:stepSize="10"
                     android:valueFrom="0"
@@ -72,6 +74,7 @@
                     android:id="@+id/imageview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:scaleX="1"
                     android:scaleY="1"
                     android:src="@drawable/blinds_closed_48px"
@@ -100,7 +103,7 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center|right|center_horizontal|fill_horizontal"
+            android:gravity="center|center_horizontal|fill_horizontal"
             android:orientation="vertical">
 
             <CheckBox
@@ -113,10 +116,7 @@
                 android:id="@+id/remotebutton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="64dp"
-                android:paddingEnd="64dp"
-                android:scaleX="1.5"
-                android:scaleY="1.5"
+                android:layout_marginHorizontal="8dp"
                 android:text="Light: off"
                 app:thumbIcon="@drawable/lightbulb_48px" />
         </LinearLayout>
