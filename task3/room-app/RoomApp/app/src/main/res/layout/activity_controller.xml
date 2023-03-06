@@ -15,7 +15,8 @@
         app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Widget.Material3.CardView.Elevated">
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -90,7 +91,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView">
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+        style="@style/Widget.Material3.CardView.Elevated">
 
         <LinearLayout
             android:id="@+id/linearLayout"
