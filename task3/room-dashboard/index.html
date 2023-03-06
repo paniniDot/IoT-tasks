@@ -7,19 +7,17 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/index.js"></script>
-    <title>room site</title>
+    <title>Smart Home</title>
 </head>
 
-<body class="d-flex flex-column" data-bs-theme="dark">
+<body class="d-flex flex-column mh-100" data-bs-theme="light">
     <div class="container-fluid shadow">
         <header class="d-flex justify-content-center p-3 ">
-            <h1>ROOM SITE</h1>
+            <h1>Smart Home</h1>
         </header>
     </div>
-    <div class="d-flex justify-content-evenly align-self-start w-100">
-        <div class="card mt-5" style="width: 18rem;">
+    <div class="d-flex justify-content-evenly align-self-start col-12">
+        <div class="card mt-5 col-3">
             <div class="card-header">rool <i class="bi bi-arrow-down-up"></i></div>
             <div class="card-body">
                 <form>
@@ -28,11 +26,11 @@
                         <label class="form-check-label" for="flexCheckDefault">manuale</label>
                     </div>
                     <label for="customRange3" class="form-label">roll</label>
-                    <input type="range" class="form-range" min="0" max="100" step="10" value="10"id="customRange3" >
+                    <input type="range" class="form-range" min="0" max="100" step="10" value="10" id="customRange3">
                 </form>
             </div>
         </div>
-        <div class="card mt-5" style="width: 18rem;">
+        <div class="card mt-5 col-3">
             <div class="card-header">light <i class="bi bi-lightbulb"></i></div>
             <div class="card-body">
                 <form>
@@ -48,8 +46,17 @@
             </div>
         </div>
     </div>
-
-    
+    <div class="d-flex justify-content-evenly align-self-start col-12">
+        <div class="card mt-5 col-8">
+            <div class="card-header">statistic </div>
+            <div class="card-body">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 
 
