@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/bootstrap.bundle.min.js"></script>
     <title>Smart Home</title>
 </head>
 
@@ -25,8 +26,12 @@
                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                         <label class="form-check-label" for="flexCheckDefault">manuale</label>
                     </div>
-                    <label for="customRange3" class="form-label">roll</label>
-                    <input type="range" class="form-range" min="0" max="100" step="10" value="10" id="customRange3">
+                    <label for="rollrange" class="form-label"></label>
+                    <input type="range" class="form-range" min="0" max="100" step="10" value="0" id="rollrange">
+                    <span class="position-absolute badge start-0 rounded-pill bg-primary"
+                        style="transform: translateX(+12px) translateY(-120%);" id="rollvalue">0
+                    </span>
+                </form>
                 </form>
             </div>
         </div>
@@ -54,7 +59,8 @@
             </div>
         </div>
     </div>
-    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/dashboard.js"></script>
 </body>
