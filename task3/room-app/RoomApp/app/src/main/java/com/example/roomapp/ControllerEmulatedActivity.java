@@ -2,10 +2,17 @@ package com.example.roomapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import android.os.Bundle;
+import android.util.Log;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
 
@@ -18,10 +25,12 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
     private int rollState;
     private TextView rollText;
 
+    private OutputStream emulatedBluetoothOutputStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DynamicColors.applyToActivityIfAvailable(this);
         setContentView(R.layout.activity_controller);
         lightState = false;
         rollState = 0;
@@ -32,9 +41,11 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         rollText = findViewById(R.id.textView3);
         lightSwitch = findViewById(R.id.remotebutton);
         lightSwitch.setOnClickListener((v) -> {
-            String message = lightState ? "off\n" : "on\n";
             lightState = !lightState;
-            runOnUiThread(() -> lightSwitch.setText("led: " + (lightState ? "on" : "off")));
+            runOnUiThread(() ->{
+                lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
+                lightSwitch.setText("light: " + (lightState ? "on" : "off"));
+            } );
         });
         lightCheckBox = findViewById(R.id.checkBox2);
         lightCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -47,8 +58,9 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         rollSlider = findViewById(R.id.seekBar);
         rollSlider.addOnChangeListener((slider, value, fromUser) -> {
             rollState = (int) rollSlider.getValue();
+            Log.i(C.TAG, "roll: " + rollSlider.getValue());
             runOnUiThread(() -> {
-                rollText.setText("servo: " + rollSlider.getValue());
+                rollText.setText("roll: " + rollSlider.getValue());
                 rollSlider.setValue(rollState);
             });
         });
@@ -71,7 +83,8 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         super.onStart();
         runOnUiThread(() -> {
             lightSwitch.setChecked(lightState);
-            lightSwitch.setText("led: " + (lightState ? "on" : "off"));
+            lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
+            lightSwitch.setText("light: " + (lightState ? "on" : "off"));
             rollSlider.setValue(rollState);
             rollCheckBox.setEnabled(true);
             lightCheckBox.setEnabled(true);

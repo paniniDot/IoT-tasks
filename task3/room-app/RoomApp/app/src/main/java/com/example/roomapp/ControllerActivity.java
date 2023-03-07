@@ -8,11 +8,13 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
 
@@ -39,7 +41,7 @@ public class ControllerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //DynamicColors.applyToActivitiesIfAvailable(this);
+        DynamicColors.applyToActivityIfAvailable(this);
         setContentView(R.layout.activity_controller);
         lightState = false;
         rollState = 0;
@@ -50,53 +52,52 @@ public class ControllerActivity extends AppCompatActivity {
         rollText = findViewById(R.id.textView3);
         lightSwitch = findViewById(R.id.remotebutton);
         lightSwitch.setOnClickListener((v) -> {
-            String message = lightState ? "off\n" : "on\n";
+            lightState = !lightState;
             try {
-                bluetoothOutputStream.write(message.getBytes(StandardCharsets.UTF_8));
+                bluetoothOutputStream.write(("light: " + lightState + "\n").getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            lightState = !lightState;
-            runOnUiThread(() -> lightSwitch.setText("led: " + (lightState ? "on" : "off")));
+            runOnUiThread(() -> {
+                lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
+                lightSwitch.setText(lightState ? "light: on" : "light: off");
+            });
         });
         lightCheckBox = findViewById(R.id.checkBox2);
         lightCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                runOnUiThread(() -> lightSwitch.setEnabled(true));
-            } else {
-                runOnUiThread(() -> lightSwitch.setEnabled(false));
-            }
-            try {
-                bluetoothOutputStream.write(("led: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (buttonView.isPressed()) {
+                runOnUiThread(() -> lightSwitch.setEnabled(isChecked));
+                try {
+                    bluetoothOutputStream.write(("lightcheckbox: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         rollSlider = findViewById(R.id.seekBar);
         rollSlider.addOnChangeListener((slider, value, fromUser) -> {
             rollState = (int) rollSlider.getValue();
             try {
-                bluetoothOutputStream.write((rollSlider.getValue() + "\n").getBytes(StandardCharsets.UTF_8));
+                bluetoothOutputStream.write(("roll: " + rollState + "\n").getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             runOnUiThread(() -> {
-                rollText.setText("servo: " + rollSlider.getValue());
+                rollText.setText("roll: " + rollState);
                 rollSlider.setValue(rollState);
             });
         });
         rollCheckBox = findViewById(R.id.checkBox);
         rollCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                runOnUiThread(() -> rollSlider.setEnabled(true));
-            } else {
-                runOnUiThread(() -> rollSlider.setEnabled(false));
+            if (buttonView.isPressed()) {
+                runOnUiThread(() -> rollSlider.setEnabled(isChecked));
+                try {
+                    bluetoothOutputStream.write(("rollcheckbox: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
-            try {
-                bluetoothOutputStream.write(("servo: " + isChecked  + "\n").getBytes(StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+
         });
         lightSwitch.setEnabled(false);
         rollSlider.setEnabled(false);
@@ -139,22 +140,31 @@ public class ControllerActivity extends AppCompatActivity {
                         return;
                     }
                     Log.i(C.TAG, "Message received: " + message);
-                    if (message.startsWith("ledstatus")) {
-                        if (message.substring("ledstatus".length()).equals("1")) {
-                            lightState = true;
-                        } else if (message.substring("ledstatus".length()).equals("0")) {
-                            lightState = false;
-                        }
-                    } else if (message.startsWith("servo")) {
-                        rollState = Integer.parseInt(message.substring("servo".length()));
+                    if (message.startsWith("lightstate: ")) {
+                        lightState = message.substring("lightstate: ".length()).equals("1");
+                        runOnUiThread(() -> {
+                            lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
+                            lightSwitch.setChecked(lightState);
+                            lightSwitch.setText("light: " + (lightState ? "on" : "off"));
+                        });
+                    } else if (message.startsWith("lightcheckbox: ")) {
+                        boolean b = message.substring("lightcheckbox: ".length()).equals("1");
+                        runOnUiThread(() -> {
+                            lightCheckBox.setChecked(b);
+                            lightSwitch.setEnabled(b);
+                            lightCheckBox.setEnabled(true);
+                        });
+                    } else if (message.startsWith("rollcheckbox: ")) {
+                        boolean b = message.substring("rollcheckbox: ".length()).equals("1");
+                        runOnUiThread(() -> {
+                            rollCheckBox.setChecked(b);
+                            rollSlider.setEnabled(b);
+                            rollCheckBox.setEnabled(true);
+                        });
+                    } else if (message.startsWith("roll: ")) {
+                        rollState = Integer.parseInt(message.substring("roll: ".length()));
+                        runOnUiThread(() -> rollSlider.setValue(rollState));
                     }
-                    runOnUiThread(() -> {
-                        lightSwitch.setChecked(lightState);
-                        lightSwitch.setText("led: " + (lightState ? "on" : "off"));
-                        rollSlider.setValue(rollState);
-                        rollCheckBox.setEnabled(true);
-                        lightCheckBox.setEnabled(true);
-                    });
                 }
                 Log.i(C.TAG, "Socket closed");
             }).start();
