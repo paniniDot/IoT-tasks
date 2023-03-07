@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Smart Home</title>
+</head>
+
+<body class="d-flex flex-column mh-100" data-bs-theme="light">
+    <div class="container-fluid shadow">
+        <header class="d-flex justify-content-center p-3 ">
+            <h1>Smart Home</h1>
+        </header>
+    </div>
+    <div class="d-flex justify-content-evenly align-self-start col-12">
+        <div class="card mt-5 col-3">
+            <div class="card-header">rool <i class="bi bi-arrow-down-up"></i></div>
+            <div class="card-body">
+                <form>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">manuale</label>
+                    </div>
+                    <label for="customRange3" class="form-label">roll</label>
+                    <input type="range" class="form-range" min="0" max="100" step="10" value="10" id="customRange3">
+                </form>
+            </div>
+        </div>
+        <div class="card mt-5 col-3">
+            <div class="card-header">light <i class="bi bi-lightbulb"></i></div>
+            <div class="card-body">
+                <form>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">manuale</label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">light</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-evenly align-self-start col-12">
+        <div class="card mt-5 col-8">
+            <div class="card-header">statistic </div>
+            <div class="card-body">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+
+</html>
