@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   range.addEventListener('input', (event) => {
     const value = event.target.value;
     valueSpan.textContent = `${value}`;
-    const offset = ((value - range.min +3) / (range.max - range.min +5)) * range.offsetWidth;
+    const offset = ((value - range.min +2.5) / (range.max - range.min +4.5)) * range.offsetWidth;
     valueSpan.style.transform = `translateX(${offset}px) translatey(-120%)`;
   });
 });
