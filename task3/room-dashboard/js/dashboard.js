@@ -1,4 +1,4 @@
-const ctx = document.getElementById('myChart');
+const ctx = document.getElementById('lightchart');
 
 new Chart(ctx, {
   type: 'line',
@@ -20,10 +20,6 @@ new Chart(ctx, {
         mode: 'index',
         intersect: false
       },
-      title: {
-        display: true,
-        text: 'light'
-      }
     },
     hover: {
       mode: 'index',
@@ -43,7 +39,42 @@ new Chart(ctx, {
     }
   },
 });
+const rtx = document.getElementById('rollchart');
 
+new Chart(rtx, {
+  type: 'line',
+  data: {
+    labels: ['1', '2', '3', '4', '5', '6'],
+    datasets: [
+      {
+        label: '%',
+        data: [0,20,100],
+        fill: false,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        mode: 'index',
+        intersect: false
+      },
+    },
+    hover: {
+      mode: 'index',
+      intersec: false
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'hour'
+        }
+      },
+    }
+  },
+});
 document.addEventListener('DOMContentLoaded', () => {
   const range = document.getElementById('rollrange');
   const valueSpan = document.getElementById('rollvalue');
