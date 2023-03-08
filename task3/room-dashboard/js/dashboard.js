@@ -7,7 +7,7 @@ new Chart(ctx, {
     datasets: [
       {
         label: 'status',
-        data: [0, 1, 0, 1],
+        data: ['ON', 'ON', 'OFF', 'ON', 'OFF', 'OFF', 'ON'],
         fill: false,
         stepped: true,
       }
@@ -37,15 +37,8 @@ new Chart(ctx, {
         }
       },
       y: {
-        title: {
-          display: true,
-          text: 'light'
-        },
-        min: 0,
-        max: 1,
-        ticks: {
-          stepSize: 1
-        }
+        type: 'category',
+        labels: ['ON', 'OFF'],
       }
     }
   },
