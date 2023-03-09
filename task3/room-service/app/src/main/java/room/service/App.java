@@ -3,14 +3,13 @@
  */
 package room.service;
 
-import room.service.client.Client;
 import room.service.serial.CommChannel;
 import room.service.serial.SerialCommChannel;
 
 public class App {
 
 	public static void main(String[] args) throws Exception {
-		CommChannel channel = new SerialCommChannel(args[0],9600);	
+		CommChannel channel = new SerialCommChannel("/dev/ttyACM1",9600);	
 		// CommChannel channel = new SerialCommChannel("/dev/cu.usbmodem1411",9600);	
 		// CommChannel channel = new SerialCommChannel("/dev/cu.isi00-DevB",9600);	
 		

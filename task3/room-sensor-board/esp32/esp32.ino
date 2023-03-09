@@ -2,8 +2,6 @@
 #include "src/PubSubClient.h"
 #include "src/Pir.h"
 #include "src/PhotoResistor.h"
-#include <esp_system.h>
-
 /* wifi network info */
 
 const char* ssid = "iphone";
