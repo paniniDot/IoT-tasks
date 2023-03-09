@@ -23,7 +23,7 @@
             <div class="card-header">control</div>
             <div class="card-body d-flex justify-content-around align-self-start col-12">
                 <div class="card col-6 me-2">
-                    <div class="card-header">rool <i class="bi bi-arrow-down-up"></i></div>
+                    <div class="card-header">rool</div>
                     <div class="card-body">
                         <form>
                             <div class="form-check">
@@ -31,16 +31,21 @@
                                 <label class="form-check-label" for="flexCheckDefault">manuale</label>
                             </div>
                             <label for="rollrange" class="form-label"></label>
-                            <input type="range" class="form-range" min="0" max="100" step="10" value="0" id="rollrange">
-                            <span class="position-absolute badge start-0 rounded-pill bg-primary"
-                                style="transform: translateX(+12px) translateY(-120%);" id="rollvalue">0
-                            </span>
+                            <div class="d-flex col-12 justify-content-around">
+                                <i class="bi bi-arrow-down"></i>
+                                <input type="range" class="form-range col-6" min="0" max="100" step="10" value="0"
+                                    id="rollrange">
+                                <span class="position-absolute badge start-0 rounded-pill bg-primary"
+                                    style="transform: translateX(+12px) translateY(-120%);" id="rollvalue">0
+                                </span>
+                                <i class="bi bi-arrow-up"></i>
+                            </div>
                         </form>
                         </form>
                     </div>
                 </div>
                 <div class="card col-6">
-                    <div class="card-header">light <i class="bi bi-lightbulb"></i></div>
+                    <div class="card-header">light</div>
                     <div class="card-body">
                         <form>
                             <div class="form-check">
@@ -49,8 +54,9 @@
                             </div>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                    id="flexSwitchCheckDefault">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">light</label>
+                                    id="lightswitch">
+                                <label class="form-check-label" for="lightswitch">light</label>
+                                <i class="bi bi-lightbulb-off"></i>
                             </div>
                         </form>
                     </div>
@@ -76,7 +82,6 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/dashboard.js"></script>
 </body>

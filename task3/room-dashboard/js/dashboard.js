@@ -48,7 +48,7 @@ new Chart(rtx, {
     datasets: [
       {
         label: '%',
-        data: [0,20,100],
+        data: [0, 20, 100, 80, 30, 100],
         fill: false,
       }
     ]
@@ -76,12 +76,23 @@ new Chart(rtx, {
   },
 });
 document.addEventListener('DOMContentLoaded', () => {
+  const lightswitch = document.getElementById("lightswitch");
+  const lightbulbIcon = document.querySelector(".bi-lightbulb-off");
+  
+  lightswitch.addEventListener("click", () => {
+    if (lightswitch.checked) {
+      lightbulbIcon.classList.replace("bi-lightbulb-off", "bi-lightbulb");
+    } else {
+      lightbulbIcon.classList.replace("bi-lightbulb", "bi-lightbulb-off");
+    }
+  });
+  
   const range = document.getElementById('rollrange');
   const valueSpan = document.getElementById('rollvalue');
   range.addEventListener('input', (event) => {
     const value = event.target.value;
     valueSpan.textContent = `${value}`;
-    const offset = ((value - range.min + 2.5) / (range.max - range.min + 4.5)) * range.offsetWidth;
+    const offset = ((value - range.min + 2) / (range.max - range.min + 4)) * range.offsetWidth;
     valueSpan.style.transform = `translateX(${offset}px) translatey(-120%)`;
   });
 });
