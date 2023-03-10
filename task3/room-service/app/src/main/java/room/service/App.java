@@ -10,22 +10,21 @@ import room.service.serial.SerialCommChannel;
 public class App {
 
 	public static void main(String[] args) throws Exception {
-		CommChannel channel = new SerialCommChannel(args[0],9600);	
-		// CommChannel channel = new SerialCommChannel("/dev/cu.usbmodem1411",9600);	
-		// CommChannel channel = new SerialCommChannel("/dev/cu.isi00-DevB",9600);	
+		CommChannel channel = new SerialCommChannel("/dev/ttyACM0", 9600);
 		
 		/* attesa necessaria per fare in modo che Arduino completi il reboot */
 		System.out.println("Waiting Arduino for rebooting...");		
 		Thread.sleep(4000);
-		System.out.println("Ready.");		
-
+		System.out.println("Ready.");	
 		
-		while (true){
-			System.out.println("Sending ping");
-			channel.sendMsg("ping");
-			String msg = channel.receiveMsg();
-			System.out.println("Received: "+msg);		
-			Thread.sleep(500);
+		try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
+			while(true) {
+				client.registerToTopic("esp32/light", (t, m) -> channel.sendMsg(new String(m.getPayload())));
+				client.registerToTopic("esp32/motion", (t, m) -> channel.sendMsg(new String(m.getPayload())));
+				if(channel.isMsgAvailable()) {
+					System.out.println(channel.receiveMsg());
+				}
+			}
 		}
-	}
+	}	
 }
