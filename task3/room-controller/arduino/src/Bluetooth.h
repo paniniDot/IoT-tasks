@@ -14,12 +14,12 @@ private:
     SoftwareSerial *bt;
     int rollmode;
     int lightmode;
-    void notify();
+    
 
 public:
     Bluetooth(int rx, int tx);
     void update(Event<int> *e);
-    void start();
+    void notify();
 };
 
 #endif
