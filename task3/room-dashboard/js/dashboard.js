@@ -76,9 +76,19 @@ new Chart(rtx, {
   },
 });
 document.addEventListener('DOMContentLoaded', () => {
+  const checkbox = document.getElementById("flexCheckDefault");
   const lightswitch = document.getElementById("lightswitch");
+
+  checkbox.addEventListener("click", () => {
+    if (!checkbox.checked) {
+      lightswitch.disabled = true;
+    } else {
+      lightswitch.disabled = false;
+    }
+  });
+
   const lightbulbIcon = document.querySelector(".bi-lightbulb-off");
-  
+
   lightswitch.addEventListener("click", () => {
     if (lightswitch.checked) {
       lightbulbIcon.classList.replace("bi-lightbulb-off", "bi-lightbulb");
@@ -86,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lightbulbIcon.classList.replace("bi-lightbulb", "bi-lightbulb-off");
     }
   });
-  
+
   const range = document.getElementById('rollrange');
   const valueSpan = document.getElementById('rollvalue');
   range.addEventListener('input', (event) => {
