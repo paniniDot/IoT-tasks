@@ -1,4 +1,4 @@
-#include <String.h>
+
 #include "src/Light.h"
 #include "src/Bluetooth.h"
 #include "src/Roll.h"
