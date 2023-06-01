@@ -6,8 +6,8 @@
 
 /* wifi network info */
 
-const char* ssid = "iphone";
-const char* password = "eleeleele";
+const char* ssid = "asus";
+const char* password = "0123456789";
 
 /* MQTT server address */
 const char* mqtt_server = "broker.mqtt-dashboard.com";
@@ -84,10 +84,10 @@ void loop() {
   publisher.loop();
 
   /* publishing the msg */
-  publisher.publish(topic_light, "resistor->toJson().c_str()");
-  publisher.publish(topic_motion, "pir->toJson().c_str()");  
+  publisher.publish(topic_light, resistor->toJson().c_str());
+  publisher.publish(topic_motion, pir->toJson().c_str());  
 
-  Serial.println("pir->toJson()");
-  Serial.println("resistor->toJson()");
+  Serial.println(resistor->toJson().c_str());
+  Serial.println(pir->toJson().c_str());
   delay(1000);
 }
