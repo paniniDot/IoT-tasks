@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
 
@@ -29,6 +30,7 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DynamicColors.applyToActivityIfAvailable(this);
         setContentView(R.layout.activity_controller);
         lightState = false;
         rollState = 0;
@@ -40,7 +42,10 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         lightSwitch = findViewById(R.id.remotebutton);
         lightSwitch.setOnClickListener((v) -> {
             lightState = !lightState;
-            runOnUiThread(() -> lightSwitch.setText("light: " + (lightState ? "on" : "off")));
+            runOnUiThread(() ->{
+                lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
+                lightSwitch.setText("light: " + (lightState ? "on" : "off"));
+            } );
         });
         lightCheckBox = findViewById(R.id.checkBox2);
         lightCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -78,6 +83,7 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         super.onStart();
         runOnUiThread(() -> {
             lightSwitch.setChecked(lightState);
+            lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
             lightSwitch.setText("light: " + (lightState ? "on" : "off"));
             rollSlider.setValue(rollState);
             rollCheckBox.setEnabled(true);

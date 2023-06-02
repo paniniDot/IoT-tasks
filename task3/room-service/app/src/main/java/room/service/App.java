@@ -4,29 +4,37 @@
 package room.service;
 
 import room.service.client.Client;
-import room.service.serial.CommChannel;
-import room.service.serial.SerialCommChannel;
+import room.service.mqtt.MessageListener;
+
+import org.eclipse.paho.client.mqttv3.MqttException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class App {
 
-	public static void main(String[] args) throws Exception {
-		CommChannel channel = new SerialCommChannel("COM3", 9600);
-		
-		/* attesa necessaria per fare in modo che Arduino completi il reboot */
-		System.out.println("Waiting Arduino for rebooting...");		
-		Thread.sleep(4000);
-		System.out.println("Ready.");	
-		
-		try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
-			client.registerToTopic("esp32/light", (t, m) -> {
-				channel.sendMsg(new String(m.getPayload()));
-				System.out.println(new String(m.getPayload()));
-			});
-			client.registerToTopic("esp32/motion", (t, m) -> {
-				channel.sendMsg(new String(m.getPayload()));
-				System.out.println(new String(m.getPayload()));
-			});
-			Thread.sleep(500);
-		}
-	}	
+    public static void main(String[] args) {
+        // Create a blocking queue to store the received messages
+        BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
+
+        try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
+
+            // Register message listeners for the topics
+            client.registerToTopic("esp32/light", new MessageListener(messageQueue));
+            client.registerToTopic("esp32/motion", new MessageListener(messageQueue));
+
+            while (true) {
+                // Check if there are any messages in the queue
+                if (!messageQueue.isEmpty()) {
+                    String message = messageQueue.take();
+                    System.out.println(message);
+                }
+
+                // Add a delay before the next iteration
+                Thread.sleep(1000);
+            }
+        } catch (MqttException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

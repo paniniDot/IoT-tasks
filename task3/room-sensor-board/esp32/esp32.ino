@@ -6,8 +6,13 @@
 
 /* wifi network info */
 
+<<<<<<< HEAD
 const char* ssid = "Tenda_A2E5A8";
 const char* password = NULL;
+=======
+const char* ssid = "asus";
+const char* password = "0123456789";
+>>>>>>> 4980a27ea3bdae1130821b945165908e3fe60bec
 
 /* MQTT server address */
 const char* mqtt_server = "broker.mqtt-dashboard.com";
@@ -87,7 +92,7 @@ void loop() {
   publisher.publish(topic_light, resistor->toJson().c_str());
   publisher.publish(topic_motion, pir->toJson().c_str());  
 
-  Serial.println(pir->toJson());
-  Serial.println(resistor->toJson());
+  Serial.println(resistor->toJson().c_str());
+  Serial.println(pir->toJson().c_str());
   delay(1000);
 }
