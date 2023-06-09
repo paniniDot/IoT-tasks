@@ -2,6 +2,10 @@
 #define __MSGSERVICE__
 
 #include "Arduino.h"
+#include "observer/Subject.h"
+#include "observer/Event.h"
+#include "ArduinoJson.h"
+#include "observer/EventSourceType.h"
 
 class Msg {
   String content;
@@ -14,6 +18,16 @@ public:
   String getContent(){
     return content;
   }
+
+  void ParseJson(String& sensorName, long& timestamp, String& measure) {
+    DynamicJsonDocument doc(128); 
+    deserializeJson(doc, content);
+
+    sensorName = doc["name"].as<String>();
+    timestamp = doc["timestamp"].as<long>();
+    measure = doc["measure"].as<String>();
+  }
+
 };
 
 class Pattern {
@@ -21,12 +35,17 @@ public:
   virtual boolean match(const Msg& m) = 0;  
 };
 
-class MsgServiceClass {
+class MsgServiceClass : Subject<Msg> {
     
+private:
+
+  void notify();
+
 public: 
   
   Msg* currentMsg;
   bool msgAvailable;
+
 
   void init();  
 

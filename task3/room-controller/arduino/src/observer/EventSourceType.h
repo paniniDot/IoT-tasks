@@ -7,7 +7,8 @@ enum EventSourceType
     LIGHT,
     SLIDER,
     CHECKBOX,
-    BLUETOOTH
+    BLUETOOTH,
+    MSG_SERVICE
 
 };
 

@@ -5,6 +5,8 @@ package room.service;
 
 import room.service.client.Client;
 import room.service.mqtt.MessageListener;
+import room.service.serial.CommChannel;
+import room.service.serial.SerialCommChannel;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import java.util.concurrent.BlockingQueue;
@@ -12,9 +14,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class App {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // Create a blocking queue to store the received messages
         BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
+        CommChannel serial = new SerialCommChannel("COM3", 9600);
 
         try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
 
@@ -27,6 +30,7 @@ public class App {
                 if (!messageQueue.isEmpty()) {
                     String message = messageQueue.take();
                     System.out.println(message);
+                    serial.sendMsg(message);
                 }
 
                 // Add a delay before the next iteration

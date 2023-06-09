@@ -9,6 +9,8 @@ bool MsgServiceClass::isMsgAvailable(){
   return msgAvailable;
 }
 
+
+
 Msg* MsgServiceClass::receiveMsg(){
   if (msgAvailable){
     Msg* msg = currentMsg;
@@ -21,12 +23,23 @@ Msg* MsgServiceClass::receiveMsg(){
   }
 }
 
+
+
 void MsgServiceClass::init(){
   Serial.begin(9600);
   content.reserve(256);
   content = "";
   currentMsg = NULL;
   msgAvailable = false;  
+}
+
+void MsgServiceClass::notify() {
+  Event<Msg> *e = new Event<Msg>(EventSourceType::MSG_SERVICE, this->currentMsg);  
+  for (int i = 0; i < this->getNObservers(); i++)
+  {
+    this->getObservers()[i]->update(e);
+  }
+  delete e;
 }
 
 void MsgServiceClass::sendMsg(const String& msg){

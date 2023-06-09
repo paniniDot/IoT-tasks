@@ -5,6 +5,8 @@ Light::Light(int pin)
   this->pin = pin;
   pinMode(this->pin, OUTPUT);
   this->lightState = 0;
+  this->pir_state = false;
+  this->photoresistor_state = 0;
 }
 
 void Light::update(Event<int> *e)
@@ -27,6 +29,38 @@ void Light::update(Event<int> *e)
     this->notify();
   }
 }
+
+void Light::update(Event<Msg> *e) 
+{
+  handleMessage(e->getEventArgs());
+  updateLightState();
+}
+
+void Light::handleMessage(Msg* msg)
+{
+  String sensorName;
+  long timestamp;
+  String measure;
+  msg->ParseJson(sensorName, timestamp, measure);
+
+  if (strcmp(sensorName.c_str(), "pir") == 0)
+  {
+    this->pir_state = true;
+  } else if (strcmp(sensorName.c_str(), "photoresistor") == 0)
+  {
+    this->photoresistor_state = measure.toInt();
+  }
+
+  delete msg;
+}
+
+void Light::updateLightState() 
+{
+  this->lightState = (pir_state && photoresistor_state < 100) ? 1 : 0;
+  digitalWrite(this->pin, (this->lightState == 1) ? HIGH : LOW);
+}
+
+
 
 void Light::notify()
 {
