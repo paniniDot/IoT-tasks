@@ -36,7 +36,7 @@ public:
   virtual boolean match(const Msg& m) = 0;  
 };
 
-class MsgServiceClass : Subject<Msg> {
+class MsgServiceClass :public  Subject<Msg> {
     
 private:
 
