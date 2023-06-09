@@ -29,8 +29,11 @@ public class App {
                 // Check if there are any messages in the queue
                 if (!messageQueue.isEmpty()) {
                     String message = messageQueue.take();
-                    System.out.println(message);
+                    //System.out.println(message);
                     serial.sendMsg(message);
+                    if(serial.isMsgAvailable()) {
+                    	System.out.println(serial.receiveMsg());
+                    }
                 }
 
                 // Add a delay before the next iteration

@@ -14,7 +14,7 @@ void setup() {
   MsgService.init();
   while (!Serial) {};
   bluetooth = new Bluetooth(2,3);
-  light = new Light(9);
+  light = new Light(13);
   roll = new Roll(6);
   bluetooth->attach(light);
   bluetooth->attach(roll);
@@ -25,8 +25,8 @@ void setup() {
 
 void loop() {
   if (MsgService.isMsgAvailable()) {
-    Serial.println("messaggio arrivato!");
     Msg* msg = MsgService.receiveMsg();
+    MsgService.sendMsg("messaggio ricevuto: " + msg->getContent());
     light->update(new Event<Msg>(EventSourceType::MSG_SERVICE, msg));
   }
   bluetooth->notify();

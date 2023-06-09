@@ -9,24 +9,27 @@
 
 class Msg {
   String content;
+  DynamicJsonDocument doc;
 
 public:
-  Msg(String content){
-    this->content = content;
+  Msg(String content) : content(content), doc(128) {
+    deserializeJson(doc, this->content);
   }
   
   String getContent(){
     return content;
   }
 
-// fai 3 funzioni separate per sensorName, timestamp e measure in modo da non passare per riferimento
-  void ParseJson(String& sensorName, long& timestamp, String& measure) {
-    DynamicJsonDocument doc(128); 
-    deserializeJson(doc, content);
+  String getSensorName() {
+    return this->doc["name"].as<String>();
+  }
 
-    sensorName = doc["name"].as<String>();
-    timestamp = doc["timestamp"].as<long>();
-    measure = doc["measure"].as<String>();
+  long getTimestamp() {
+    return this->doc["timestamp"].as<long>();
+  }
+
+  bool getMeasure() {
+    return this->doc["measure"].as<bool>();
   }
 
 };
