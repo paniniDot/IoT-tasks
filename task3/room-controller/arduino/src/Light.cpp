@@ -45,7 +45,7 @@ void Light::handleMessage(Msg* msg)
 
   if (strcmp(sensorName.c_str(), "pir") == 0)
   {
-    this->pir_state = true;
+    this->pir_state = measure.toBool();
   } else if (strcmp(sensorName.c_str(), "photoresistor") == 0)
   {
     this->photoresistor_state = measure.toInt();

@@ -19,6 +19,7 @@ public:
     return content;
   }
 
+// fai 3 funzioni separate per sensorName, timestamp e measure in modo da non passare per riferimento
   void ParseJson(String& sensorName, long& timestamp, String& measure) {
     DynamicJsonDocument doc(128); 
     deserializeJson(doc, content);

@@ -22,7 +22,7 @@ private:
 public:
   Light(int pin);
   void update(Event<int> *e);
-  void update(Event<Msg*> *e);
+  void update(Event<Msg> *e);
 };
 
 #endif
