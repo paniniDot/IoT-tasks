@@ -1,5 +1,5 @@
 #include "Bluetooth.h"
-
+#include <ArduinoJson.h>
 Bluetooth::Bluetooth(int rx, int tx) {
   this->bt = new SoftwareSerial(rx, tx);
   this->rollmode = 0;
@@ -10,13 +10,27 @@ Bluetooth::Bluetooth(int rx, int tx) {
 void Bluetooth::update(Event<int> *e) {
   EventSourceType src = e->getSrcType();
   if (src == EventSourceType::LIGHT) {
-    this->bt->print("lightstate: ");
-    this->bt->println(*e->getEventArgs());
+    // Crea un oggetto JSON per inviare lo stato della luce
+    StaticJsonDocument<128> lightStateDoc;
+    lightStateDoc["lightstate"] = *e->getEventArgs();
+    String lightStateJson;
+    serializeJson(lightStateDoc, lightStateJson);
+    
+    // Invia il messaggio via Bluetooth
+    this->bt->println(lightStateJson);
   } else if (src == EventSourceType::SERVO) {
-    this->bt->print("roll: ");
-    this->bt->println(*e->getEventArgs());
+    // Crea un oggetto JSON per inviare lo stato del roll
+    StaticJsonDocument<128> rollStateDoc;
+    rollStateDoc["roll"] = *e->getEventArgs();
+    String rollStateJson;
+    serializeJson(rollStateDoc, rollStateJson);
+    
+    // Invia il messaggio via Bluetooth
+    this->bt->println(rollStateJson);
   }
 }
+
+
 
 void Bluetooth::notify() {
   if (Serial.available()) {
@@ -32,10 +46,14 @@ void Bluetooth::notify() {
         this->getObservers()[i]->update(e);
       }
       delete e;
-      this->bt->print("lightcheckbox: ");
-      this->bt->println(this->lightmode);
-      this->bt->print("rollcheckbox: ");
-      this->bt->println(this->rollmode);
+
+      // Crea un oggetto JSON per inviare i dati di configurazione
+      StaticJsonDocument<128> configDoc;
+      configDoc["lightcheckbox"] = this->lightmode;
+      configDoc["rollcheckbox"] = this->rollmode;
+      String configJson;
+      serializeJson(configDoc, configJson);
+      this->bt->println(configJson);
     } else if (msg.startsWith("lightcheckbox")) {
       this->lightmode = msg.substring(strlen("lightcheckbox: ")).equals("true");
     } else if (msg.startsWith("rollcheckbox")) {

@@ -18,6 +18,9 @@ import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -116,11 +119,21 @@ public class ControllerActivity extends AppCompatActivity {
         connectionThread.start();
     }
 
+
     private void manageConnectedSocket(BluetoothSocket socket) {
         try {
             bluetoothOutputStream = socket.getOutputStream();
             Log.i(C.TAG, "Connection successful!");
             bluetoothOutputStream.write("connesso".getBytes(StandardCharsets.UTF_8));
+            runOnUiThread(() -> {
+            lightCheckBox.setEnabled(true);
+            rollCheckBox.setEnabled(true);});
+            // Invia i dati di configurazione come JSON
+            JSONObject configJson = new JSONObject();
+            configJson.put("lightcheckbox", lightCheckBox.isChecked());
+            configJson.put("rollcheckbox", rollCheckBox.isChecked());
+            bluetoothOutputStream.write(configJson.toString().getBytes(StandardCharsets.UTF_8));
+
             new Thread(() -> {
                 BufferedReader input = null;
                 try {
@@ -140,38 +153,55 @@ public class ControllerActivity extends AppCompatActivity {
                         return;
                     }
                     Log.i(C.TAG, "Message received: " + message);
-                    if (message.startsWith("lightstate: ")) {
-                        lightState = message.substring("lightstate: ".length()).equals("1");
-                        runOnUiThread(() -> {
-                            lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
-                            lightSwitch.setChecked(lightState);
-                            lightSwitch.setText("light: " + (lightState ? "on" : "off"));
-                        });
-                    } else if (message.startsWith("lightcheckbox: ")) {
-                        boolean b = message.substring("lightcheckbox: ".length()).equals("1");
-                        runOnUiThread(() -> {
-                            lightCheckBox.setChecked(b);
-                            lightSwitch.setEnabled(b);
-                            lightCheckBox.setEnabled(true);
-                        });
-                    } else if (message.startsWith("rollcheckbox: ")) {
-                        boolean b = message.substring("rollcheckbox: ".length()).equals("1");
-                        runOnUiThread(() -> {
-                            rollCheckBox.setChecked(b);
-                            rollSlider.setEnabled(b);
-                            rollCheckBox.setEnabled(true);
-                        });
-                    } else if (message.startsWith("roll: ")) {
-                        rollState = Integer.parseInt(message.substring("roll: ".length()));
-                        runOnUiThread(() -> rollSlider.setValue(rollState));
+
+// Analizza il messaggio JSON ricevuto
+                    try {
+                        JSONObject jsonObject = new JSONObject(message);
+
+                        if (jsonObject.has("lightstate")) {
+                            int lightState = jsonObject.getInt("lightState");
+                            boolean lightValue = lightState != 0;
+                            // Aggiorna lo stato della luce sulla UI
+                            runOnUiThread(() -> {
+                                lightSwitch.setThumbIconDrawable(lightValue ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
+                                lightSwitch.setChecked(lightValue);
+                                lightSwitch.setText("light: " + (lightValue ? "on" : "off"));
+                            });
+                        } else if (jsonObject.has("lightcheckbox")) {
+                            int lightCheckboxState = jsonObject.getInt("lightcheckbox");
+                            boolean lightCheckboxValue = lightCheckboxState != 0;
+                            // Aggiorna lo stato del checkbox della luce sulla UI
+                            runOnUiThread(() -> {
+                                lightCheckBox.setChecked(lightCheckboxValue);
+                                lightSwitch.setEnabled(lightCheckboxValue);
+
+                            });
+                        } else if (jsonObject.has("rollcheckbox")) {
+                            int rollCheckboxState = jsonObject.getInt("rollcheckbox");
+                            boolean rollCheckboxValue = rollCheckboxState != 0;
+                            // Aggiorna lo stato del checkbox del roll sulla UI
+                            runOnUiThread(() -> {
+                                rollCheckBox.setChecked(rollCheckboxValue);
+                                rollSlider.setEnabled(rollCheckboxValue);
+
+                            });
+                        } else if (jsonObject.has("roll")) {
+                            int rollState = jsonObject.getInt("roll");
+                            // Aggiorna lo stato del roll sulla UI
+                            runOnUiThread(() -> rollSlider.setValue(rollState));
+                        }
+                    } catch (JSONException e) {
+                        // Se il messaggio non è un formato JSON valido, puoi gestire l'errore qui
+                        e.printStackTrace();
                     }
+
+
                 }
                 Log.i(C.TAG, "Socket closed");
             }).start();
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             Log.e(C.TAG, "Error occurred when creating output stream", e);
         }
-
     }
 
     @Override

@@ -29,5 +29,5 @@ void loop() {
     MsgService.sendMsg("messaggio ricevuto: " + msg->getContent());
     light->update(new Event<Msg>(EventSourceType::MSG_SERVICE, msg));
   }
-  //bluetooth->notify();
+  bluetooth->notify();
 }
