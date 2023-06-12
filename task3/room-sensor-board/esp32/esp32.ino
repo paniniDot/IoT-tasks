@@ -6,8 +6,8 @@
 
 /* wifi network info */
 
-const char* ssid = "asus";
-const char* password = "0123456789";
+const char* ssid = "Tenda_A2E5A8";
+const char* password = NULL;
 
 
 /* MQTT server address */
@@ -18,8 +18,8 @@ const char* topic_light = "esp32/light";
 const char* topic_motion = "esp32/motion";
 
 //define hardware 
-PhotoResistor* resistor = new PhotoResistor(4);
-Pir* pir = new Pir(5);
+PhotoResistor* resistor;
+Pir* pir;
 
 
 /* MQTT client management */
@@ -45,6 +45,9 @@ void setup_wifi() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+  
+  resistor = new PhotoResistor(4);
+  pir = new Pir(5);
 }
 
 
