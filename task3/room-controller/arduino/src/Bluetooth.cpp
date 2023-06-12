@@ -21,9 +21,7 @@ void Bluetooth::update(Event<int> *e) {
 void Bluetooth::notify() {
   if (Serial.available()) {
     String msg = Serial.readStringUntil('\n');
-    delay(500);
     Serial.println(msg);
-    delay(500);
   }
   if (this->bt->available()) {
     String msg = this->bt->readStringUntil('\n');
@@ -36,7 +34,6 @@ void Bluetooth::notify() {
       delete e;
       this->bt->print("lightcheckbox: ");
       this->bt->println(this->lightmode);
-      delay(100);
       this->bt->print("rollcheckbox: ");
       this->bt->println(this->rollmode);
     } else if (msg.startsWith("lightcheckbox")) {

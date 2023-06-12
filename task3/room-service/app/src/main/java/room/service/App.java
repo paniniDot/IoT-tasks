@@ -17,14 +17,14 @@ public class App {
     public static void main(String[] args) throws Exception {
         // Create a blocking queue to store the received messages
         BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
-        CommChannel serial = new SerialCommChannel("COM3", 9600);
+        CommChannel serial = new SerialCommChannel("COM6", 9600);
 
         try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
 
             // Register message listeners for the topics
             client.registerToTopic("esp32/light", new MessageListener(messageQueue));
             client.registerToTopic("esp32/motion", new MessageListener(messageQueue));
-
+            Thread.sleep(1000);
             while (true) {
                 // Check if there are any messages in the queue
                 if (!messageQueue.isEmpty()) {
@@ -35,9 +35,6 @@ public class App {
                     	System.out.println(serial.receiveMsg());
                     }
                 }
-
-                // Add a delay before the next iteration
-                Thread.sleep(1000);
             }
         } catch (MqttException | InterruptedException e) {
             e.printStackTrace();

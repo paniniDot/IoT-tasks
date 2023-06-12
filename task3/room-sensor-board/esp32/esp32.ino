@@ -6,8 +6,8 @@
 
 /* wifi network info */
 
-const char* ssid = "Tenda_A2E5A8";
-const char* password = NULL;
+const char* ssid = "asus";
+const char* password = "0123456789";
 
 
 /* MQTT server address */
@@ -71,7 +71,6 @@ void reconnect() {
 void setup() {
   Serial.begin(115200);
   delay(1000);
-  Serial.print("LOOL");
   setup_wifi();
   publisher.setServer(mqtt_server, 1883);
 }
@@ -83,12 +82,8 @@ void loop() {
   }
 
   publisher.loop();
-
   /* publishing the msg */
   publisher.publish(topic_light, resistor->toJson().c_str());
   publisher.publish(topic_motion, pir->toJson().c_str());  
-
-  Serial.println(resistor->toJson().c_str());
-  Serial.println(pir->toJson().c_str());
   delay(1000);
 }
