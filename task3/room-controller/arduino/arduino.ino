@@ -21,12 +21,15 @@ void setup() {
   light->attach(bluetooth);
   roll->attach(bluetooth);
   MsgService.attach(light);
+  MsgService.attach(roll);
 }
 
 void loop() {
   if (MsgService.isMsgAvailable()) {
     Msg* msg = MsgService.receiveMsg();
+    //creo due eventi distinti in modo che ciascuno possa eliminare il proprio
     light->update(new Event<Msg>(EventSourceType::MSG_SERVICE, msg));
+    roll->update(new Event<Msg>(EventSourceType::MSG_SERVICE, msg));
   }
   bluetooth->notify();
 }
