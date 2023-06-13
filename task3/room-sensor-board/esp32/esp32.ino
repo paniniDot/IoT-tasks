@@ -47,7 +47,7 @@ void setup_wifi() {
   Serial.println(WiFi.localIP());
   
   resistor = new PhotoResistor(4);
-  pir = new Pir(5);
+  pir = new Pir(34);
 }
 
 
