@@ -32,8 +32,9 @@ void Light::update(Event<int> *e)
 
 void Light::update(Event<Msg> *e) 
 {
-  handleMessage(e->getEventArgs());
-  updateLightState();
+  this->handleMessage(e->getEventArgs());
+  this->updateLightState();
+  delete e;
 }
 
 void Light::handleMessage(Msg* msg)
@@ -49,14 +50,13 @@ void Light::handleMessage(Msg* msg)
   {
     this->photoresistor_state = measure;
   }
-
-  delete msg;
 }
 
 void Light::updateLightState() 
 {
   this->lightState = (pir_state && photoresistor_state) ? 1 : 0;
   digitalWrite(this->pin, this->lightState ? HIGH : LOW);
+  this->notify(); // serve per il bluetooth?
 }
 
 

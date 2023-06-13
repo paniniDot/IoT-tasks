@@ -26,7 +26,6 @@ void setup() {
 void loop() {
   if (MsgService.isMsgAvailable()) {
     Msg* msg = MsgService.receiveMsg();
-    MsgService.sendMsg("messaggio ricevuto: " + msg->getContent());
     light->update(new Event<Msg>(EventSourceType::MSG_SERVICE, msg));
   }
   bluetooth->notify();

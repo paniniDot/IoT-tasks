@@ -17,7 +17,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         // Create a blocking queue to store the received messages
         BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
-        CommChannel serial = new SerialCommChannel("COM6", 9600);
+        CommChannel serial = new SerialCommChannel("COM3", 9600);
 
         try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
 

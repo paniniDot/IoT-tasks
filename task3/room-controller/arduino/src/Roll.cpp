@@ -2,7 +2,7 @@
 
 Roll::Roll(int pin)
 {
-  this->servo = new Servo();
+  this->servo = new ServoTimer2();
   this->servo->attach(pin);
   this->rollState = 0;
 }
@@ -29,4 +29,47 @@ void Roll::notify()
     this->getObservers()[i]->update(e);
   }
   delete e;
+}
+
+void Roll::update(Event<Msg> *e)
+{
+  this->handleMessage(e->getEventArgs());
+  this->updateRollState();
+  delete e;
+}
+
+void Roll::handleMessage(Msg* msg)
+{
+  String sensorName = msg->getSensorName();
+  long timestamp = msg->getTimestamp();
+  bool measure = msg->getMeasure();
+
+  if (strcmp(sensorName.c_str(), "pir_sensor") == 0)
+  {
+    if(measure &&isDay(getCurrentHour(timestamp)))
+    {
+      this->rollState = 0;
+    } else {
+      this->rollState = 100;
+    }
+  } 
+}
+
+void Roll::updateRollState()
+{
+  this->servo->write(map(this->rollState, 0, 100, 0, 1023));
+  this->notify(); // serve per il bluetooth?
+}
+
+int Roll::getCurrentHour(long timestamp)
+{
+  setTime(timestamp); // Set the time using the timestamp
+  Serial.println(hour());
+  return hour(); // Return the current hour
+}
+
+
+bool Roll::isDay(int hour)
+{
+  return hour >= 8 && hour < 19;
 }
