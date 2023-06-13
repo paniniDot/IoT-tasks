@@ -46,7 +46,7 @@ public class DataService extends AbstractVerticle {
 	
 	private void handleAddNewData(RoutingContext routingContext) {
 		HttpServerResponse response = routingContext.response();
-		// log("new msg "+routingContext.getBodyAsString());
+		log("new msg "+routingContext.getBodyAsString());
 		JsonObject res = routingContext.getBodyAsJson();
 		if (res == null) {
 			sendError(400, response);
