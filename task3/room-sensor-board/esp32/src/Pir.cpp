@@ -11,5 +11,5 @@ Pir::Pir(int pin) : JSONSensor<bool>("pir_sensor"), pin(pin)
 
 bool Pir::getMotion()
 {
-  return digitalRead(this->pin) == HIGH;
+  return digitalRead(this->pin) == LOW;
 };

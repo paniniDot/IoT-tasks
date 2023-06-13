@@ -33,13 +33,8 @@ void Bluetooth::update(Event<int> *e) {
 
 
 void Bluetooth::notify() {
-  if (Serial.available()) {
-    String msg = Serial.readStringUntil('\n');
-    Serial.println(msg);
-  }
   if (this->bt->available()) {
     String msg = this->bt->readStringUntil('\n');
-    Serial.println(msg);
     if (msg.startsWith("connesso")) {
       Event<int> *e = new Event<int>(EventSourceType::BLUETOOTH, new int(0));
       for (int i = 0; i < this->getNObservers(); i++) {

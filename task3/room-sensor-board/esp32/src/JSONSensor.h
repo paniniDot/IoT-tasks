@@ -14,9 +14,8 @@ private:
     NTPClient timeClient;
 
 public:
-    JSONSensor(const char* name) : _name(name), timeClient(ntpUDP, "pool.ntp.org") {
+    JSONSensor(const char* name) : _name(name), timeClient(ntpUDP, "pool.ntp.org", 7200) {
         timeClient.begin();
-        timeClient.setTimeOffset(0);
         timeClient.update();
     }
 

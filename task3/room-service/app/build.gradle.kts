@@ -34,6 +34,11 @@ dependencies {
 	
 	// https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl
 	implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")	
+
+    // https://central.sonatype.com/artifact/io.vertx/vertx-core/4.4.3
+    implementation("io.vertx:vertx-core:4.2.6")
+    implementation("io.vertx:vertx-web:4.2.6")
+    implementation("io.vertx:vertx-web-client:4.2.6")
 }
 
 application {

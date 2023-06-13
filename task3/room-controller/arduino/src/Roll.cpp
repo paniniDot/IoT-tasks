@@ -35,7 +35,6 @@ void Roll::update(Event<Msg> *e)
 {
   this->handleMessage(e->getEventArgs());
   this->updateRollState();
-  delete e;
 }
 
 void Roll::handleMessage(Msg* msg)
@@ -64,10 +63,8 @@ void Roll::updateRollState()
 int Roll::getCurrentHour(long timestamp)
 {
   setTime(timestamp); // Set the time using the timestamp
-  Serial.println(hour());
   return hour(); // Return the current hour
 }
-
 
 bool Roll::isDay(int hour)
 {

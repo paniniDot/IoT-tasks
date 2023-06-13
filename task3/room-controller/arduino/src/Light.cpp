@@ -34,7 +34,6 @@ void Light::update(Event<Msg> *e)
 {
   this->handleMessage(e->getEventArgs());
   this->updateLightState();
-  delete e;
 }
 
 void Light::handleMessage(Msg* msg)

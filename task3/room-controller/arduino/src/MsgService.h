@@ -54,12 +54,12 @@ public:
   void init();  
 
   bool isMsgAvailable();
-  Msg* receiveMsg();
+  void receiveMsg();
 
   bool isMsgAvailable(Pattern& pattern);
 
   /* note: message deallocation is responsibility of the client */
-  Msg* receiveMsg(Pattern& pattern);
+  void receiveMsg(Pattern& pattern);
   
   void sendMsg(const String& msg);
 };
