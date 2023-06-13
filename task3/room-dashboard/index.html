@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.24.2.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Smart Home</title>
 </head>
 
@@ -69,7 +70,10 @@
                 <div class="card col-lg-6 me-2">
                     <div class="card-header">roll</div>
                     <div class="card-body">
-                        <canvas id="rollchart"></canvas>
+                        <div id="rollchart"></div>
+                        <div>
+                            <button id="update-roll">Update</button>
+                        </div>
                     </div>
                 </div>
                 <div class="card col-lg-6 mt-1 mt-md-0">
@@ -84,6 +88,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/dashboard.js"></script>
+    <script src="js/roll_chart.js"></script>
 </body>
 
 

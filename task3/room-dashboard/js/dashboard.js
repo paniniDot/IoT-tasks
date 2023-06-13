@@ -39,42 +39,11 @@ new Chart(ctx, {
     }
   },
 });
-const rtx = document.getElementById('rollchart');
 
-new Chart(rtx, {
-  type: 'line',
-  data: {
-    labels: ['1', '2', '3', '4', '5', '6'],
-    datasets: [
-      {
-        label: '%',
-        data: [0, 20, 100, 80, 30, 100],
-        fill: false,
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      tooltip: {
-        mode: 'index',
-        intersect: false
-      },
-    },
-    hover: {
-      mode: 'index',
-      intersec: false
-    },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'hour'
-        }
-      },
-    }
-  },
-});
+
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const checkbox = document.getElementById("flexCheckDefault");
   const lightswitch = document.getElementById("lightswitch");
