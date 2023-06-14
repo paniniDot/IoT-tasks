@@ -29,7 +29,7 @@ function updateRollChart(time, value) {
 Plotly.newPlot('rollchart', data, layout);
 
 setInterval(function () {
-  axios.get('/api/data')
+  axios.get('http://localhost:8080/api/data')
   .then(response => {
     // Dati ricevuti dal server
     const data = response.data;
