@@ -36,7 +36,9 @@ public class DataService extends AbstractVerticle {
 	}
 	
 	private void handleGetData(RoutingContext routingContext) {
+		final String origin = routingContext.request().getHeader("Origin");
 		routingContext.response()
+			.putHeader("Access-Control-Allow-Origin", origin)
 			.putHeader("content-type", "application/json")
 			.end(this.values.getFirst());
 	}
