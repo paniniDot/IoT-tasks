@@ -23,9 +23,9 @@ public class App {
     public static void main(String[] args) throws Exception {
         // Create a blocking queue to store the received messages
         BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
-        CommChannel serial = new SerialCommChannel("/dev/ttyACM3", 9600);
+        //CommChannel serial = new SerialCommChannel("/dev/ttyACM3", 9600);
         Vertx vertx = Vertx.vertx();
-		DataService service = new DataService(80);
+		DataService service = new DataService(8080);
 		vertx.deployVerticle(service);
 		Gson gson = new Gson();
         try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
@@ -39,10 +39,10 @@ public class App {
                 if (!messageQueue.isEmpty()) {
                     String message = messageQueue.take();
                     //System.out.println(message);
-                    serial.sendMsg(message);
-                    if(serial.isMsgAvailable()) {
-                    	//System.out.println(serial.receiveMsg());
-                    }
+//                    serial.sendMsg(message);
+//                    if(serial.isMsgAvailable()) {
+//                    	//System.out.println(serial.receiveMsg());
+//                    }
                     String json = gson.toJson(new DataObject("photo_resistor", (int) (Math.random() * 100), System.currentTimeMillis()));
                     System.out.println(json);
                     service.addMeasure(json);
