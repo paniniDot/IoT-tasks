@@ -35,20 +35,23 @@ void Bluetooth::update(Event<int> *e) {
 void Bluetooth::notify() {
   if (this->bt->available()) {
     String msg = this->bt->readStringUntil('\n');
+    Serial.println(msg);
     if (msg.startsWith("connesso")) {
       Event<int> *e = new Event<int>(EventSourceType::BLUETOOTH, new int(0));
       for (int i = 0; i < this->getNObservers(); i++) {
         this->getObservers()[i]->update(e);
       }
       delete e;
-
+      
       // Crea un oggetto JSON per inviare i dati di configurazione
-      StaticJsonDocument<128> configDoc;
+      StaticJsonDocument<64> configDoc;
       configDoc["lightcheckbox"] = this->lightmode;
       configDoc["rollcheckbox"] = this->rollmode;
       String configJson;
       serializeJson(configDoc, configJson);
+      
       this->bt->println(configJson);
+      
     } else if (msg.startsWith("lightcheckbox")) {
       this->lightmode = msg.substring(strlen("lightcheckbox: ")).equals("true");
     } else if (msg.startsWith("rollcheckbox")) {

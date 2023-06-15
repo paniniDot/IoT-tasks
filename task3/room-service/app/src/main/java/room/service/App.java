@@ -22,7 +22,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         // Create a blocking queue to store the received messages
         BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
-        CommChannel serial = new SerialCommChannel("/dev/ttyACM0", 9600);
+        CommChannel serial = new SerialCommChannel("COM8", 9600);
         Vertx vertx = Vertx.vertx();
 		DataService service = new DataService(8080);
 		vertx.deployVerticle(service);
@@ -39,7 +39,8 @@ public class App {
                     serial.sendMsg(message);
                     if(serial.isMsgAvailable()) {
                     	System.out.println(serial.receiveMsg());
-                    	service.addMeasure(JsonBuilder.getJsonWithTimestamp(serial.receiveMsg()));
+                    	service.addMeasure("lol");
+                    	System.out.println(serial.receiveMsg());
                     }
                 }
             }

@@ -29,4 +29,5 @@ void loop() {
   MsgService.sendMsg(light->toJson());
   MsgService.sendMsg(roll->toJson());
   bluetooth->notify();
+  delay(1000);
 }
