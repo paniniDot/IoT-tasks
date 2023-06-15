@@ -6,8 +6,8 @@
 
 /* wifi network info */
 
-const char* ssid = "Tenda_A2E5A8";
-const char* password = NULL;
+const char* ssid = "asus";
+const char* password = "0123456789";
 
 
 /* MQTT server address */

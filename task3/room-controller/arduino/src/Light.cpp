@@ -1,6 +1,6 @@
 #include "Light.h"
 
-Light::Light(int pin)
+Light::Light(int pin) : JSONSensor<bool>("light")
 {
   this->pin = pin;
   pinMode(this->pin, OUTPUT);

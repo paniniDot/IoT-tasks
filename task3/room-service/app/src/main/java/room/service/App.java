@@ -6,14 +6,13 @@ package room.service;
 import room.service.client.Client;
 import room.service.html.DataService;
 import room.service.mqtt.MessageListener;
-import room.service.serial.CommChannel;
-import room.service.serial.SerialCommChannel;
+
+import room.service.serial.*;
+import room.service.utils.JsonBuilder;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import io.vertx.core.Vertx;
-
-import com.google.gson.*;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -23,12 +22,11 @@ public class App {
     public static void main(String[] args) throws Exception {
         // Create a blocking queue to store the received messages
         BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
-        //CommChannel serial = new SerialCommChannel("/dev/ttyACM3", 9600);
+        CommChannel serial = new SerialCommChannel("/dev/ttyACM0", 9600);
         Vertx vertx = Vertx.vertx();
 		DataService service = new DataService(8080);
 		vertx.deployVerticle(service);
-		Gson gson = new Gson();
-        try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
+		try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
 
             // Register message listeners for the topics
             client.registerToTopic("esp32/light", new MessageListener(messageQueue));
@@ -38,30 +36,16 @@ public class App {
                 // Check if there are any messages in the queue
                 if (!messageQueue.isEmpty()) {
                     String message = messageQueue.take();
-                    //System.out.println(message);
-//                    serial.sendMsg(message);
-//                    if(serial.isMsgAvailable()) {
-//                    	//System.out.println(serial.receiveMsg());
-//                    }
-                    String json = gson.toJson(new DataObject("photo_resistor", (int) (Math.random() * 100), System.currentTimeMillis()));
-                    System.out.println(json);
-                    service.addMeasure(json);
+                    serial.sendMsg(message);
+                    if(serial.isMsgAvailable()) {
+                    	System.out.println(serial.receiveMsg());
+                    	service.addMeasure(JsonBuilder.getJsonWithTimestamp(serial.receiveMsg()));
+                    }
                 }
             }
         } catch (MqttException | InterruptedException e) {
             e.printStackTrace();
         }
     }
-  
-    static class DataObject {
-        private String name;
-        private int measure;
-        private long timestamp;
-
-        public DataObject(String name, int measure, long timestamp) {
-            this.name = name;
-            this.measure = measure;
-            this.timestamp = timestamp;
-        }
-    }
+    
 }

@@ -1,6 +1,6 @@
 #include "Roll.h"
 
-Roll::Roll(int pin)
+Roll::Roll(int pin) : JSONSensor<int>("roll")
 {
   this->servo = new ServoTimer2();
   this->servo->attach(pin);

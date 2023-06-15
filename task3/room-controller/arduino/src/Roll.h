@@ -3,6 +3,7 @@
 
 #include "ServoTimer2.h"
 #include "Arduino.h"
+#include "JSONSensor.h"
 #include "observer/Observer.h"
 #include "observer/Subject.h"
 #include "observer/Event.h"
@@ -10,7 +11,7 @@
 #include "MsgService.h"
 #include "TimeLib.h"
 
-class Roll : public Subject<int>, public Observer<int>, public Observer<Msg>
+class Roll : JSONSensor<int>, public Subject<int>, public Observer<int>, public Observer<Msg>
 {
 private:
   int rollState;
@@ -25,6 +26,9 @@ public:
   Roll(int pin);
   void update(Event<int> *e);
   void update(Event<Msg> *e);
+  String toJson() {
+    return this->getJson(this->rollState);
+  }
 };
 
 #endif

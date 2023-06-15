@@ -13,12 +13,7 @@ private:
     WiFiUDP ntpUDP;
     NTPClient timeClient;
 
-public:
-    JSONSensor(const char* name) : _name(name), timeClient(ntpUDP, "pool.ntp.org", 7200) {
-        timeClient.begin();
-        timeClient.update();
-    }
-
+protected:
     String getJson(T measure) {
         timeClient.update(); // Update time before sending
         DynamicJsonDocument doc(JSON_OBJECT_SIZE(4));
@@ -29,6 +24,12 @@ public:
         String json;
         serializeJson(doc, json);
         return json;
+    }
+
+public:
+    JSONSensor(const char* name) : _name(name), timeClient(ntpUDP, "pool.ntp.org", 7200) {
+        timeClient.begin();
+        timeClient.update();
     }
 };
 

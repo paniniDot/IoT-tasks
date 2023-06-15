@@ -47,7 +47,9 @@ setInterval(function () {
     const time = convertTimestampToFormattedDate(data.timestamp);
     const measure = data.measure;
     const name = data.name;
-    updateRollChart(time, measure);
+    if(name == "roll") {
+      updateRollChart(time, measure);
+    }
   })
   .catch(error => {
     // Gestire eventuali errori
