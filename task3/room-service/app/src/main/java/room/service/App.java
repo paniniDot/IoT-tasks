@@ -39,8 +39,7 @@ public class App {
                     serial.sendMsg(message);
                     if(serial.isMsgAvailable()) {
                     	System.out.println(serial.receiveMsg());
-                    	service.addMeasure("lol");
-                    	System.out.println(serial.receiveMsg());
+                    	service.addMeasure(JsonBuilder.getJsonWithTimestamp(serial.receiveMsg()));
                     }
                 }
             }
