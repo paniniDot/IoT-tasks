@@ -43,6 +43,7 @@ void MsgServiceClass::notify() {
 
 void MsgServiceClass::sendMsg(const String& msg){
   Serial.println(msg);  
+  delay(1000);
 }
 
 void serialEvent() {

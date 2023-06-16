@@ -26,7 +26,7 @@ void setup() {
 
 void loop() {
   MsgService.receiveMsg();
-  //MsgService.sendMsg(light->toJson());
-  //MsgService.sendMsg(roll->toJson());
+  MsgService.sendMsg(light->toJson());
+  MsgService.sendMsg(roll->toJson());
   bluetooth->notify();
 }
