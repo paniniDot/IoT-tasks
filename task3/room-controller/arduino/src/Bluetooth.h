@@ -7,6 +7,7 @@
 #include "observer/Subject.h"
 #include "observer/Event.h"
 #include "observer/EventSourceType.h"
+#include "ArduinoJson.h"
 
 class Bluetooth : public Observer<int>, public Subject<int>
 {

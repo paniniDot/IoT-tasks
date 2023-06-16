@@ -1,20 +1,17 @@
 package com.example.roomapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-
 import android.os.Bundle;
 import android.util.Log;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
+
+import java.io.OutputStream;
 
 public class ControllerEmulatedActivity extends AppCompatActivity {
     private MaterialSwitch lightSwitch;
@@ -42,10 +39,10 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         lightSwitch = findViewById(R.id.remotebutton);
         lightSwitch.setOnClickListener((v) -> {
             lightState = !lightState;
-            runOnUiThread(() ->{
+            runOnUiThread(() -> {
                 lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
                 lightSwitch.setText("light: " + (lightState ? "on" : "off"));
-            } );
+            });
         });
         lightCheckBox = findViewById(R.id.checkBox2);
         lightCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {

@@ -1,18 +1,18 @@
 package com.example.roomapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -22,8 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -39,6 +39,7 @@ public class ControllerActivity extends AppCompatActivity {
     private int rollState;
     private TextView rollText;
     private BluetoothClientConnectionThread connectionThread;
+    private boolean isDragging = false;
 
 
     @Override
@@ -57,8 +58,10 @@ public class ControllerActivity extends AppCompatActivity {
         lightSwitch.setOnClickListener((v) -> {
             lightState = !lightState;
             try {
-                bluetoothOutputStream.write(("light: " + lightState + "\n").getBytes(StandardCharsets.UTF_8));
-            } catch (IOException e) {
+                JSONObject configJson = new JSONObject();
+                configJson.put("light", lightState);
+                bluetoothOutputStream.write(configJson.toString().getBytes(StandardCharsets.UTF_8));
+            } catch (IOException | JSONException e) {
                 throw new RuntimeException(e);
             }
             runOnUiThread(() -> {
@@ -71,36 +74,60 @@ public class ControllerActivity extends AppCompatActivity {
             if (buttonView.isPressed()) {
                 runOnUiThread(() -> lightSwitch.setEnabled(isChecked));
                 try {
-                    bluetoothOutputStream.write(("lightcheckbox: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
-                } catch (IOException e) {
+                    JSONObject configJson = new JSONObject();
+                    configJson.put("lightcheckbox", isChecked);
+                    bluetoothOutputStream.write(configJson.toString().getBytes(StandardCharsets.UTF_8));
+                } catch (IOException | JSONException e) {
                     throw new RuntimeException(e);
                 }
             }
         });
         rollSlider = findViewById(R.id.seekBar);
         rollSlider.addOnChangeListener((slider, value, fromUser) -> {
-            rollState = (int) rollSlider.getValue();
-            try {
-                bluetoothOutputStream.write(("roll: " + rollState + "\n").getBytes(StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (fromUser) {
+                rollState = (int) value;
+                isDragging = true;
             }
-            runOnUiThread(() -> {
-                rollText.setText("roll: " + rollState);
-                rollSlider.setValue(rollState);
-            });
+        });
+        rollSlider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+            @Override
+            public void onStartTrackingTouch(@NonNull Slider slider) {
+                // Non è necessario fare nulla all'inizio del tracciamento del tocco.
+            }
+            @Override
+            public void onStopTrackingTouch(@NonNull Slider slider) {
+                // Qui puoi ottenere il valore dello slider e inviarlo solo se il click è stato rilasciato.
+                if (isDragging) {
+                    try {
+                        JSONObject configJson = new JSONObject();
+                        configJson.put("roll", rollState);
+                        bluetoothOutputStream.write(configJson.toString().getBytes(StandardCharsets.UTF_8));
+                    } catch (IOException | JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    runOnUiThread(() -> {
+                        // Aggiorna la visualizzazione del valore
+                        rollText.setText("roll: " + rollState);
+                        rollSlider.setValue(rollState);
+                    });
+
+                    isDragging = false;
+                }
+            }
         });
         rollCheckBox = findViewById(R.id.checkBox);
         rollCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 runOnUiThread(() -> rollSlider.setEnabled(isChecked));
                 try {
-                    bluetoothOutputStream.write(("rollcheckbox: " + isChecked + "\n").getBytes(StandardCharsets.UTF_8));
-                } catch (IOException e) {
+                    JSONObject configJson = new JSONObject();
+                    configJson.put("rollcheckbox", isChecked);
+                    bluetoothOutputStream.write(configJson.toString().getBytes(StandardCharsets.UTF_8));
+                } catch (IOException | JSONException e) {
                     throw new RuntimeException(e);
                 }
             }
-
         });
         lightSwitch.setEnabled(false);
         rollSlider.setEnabled(false);
@@ -114,7 +141,6 @@ public class ControllerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         BluetoothDevice bluetoothDevice = intent.getParcelableExtra(ScanActivity.X_BLUETOOTH_DEVICE_EXTRA);
         BluetoothAdapter btAdapter = getSystemService(BluetoothManager.class).getAdapter();
-        Log.i(C.TAG, "Connecting to " + bluetoothDevice.getName());
         connectionThread = new BluetoothClientConnectionThread(bluetoothDevice, btAdapter, this::manageConnectedSocket);
         connectionThread.start();
     }
@@ -123,17 +149,13 @@ public class ControllerActivity extends AppCompatActivity {
     private void manageConnectedSocket(BluetoothSocket socket) {
         try {
             bluetoothOutputStream = socket.getOutputStream();
-            Log.i(C.TAG, "Connection successful!");
-            bluetoothOutputStream.write("connesso".getBytes(StandardCharsets.UTF_8));
-            runOnUiThread(() -> {
-            lightCheckBox.setEnabled(true);
-            rollCheckBox.setEnabled(true);});
-            // Invia i dati di configurazione come JSON
             JSONObject configJson = new JSONObject();
-            configJson.put("lightcheckbox", lightCheckBox.isChecked());
-            configJson.put("rollcheckbox", rollCheckBox.isChecked());
+            configJson.put("connesso", 0);
             bluetoothOutputStream.write(configJson.toString().getBytes(StandardCharsets.UTF_8));
-
+            runOnUiThread(() -> {
+                lightCheckBox.setEnabled(true);
+                rollCheckBox.setEnabled(true);
+            });
             new Thread(() -> {
                 BufferedReader input = null;
                 try {
@@ -153,15 +175,11 @@ public class ControllerActivity extends AppCompatActivity {
                         return;
                     }
                     Log.i(C.TAG, "Message received: " + message);
-
-// Analizza il messaggio JSON ricevuto
                     try {
                         JSONObject jsonObject = new JSONObject(message);
-
                         if (jsonObject.has("lightstate")) {
                             int lightState = jsonObject.getInt("lightState");
                             boolean lightValue = lightState != 0;
-                            // Aggiorna lo stato della luce sulla UI
                             runOnUiThread(() -> {
                                 lightSwitch.setThumbIconDrawable(lightValue ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
                                 lightSwitch.setChecked(lightValue);
@@ -170,37 +188,31 @@ public class ControllerActivity extends AppCompatActivity {
                         } else if (jsonObject.has("lightcheckbox")) {
                             int lightCheckboxState = jsonObject.getInt("lightcheckbox");
                             boolean lightCheckboxValue = lightCheckboxState != 0;
-                            // Aggiorna lo stato del checkbox della luce sulla UI
                             runOnUiThread(() -> {
                                 lightCheckBox.setChecked(lightCheckboxValue);
                                 lightSwitch.setEnabled(lightCheckboxValue);
-
                             });
                         } else if (jsonObject.has("rollcheckbox")) {
                             int rollCheckboxState = jsonObject.getInt("rollcheckbox");
                             boolean rollCheckboxValue = rollCheckboxState != 0;
-                            // Aggiorna lo stato del checkbox del roll sulla UI
                             runOnUiThread(() -> {
                                 rollCheckBox.setChecked(rollCheckboxValue);
                                 rollSlider.setEnabled(rollCheckboxValue);
-
                             });
                         } else if (jsonObject.has("roll")) {
                             int rollState = jsonObject.getInt("roll");
-                            // Aggiorna lo stato del roll sulla UI
                             runOnUiThread(() -> rollSlider.setValue(rollState));
                         }
                     } catch (JSONException e) {
-                        // Se il messaggio non è un formato JSON valido, puoi gestire l'errore qui
                         e.printStackTrace();
                     }
-
-
                 }
                 Log.i(C.TAG, "Socket closed");
             }).start();
-        } catch (IOException | JSONException e) {
+        } catch (IOException e) {
             Log.e(C.TAG, "Error occurred when creating output stream", e);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
     }
 

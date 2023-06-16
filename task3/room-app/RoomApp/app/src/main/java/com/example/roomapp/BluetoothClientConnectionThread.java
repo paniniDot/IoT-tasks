@@ -34,35 +34,35 @@ public class BluetoothClientConnectionThread extends Thread {
     }
 
     public void run() {
-            // Cancel discovery because it otherwise slows down the connection.
-            btAdapter.cancelDiscovery();
+        // Cancel discovery because it otherwise slows down the connection.
+        btAdapter.cancelDiscovery();
 
-            try {
-                // Connect to the remote device through the socket. This call blocks
-                // until it succeeds or throws an exception.
-                socket.connect();
-            } catch (IOException connectException) {
-                Log.e(C.TAG, "unable to connect");
-                // Unable to connect; close the socket and return.
-                try {
-                    socket.close();
-                } catch (IOException closeException) {
-                    Log.e(C.TAG, "Could not close the client socket", closeException);
-                }
-                return;
-            }
-            // The connection attempt succeeded. Perform work associated with
-            // the connection in a separate thread.
-            handler.accept(socket);
-        }
-
-        // Closes the client socket and causes the thread to finish.
-        public void cancel() {
+        try {
+            // Connect to the remote device through the socket. This call blocks
+            // until it succeeds or throws an exception.
+            socket.connect();
+        } catch (IOException connectException) {
+            Log.e(C.TAG, "unable to connect");
+            // Unable to connect; close the socket and return.
             try {
                 socket.close();
-            } catch (IOException e) {
-                Log.e(C.TAG, "Could not close the client socket", e);
+            } catch (IOException closeException) {
+                Log.e(C.TAG, "Could not close the client socket", closeException);
             }
+            return;
         }
+        // The connection attempt succeeded. Perform work associated with
+        // the connection in a separate thread.
+        handler.accept(socket);
+    }
+
+    // Closes the client socket and causes the thread to finish.
+    public void cancel() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            Log.e(C.TAG, "Could not close the client socket", e);
+        }
+    }
 }
 

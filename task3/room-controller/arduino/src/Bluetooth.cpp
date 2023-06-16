@@ -9,22 +9,16 @@ Bluetooth::Bluetooth(int rx, int tx) {
 void Bluetooth::update(Event<int> *e) {
   EventSourceType src = e->getSrcType();
   if (src == EventSourceType::LIGHT) {
-    // Crea un oggetto JSON per inviare lo stato della luce
     StaticJsonDocument<128> lightStateDoc;
     lightStateDoc["lightstate"] = *e->getEventArgs();
     String lightStateJson;
     serializeJson(lightStateDoc, lightStateJson);
-    
-    // Invia il messaggio via Bluetooth
     this->bt->println(lightStateJson);
   } else if (src == EventSourceType::SERVO) {
-    // Crea un oggetto JSON per inviare lo stato del roll
     StaticJsonDocument<128> rollStateDoc;
     rollStateDoc["roll"] = *e->getEventArgs();
     String rollStateJson;
     serializeJson(rollStateDoc, rollStateJson);
-    
-    // Invia il messaggio via Bluetooth
     this->bt->println(rollStateJson);
   }
 }
@@ -34,34 +28,36 @@ void Bluetooth::update(Event<int> *e) {
 void Bluetooth::notify() {
   if (this->bt->available()) {
     String msg = this->bt->readStringUntil('\n');
-    if (msg.startsWith("connesso")) {
+    StaticJsonDocument<128> doc;
+    deserializeJson(doc, msg);
+    if (doc.containsKey("connesso")) {
       Event<int> *e = new Event<int>(EventSourceType::BLUETOOTH, new int(0));
       for (int i = 0; i < this->getNObservers(); i++) {
         this->getObservers()[i]->update(e);
       }
       delete e;
-      
-      // Crea un oggetto JSON per inviare i dati di configurazione
       StaticJsonDocument<64> configDoc;
       configDoc["lightcheckbox"] = this->lightmode;
-      configDoc["rollcheckbox"] = this->rollmode;
       String configJson;
       serializeJson(configDoc, configJson);
-      
       this->bt->println(configJson);
-      
-    } else if (msg.startsWith("lightcheckbox")) {
-      this->lightmode = msg.substring(strlen("lightcheckbox: ")).equals("true");
-    } else if (msg.startsWith("rollcheckbox")) {
-      this->rollmode = msg.substring(strlen("rollcheckbox: ")).equals("true");
-    } else if (msg.startsWith("light")) {
-      Event<int> *e = new Event<int>(EventSourceType::LIGHT, new int(msg.substring(strlen("light: ")).equals("true")));
+      StaticJsonDocument<64> configDoc1;
+      configDoc1["rollcheckbox"] = this->rollmode;
+      String configJson1;
+      serializeJson(configDoc1, configJson1);
+      this->bt->println(configJson1);      
+    } else if (doc.containsKey("lightcheckbox")) {
+      this->lightmode =  doc["lightcheckbox"];
+    } else if (doc.containsKey("rollcheckbox")) {
+      this->rollmode = doc["rollcheckbox"];
+    } else if (doc.containsKey("light")) {
+      Event<int> *e = new Event<int>(EventSourceType::LIGHT, new int(doc["light"]));
       for (int i = 0; i < this->getNObservers(); i++) {
         this->getObservers()[i]->update(e);
       }
       delete e;
-    } else if (msg.startsWith("roll")) {
-      Event<int> *e = new Event<int>(EventSourceType::SERVO, new int(msg.substring(strlen("roll: ")).toInt()));
+    } else if (doc.containsKey("roll")) {
+      Event<int> *e = new Event<int>(EventSourceType::SERVO, new int(doc["roll"]));
       for (int i = 0; i < this->getNObservers(); i++) {
         this->getObservers()[i]->update(e);
       }

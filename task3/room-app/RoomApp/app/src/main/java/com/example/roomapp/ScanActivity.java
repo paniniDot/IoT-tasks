@@ -1,10 +1,5 @@
 package com.example.roomapp;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -22,6 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.material.color.DynamicColors;
 
 import java.util.ArrayList;
@@ -29,29 +29,23 @@ import java.util.List;
 
 public class ScanActivity extends AppCompatActivity {
 
+    public static final String X_BLUETOOTH_DEVICE_EXTRA = "X_BLUETOOTH_DEVICE_EXTRA";
     private static final int REQUEST_ENABLE_BT = 1234;
     private static final int REQUEST_PERMISSION_CONNECT = 758;
     private static final int REQUEST_PERMISSION_SCAN = 759;
     private static final int LEGACY_REQUEST_PERMISSION_BLUETOOTH = 555;
     private static final int REQUEST_PERMISSION_ADMIN = 556;
-
-    public static final String X_BLUETOOTH_DEVICE_EXTRA = "X_BLUETOOTH_DEVICE_EXTRA";
-
-
     private final List<BluetoothDevice> scannedDevices = new ArrayList<>();
     private final List<String> scannedNameList = new ArrayList<>();
 
     private final List<BluetoothDevice> pairedDevices = new ArrayList<>();
     private final List<String> pairedNameList = new ArrayList<>();
+    private final boolean bluetoothEnabled = false;
     private BluetoothAdapter btAdapter;
-
     private ListView scannedListView;
     private ListView pairedListView;
     private Button scanButton;
     private ArrayAdapter<String> scannedListAdapter;
-    private ArrayAdapter<String> pairedListAdapter;
-    private final boolean bluetoothEnabled = false;
-
     //When new bluetooth devices are discovered Bluetooth the system sends out an event.
     //A broadcast receiver is needed to capture system events and react accordingly
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -63,11 +57,12 @@ public class ScanActivity extends AppCompatActivity {
             }
         }
     };
+    private ArrayAdapter<String> pairedListAdapter;
 
     @SuppressLint("MissingPermission")
     private void onBluetoothDeviceFound(BluetoothDevice device) {
         this.scannedDevices.add(device);
-        if(device.getName()!= null){
+        if (device.getName() != null) {
             this.scannedNameList.add(device.getName());
         } else {
             this.scannedNameList.add(device.getAddress());
@@ -136,7 +131,7 @@ public class ScanActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
                 //do not ask for permissions on resume otherwise you will get in a loop!
                 displayError("Please grant legacy permissions first");
@@ -154,7 +149,7 @@ public class ScanActivity extends AppCompatActivity {
     }
 
     @SuppressLint("MissingPermission")
-    private void checkPairedDevices(){
+    private void checkPairedDevices() {
         pairedDevices.clear();
         pairedNameList.clear();
         runOnUiThread(() -> pairedListAdapter.notifyDataSetChanged());
@@ -162,7 +157,7 @@ public class ScanActivity extends AppCompatActivity {
         if (pairedDevices.size() > 0) {
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : pairedDevices) {
-                if(device.getName()!= null){
+                if (device.getName() != null) {
                     this.pairedNameList.add(device.getName());
                 } else {
                     this.pairedNameList.add(device.getAddress());
@@ -192,7 +187,7 @@ public class ScanActivity extends AppCompatActivity {
             return;
         } else {
             //empty lists
-            if(!btAdapter.isDiscovering()) {
+            if (!btAdapter.isDiscovering()) {
                 checkPermissionAndEnableBluetooth();
                 scannedDevices.clear();
                 scannedNameList.clear();
@@ -207,10 +202,10 @@ public class ScanActivity extends AppCompatActivity {
 
     /* ================== PERMISSION MANAGEMENT ========================== */
 
-    private void checkPermissionAndEnableBluetooth(){
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S){
+    private void checkPermissionAndEnableBluetooth() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED
-             || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
             ) {
                 requestPermissions(new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.ACCESS_FINE_LOCATION}, LEGACY_REQUEST_PERMISSION_BLUETOOTH);
             } else {
@@ -257,13 +252,13 @@ public class ScanActivity extends AppCompatActivity {
                     //go back at scanning after receiving the permission
                     startScanning();
                 } else {
-                    displayError( "You need to grant bluetooth scan permission to use this feature");
+                    displayError("You need to grant bluetooth scan permission to use this feature");
                 }
                 break;
             case LEGACY_REQUEST_PERMISSION_BLUETOOTH:
-                if(grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
+                if (grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
                     logMessage("legacy ok");
-                    checkPermissionAndEnableBluetooth();
+                checkPermissionAndEnableBluetooth();
                 break;
             default:
                 logMessage("result of unknown activity request");
@@ -275,7 +270,7 @@ public class ScanActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQUEST_ENABLE_BT:
-                if(resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     this.scanButton.setEnabled(true);
                 } else {
                     displayError("You need to enable bluetooth to use the app");
@@ -292,7 +287,7 @@ public class ScanActivity extends AppCompatActivity {
         Log.e(C.TAG, s);
     }
 
-    private void logMessage(String message){
+    private void logMessage(String message) {
         Log.i(C.TAG, message);
     }
 }
