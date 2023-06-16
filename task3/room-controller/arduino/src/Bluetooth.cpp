@@ -5,7 +5,6 @@ Bluetooth::Bluetooth(int rx, int tx) {
   this->rollmode = 0;
   this->lightmode = 0;
   bt->begin(9600);
-  Serial.println("ready to go.");
 }
 void Bluetooth::update(Event<int> *e) {
   EventSourceType src = e->getSrcType();

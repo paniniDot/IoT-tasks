@@ -12,7 +12,7 @@ public class JsonBuilder {
 	    if (jsonEl.isJsonObject()) {
 	        JsonObject jsonObj = jsonEl.getAsJsonObject();
 	        jsonObj.addProperty("timestamp", System.currentTimeMillis());
-	        return jsonObj.getAsString();
+	        return jsonObj.toString();
 	    }
 	    return null;
 	}
