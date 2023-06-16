@@ -38,8 +38,9 @@ public class App {
                     String message = messageQueue.take();
                     serial.sendMsg(message);
                     if(serial.isMsgAvailable()) {
-                    	System.out.println(serial.receiveMsg());
-                    	service.addMeasure(JsonBuilder.getJsonWithTimestamp(serial.receiveMsg()));
+                    	String msg = serial.receiveMsg();
+                    	System.out.println(msg);
+                    	service.addMeasure(JsonBuilder.getJsonWithTimestamp(msg));
                     }
                 }
             }

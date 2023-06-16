@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 
 public class JsonBuilder {
 
-	public static String getJsonWithTimestamp(String json) {
+	public static String getJsonWithTimestamp(String json) throws Exception {
 	    JsonElement jsonEl = JsonParser.parseString(json);
 	    if (jsonEl.isJsonObject()) {
 	        JsonObject jsonObj = jsonEl.getAsJsonObject();
