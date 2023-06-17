@@ -63,6 +63,6 @@ void loop() {
   }
   publisher.loop();
   publisher.publish(topic_light, resistor->toJson().c_str());
-  publisher.publish(topic_motion, pir->toJson().c_str());  
+  publisher.publish(topic_motion, pir->toJson().c_str());
   delay(1000);
 }
