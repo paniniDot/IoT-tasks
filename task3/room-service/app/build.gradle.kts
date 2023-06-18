@@ -39,6 +39,8 @@ dependencies {
     implementation("io.vertx:vertx-core:4.2.6")
     implementation("io.vertx:vertx-web:4.2.6")
     implementation("io.vertx:vertx-web-client:4.2.6")
+    implementation("io.vertx:vertx-mqtt:4.4.3")
+
 
     implementation("com.google.code.gson:gson:2.10.1")
 }
