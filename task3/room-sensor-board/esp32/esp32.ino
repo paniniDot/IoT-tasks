@@ -1,68 +1,84 @@
 #include <WiFi.h>
-#include "src/PubSubClient.h"
+#include <Adafruit_MQTT.h>
+#include "Adafruit_MQTT_Client.h"
+#include <esp_system.h>
 #include "src/Pir.h"
 #include "src/PhotoResistor.h"
-#include <esp_system.h>
+#define PIR_PIN 34
+#define PHOTO_RESISTOR_PIN 24
 
 /* wifi network info */
 const char* ssid = "asus";
 const char* password = "0123456789";
 /* MQTT server address */
-const char* mqtt_server = "broker.mqtt-dashboard.com";
-//define topics 
-const char* topic_light = "esp32/light";
-const char* topic_motion = "esp32/motion";
-//define hardware 
-PhotoResistor* resistor;
-Pir* pir;
+const char* mqtt_server = "192.168.2.2";
+const int mqtt_port = 1883;
+/* MQTT topics */
+const char* topic_light = "/esp/light";
+const char* topic_motion = "/esp/motion";
 /* MQTT client management */
 WiFiClient espClient;
-PubSubClient publisher(espClient);
+Adafruit_MQTT_Client mqttClient(&espClient, mqtt_server, mqtt_port);
+Adafruit_MQTT_Publish publisher_light(&mqttClient, topic_light);
+Adafruit_MQTT_Publish publisher_motion(&mqttClient, topic_motion);
+
+/* Hardware objects */
+PhotoResistor* resistor;
+Pir* pir;
 
 void setup_wifi() {
   delay(100);
   Serial.print("Connecting to ");
-  Serial.print(ssid);
+  Serial.println(ssid);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(" . ");
+    Serial.print(".");
   }
-  Serial.print(" WiFi connected ");
-  Serial.print("IP address: ");
+  Serial.println();
+  Serial.print("WiFi connected. IP address: ");
   Serial.println(WiFi.localIP());
-  resistor = new PhotoResistor(4);
-  pir = new Pir(34);
 }
 
-void reconnect() {
-  while (!publisher.connected()) {
-    Serial.print("Attempting MQTT connection...");
-    if (publisher.connect("ESP32 room sensor board")) {
-      Serial.println("connected");
-    } else {
+void connectToMQTT() {
+  while (!mqttClient.connected()) {
+    Serial.print("Connecting to MQTT server...");
+    if (!mqttClient.connect()) {
       Serial.print("failed, rc=");
-      Serial.print(publisher.state());
-      Serial.println(" try again in 5 seconds");
+      Serial.println(" retrying in 5 seconds");
       delay(5000);
     }
   }
+  Serial.println("connected");
 }
 
 void setup() {
   Serial.begin(115200);
-  delay(100);
   setup_wifi();
-  publisher.setServer(mqtt_server, 1883);
+  resistor = new PhotoResistor(PHOTO_RESISTOR_PIN);
+  pir = new Pir(PIR_PIN);
 }
 
 void loop() {
-  if (!publisher.connected()) {
-    reconnect();
+  if (!mqttClient.connected()) {
+    connectToMQTT();
   }
-  publisher.loop();
-  publisher.publish(topic_light, resistor->toJson().c_str());
-  publisher.publish(topic_motion, pir->toJson().c_str());
-  delay(1000);
+  // Publish light value
+  String lightValue = resistor->toJson();
+  if (publisher_light.publish(lightValue.c_str())) {
+    Serial.println("Published light value");
+  } else {
+    Serial.println("Failed to publish light value");
+  }
+
+  // Publish motion value
+  String motionValue = pir->toJson();
+  if (publisher_motion.publish(motionValue.c_str())) {
+    Serial.println("Published motion value");
+  } else {
+    Serial.println("Failed to publish motion value");
+  }
+
+  delay(1000);  // Publish every 5 seconds
 }
