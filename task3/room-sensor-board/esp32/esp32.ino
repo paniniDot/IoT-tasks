@@ -26,7 +26,7 @@ Adafruit_MQTT_Publish publisher_motion(&mqttClient, topic_motion);
 PhotoResistor* resistor;
 Pir* pir;
 
-void setup_wifi() {
+void connectToWIFI() {
   delay(100);
   Serial.print("Connecting to ");
   Serial.println(ssid);
@@ -34,20 +34,16 @@ void setup_wifi() {
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
   }
-  Serial.println();
   Serial.print("WiFi connected. IP address: ");
   Serial.println(WiFi.localIP());
 }
 
 void connectToMQTT() {
+  Serial.println("Connecting to MQTT server");
   while (!mqttClient.connected()) {
-    Serial.print("Connecting to MQTT server...");
     if (!mqttClient.connect()) {
-      Serial.print("failed, rc=");
-      Serial.println(" retrying in 5 seconds");
-      delay(5000);
+      delay(500);
     }
   }
   Serial.println("connected");
@@ -55,13 +51,20 @@ void connectToMQTT() {
 
 void setup() {
   Serial.begin(115200);
-  setup_wifi();
+  connectToWIFI();
+  connectToMQTT();
   resistor = new PhotoResistor(PHOTO_RESISTOR_PIN);
   pir = new Pir(PIR_PIN);
 }
 
 void loop() {
-  if (!mqttClient.connected()) {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi connection lost. Reconnecting...");
+    connectToWIFI();
+  }
+  if (!mqttClient.ping()) {
+    Serial.println("MQTT server connection lost");
+    //mqttClient.disconnect();
     connectToMQTT();
   }
   // Publish light value
