@@ -14,8 +14,8 @@ const char* password = "0123456789";
 const char* mqtt_server = "192.168.2.2";
 const int mqtt_port = 1883;
 /* MQTT topics */
-const char* topic_light = "/esp/light";
-const char* topic_motion = "/esp/motion";
+const char* topic_light = "esp/light";
+const char* topic_motion = "esp/motion";
 /* MQTT client management */
 WiFiClient espClient;
 Adafruit_MQTT_Client mqttClient(&espClient, mqtt_server, mqtt_port);
