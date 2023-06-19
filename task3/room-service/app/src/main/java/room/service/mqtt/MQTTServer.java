@@ -22,7 +22,7 @@ public class MQTTServer {
 		Vertx vertx = Vertx.vertx();
 		final List<MqttEndpoint> endpoints = new ArrayList<>();
 		MqttServerOptions options = new MqttServerOptions()
-            .setHost("192.168.2.2") // Indirizzo IP o hostname del server MQTT
+            .setHost("localhost") // Indirizzo IP o hostname del server MQTT
             .setPort(1883); // Porta su cui il server MQTT deve ascoltare
 		
 		MqttServer mqttServer = MqttServer.create(vertx,options);

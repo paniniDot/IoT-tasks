@@ -15,7 +15,7 @@ public class App {
 
 	public static void main(String[] args) throws Exception {
 		// Create a blocking queue to store the received messages
-		CommChannel serial = new SerialCommChannel("COM12", 9600);
+		CommChannel serial = new SerialCommChannel("/dev/ttyACM0", 9600);
 		Vertx vertx = Vertx.vertx();
 		DataService service = new DataService(8080);
 		vertx.deployVerticle(service);

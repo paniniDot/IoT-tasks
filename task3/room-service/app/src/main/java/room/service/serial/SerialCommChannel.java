@@ -20,16 +20,21 @@ public class SerialCommChannel implements CommChannel {
 				8, 
 				SerialPort.ONE_STOP_BIT, 
 				SerialPort.FLOW_CONTROL_DISABLED);
+		this.port.openPort();
 		this.port.addDataListener(new SerialPortDataListener() {	
+			
+			String messages = "";
 			
 			@Override
 			public void serialEvent(SerialPortEvent event) {
-				if (event.getEventType() == SerialPort.LISTENING_EVENT_DATA_AVAILABLE) {
-                    String message = new String(new byte[port.bytesAvailable()]);
-                    queue.add(message);
-                    System.out.println("Messaggio ricevuto: " + message);
-                }
-			}		
+				messages += new String(event.getReceivedData());
+				System.out.println("Messaggio attuale: " + messages);
+				while (messages.contains("\n")) {
+					String[] message = messages.split("\\n", 2);
+					messages = (message.length > 1) ? message[1] : "";
+					System.out.println("Message: " + message[0]);
+				}
+			}	
 			
 			@Override
 			public int getListeningEvents() {
