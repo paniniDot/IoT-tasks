@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.netty.handler.codec.mqtt.MqttProperties;
-import io.netty.handler.codec.mqtt.MqttQoS;
 import io.vertx.core.Vertx;
 import io.vertx.mqtt.MqttEndpoint;
 import io.vertx.mqtt.MqttServer;
 import io.vertx.mqtt.MqttServerOptions;
 import io.vertx.mqtt.messages.codes.MqttSubAckReasonCode;
+import room.service.serial.CommChannel;
 
 /**
  * An MQTT Server instance that handles MQTT communication with ESP32.
@@ -18,7 +18,7 @@ import io.vertx.mqtt.messages.codes.MqttSubAckReasonCode;
  * */
 public class MQTTServer {
 
-	public MQTTServer() {
+	public MQTTServer(CommChannel serial) {
 		Vertx vertx = Vertx.vertx();
 		final List<MqttEndpoint> endpoints = new ArrayList<>();
 		MqttServerOptions options = new MqttServerOptions()
@@ -52,11 +52,7 @@ public class MQTTServer {
 
 			endpoint.publishHandler(message -> {
 				log("messaggio arrivato: "+ message.payload());
-				endpoint.publish(message.topicName(), 
-						message.payload(), 
-						MqttQoS.EXACTLY_ONCE, 
-						false, 
-						false);
+				serial.sendMsg(message.payload().toString());
 			});
 			endpoint.accept(false);
 		}).listen()
