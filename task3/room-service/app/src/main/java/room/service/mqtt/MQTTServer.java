@@ -22,10 +22,10 @@ public class MQTTServer {
 		Vertx vertx = Vertx.vertx();
 		final List<MqttEndpoint> endpoints = new ArrayList<>();
 		MqttServerOptions options = new MqttServerOptions()
-            .setHost("localhost") // Indirizzo IP o hostname del server MQTT
+            .setHost("192.168.2.2") // Indirizzo IP o hostname del server MQTT
             .setPort(1883); // Porta su cui il server MQTT deve ascoltare
 		
-		MqttServer mqttServer = MqttServer.create(vertx);
+		MqttServer mqttServer = MqttServer.create(vertx,options);
 		
 		mqttServer.endpointHandler(endpoint -> {
 			log("client connesso: " + endpoint.clientIdentifier());
@@ -51,7 +51,7 @@ public class MQTTServer {
 				});
 
 			endpoint.publishHandler(message -> {
-				log("messaggio arrivato: "+ message);
+				log("messaggio arrivato: "+ message.payload());
 				endpoint.publish(message.topicName(), 
 						message.payload(), 
 						MqttQoS.EXACTLY_ONCE, 
@@ -71,9 +71,6 @@ public class MQTTServer {
 	
 	private void log(final String msg) {
 		System.out.println("[MQTT SERVER] " + msg);
-	}
-	public static void main(String[] args) {
-		MQTTServer server = new MQTTServer();
 	}
 	
 }

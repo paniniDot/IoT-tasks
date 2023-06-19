@@ -5,6 +5,7 @@ package room.service;
 
 import room.service.client.Client;
 import room.service.html.DataService;
+import room.service.mqtt.MQTTServer;
 import room.service.mqtt.MessageListener;
 
 import room.service.serial.*;
@@ -19,55 +20,60 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class App {
 
-    public static void main(String[] args) throws Exception {
-        // Create a blocking queue to store the received messages
-        BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
-        CommChannel serial = new SerialCommChannel("COM9", 9600);
-        Vertx vertx = Vertx.vertx();
+	public static void main(String[] args) throws Exception {
+		// Create a blocking queue to store the received messages
+		BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
+		CommChannel serial = new SerialCommChannel("COM12", 9600);
+		Vertx vertx = Vertx.vertx();
 		DataService service = new DataService(8080);
 		vertx.deployVerticle(service);
-		try (Client client = new Client("tcp", "broker.mqtt-dashboard.com", 1883)) {
-
-            // Register message listeners for the topics
-            client.registerToTopic("esp32/light", new MessageListener(messageQueue));
-            client.registerToTopic("esp32/motion", new MessageListener(messageQueue));
-            Thread.sleep(1000);
-            Thread readThread = new Thread(() -> {
-                while (true) {
-                    if (serial.isMsgAvailable()) {
-                        try {
-                            String msg = serial.receiveMsg();
-                            System.out.println(msg);
-                            if (JsonUtils.isFromArduino(msg)) {
-                                service.addMeasure(JsonUtils.getJsonWithTimestamp(msg));
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+		Thread serverThread = new Thread(() -> {
+			new MQTTServer();
+		});
+		Thread.sleep(5000);
+		Thread readThread = new Thread(() -> {
+			while (true) {
+				if (serial.isMsgAvailable()) {
+					try {
+						String msg = serial.receiveMsg();
+						System.out.println(msg);
+						if (JsonUtils.isFromArduino(msg)) {
+							service.addMeasure(JsonUtils.getJsonWithTimestamp(msg));
 						}
-                    }
-                }
-            });
-            Thread sendThread = new Thread(() -> {
-                while (true) {
-                    try {
-                        if (!messageQueue.isEmpty()) {
-                            String message = messageQueue.take();
-                            serial.sendMsg(message);
-                        }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            readThread.start();
-            sendThread.start();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		Thread.sleep(5000);
+		Thread sendThread = new Thread(() -> {
+			System.out.println("lol1");
+			try (Client client = new Client("", "localhost", 1883)) {
+				System.out.println("lol2");
+				// Register message listeners for the topics
+				client.registerToTopic("esp32/light", new MessageListener(messageQueue));
+				client.registerToTopic("esp32/motion", new MessageListener(messageQueue));
+				while (true) {
+					try {
+						System.out.println("lol3");
+						if (!messageQueue.isEmpty()) {
+							String msg = messageQueue.take();
+							
+							serial.sendMsg(msg);
+						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			} catch (MqttException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		serverThread.start();
+		readThread.start();
+		sendThread.start();
+	}
 
-        } catch (MqttException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    
 }
