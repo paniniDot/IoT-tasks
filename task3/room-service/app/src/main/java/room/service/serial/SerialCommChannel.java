@@ -1,106 +1,65 @@
 package room.service.serial;
 
+import java.io.IOException;
 import java.util.concurrent.*;
-import jssc.*;
 
-/**
- * Comm channel implementation based on serial port.
- * 
- * @author aricci
- *
- */
-public class SerialCommChannel implements CommChannel, SerialPortEventListener {
+import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortDataListener;
+import com.fazecast.jSerialComm.SerialPortEvent;
 
-	private SerialPort serialPort;
-	private BlockingQueue<String> queue;
-	private StringBuffer currentMsg = new StringBuffer("");
+public class SerialCommChannel implements CommChannel {
 	
-	public SerialCommChannel(String port, int rate) throws Exception {
-		queue = new ArrayBlockingQueue<String>(100);
-
-		serialPort = new SerialPort(port);
-		serialPort.openPort();
-
-		serialPort.setParams(rate,
-		                         SerialPort.DATABITS_8,
-		                         SerialPort.STOPBITS_1,
-		                         SerialPort.PARITY_NONE);
-
-		serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | 
-		                                  SerialPort.FLOWCONTROL_RTSCTS_OUT);
-
-		// serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);
-		serialPort.addEventListener(this);
+	private BlockingQueue<String> queue;
+	private SerialPort port;
+	
+	public SerialCommChannel(String portName, int rate) {
+		this.queue = new ArrayBlockingQueue<String>(100);
+		this.port = SerialPort.getCommPort(portName);
+		this.port.setComPortParameters(
+				rate, 
+				8, 
+				SerialPort.ONE_STOP_BIT, 
+				SerialPort.FLOW_CONTROL_DISABLED);
+		this.port.addDataListener(new SerialPortDataListener() {	
+			
+			@Override
+			public void serialEvent(SerialPortEvent event) {
+				if (event.getEventType() == SerialPort.LISTENING_EVENT_DATA_AVAILABLE) {
+                    String message = new String(new byte[port.bytesAvailable()]);
+                    queue.add(message);
+                    System.out.println("Messaggio ricevuto: " + message);
+                }
+			}		
+			
+			@Override
+			public int getListeningEvents() {
+				return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
+			}
+		});
 	}
-
+	
+	
 	@Override
 	public void sendMsg(String msg) {
-		System.out.println(msg);
-		String messageWithNewline = msg + "\n";
-        try {
-			serialPort.writeString(messageWithNewline);
-		} catch (SerialPortException e) {
+		try {
+			this.port.getOutputStream().write(msg.getBytes());
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
 	public String receiveMsg() throws InterruptedException {
-		return queue.take();
+		return this.queue.take();
 	}
 
 	@Override
 	public boolean isMsgAvailable() {
-		return !queue.isEmpty();
+		return !this.queue.isEmpty();
 	}
-
-	/**
-	 * This should be called when you stop using the port.
-	 * This will prevent port locking on platforms like Linux.
-	 */
+	
 	public void close() {
-		try {
-			if (serialPort != null) {
-				serialPort.removeEventListener();
-				serialPort.closePort();
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
-
-	public void serialEvent(SerialPortEvent event) {
-		/* if there are bytes received in the input buffer */
-		if (event.isRXCHAR()) {
-            try {
-            		String msg = serialPort.readString(event.getEventValue());
-            		
-            		msg = msg.replaceAll("\r", "");
-            		
-            		currentMsg.append(msg);
-            		
-            		boolean goAhead = true;
-            		
-        			while(goAhead) {
-        				String msg2 = currentMsg.toString();
-        				int index = msg2.indexOf("\n");
-            			if (index >= 0) {
-            				queue.put(msg2.substring(0, index));
-            				currentMsg = new StringBuffer("");
-            				if (index + 1 < msg2.length()) {
-            					currentMsg.append(msg2.substring(index + 1)); 
-            				}
-            			} else {
-            				goAhead = false;
-            			}
-        			}
-        			
-            } catch (Exception ex) {
-            		ex.printStackTrace();
-                System.out.println("Error in receiving string from COM-port: " + ex);
-            }
-        }
+		this.port.closePort();
 	}
 }
+
