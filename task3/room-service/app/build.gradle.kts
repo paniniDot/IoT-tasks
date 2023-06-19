@@ -40,8 +40,7 @@ dependencies {
     implementation("io.vertx:vertx-web:4.4.3")
     implementation("io.vertx:vertx-web-client:4.4.3")
     implementation("io.vertx:vertx-mqtt:4.4.3")
-
-
+    implementation ("com.fazecast:jSerialComm:[2.0.0,3.0.0)")
     implementation("com.google.code.gson:gson:2.10.1")
 }
 

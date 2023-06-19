@@ -14,7 +14,9 @@ bool MsgServiceClass::isMsgAvailable(){
 void MsgServiceClass::receiveMsg(){
   if (msgAvailable){
     Msg* msg = currentMsg;
+    delay(100);
     Serial.println(msg->getContent());
+    delay(100);
     this->notify();
     msgAvailable = false;
     currentMsg = NULL;
@@ -42,7 +44,9 @@ void MsgServiceClass::notify() {
 }
 
 void MsgServiceClass::sendMsg(const String& msg){
+  delay(100);
   Serial.println(msg);  
+  delay(100);
 }
 
 void serialEvent() {
