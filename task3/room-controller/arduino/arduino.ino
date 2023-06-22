@@ -8,6 +8,8 @@
 Bluetooth *bluetooth;
 Light *light;
 Roll *roll;
+unsigned long previousMillis = 0;
+const unsigned long interval = 1000;
 
 void setup() {
   //MsgServiceBT.init();
@@ -25,9 +27,12 @@ void setup() {
 }
 
 void loop() {
+ unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+    MsgService.sendMsg(light->toJson());
+    MsgService.sendMsg(roll->toJson());
+  }
   MsgService.receiveMsg();
-  MsgService.sendMsg(light->toJson());
-  MsgService.sendMsg(roll->toJson());
-  bluetooth->notify();
-  delay(1000);
+  //bluetooth->notify();
 }

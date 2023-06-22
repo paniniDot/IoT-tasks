@@ -10,6 +10,7 @@ import io.vertx.mqtt.MqttServer;
 import io.vertx.mqtt.MqttServerOptions;
 import io.vertx.mqtt.messages.codes.MqttSubAckReasonCode;
 import room.service.serial.CommChannel;
+import room.service.serial.SerialArduino;
 
 /**
  * An MQTT Server instance that handles MQTT communication with ESP32.
@@ -18,11 +19,11 @@ import room.service.serial.CommChannel;
  * */
 public class MQTTServer {
 
-	public MQTTServer(CommChannel serial) {
+	public MQTTServer(SerialArduino serial) {
 		Vertx vertx = Vertx.vertx();
 		final List<MqttEndpoint> endpoints = new ArrayList<>();
 		MqttServerOptions options = new MqttServerOptions()
-            .setHost("192.168.2.2") // Indirizzo IP o hostname del server MQTT
+            .setHost("192.168.2.138") // Indirizzo IP o hostname del server MQTT
             .setPort(1883); // Porta su cui il server MQTT deve ascoltare
 		
 		MqttServer mqttServer = MqttServer.create(vertx,options);
@@ -52,7 +53,7 @@ public class MQTTServer {
 
 			endpoint.publishHandler(message -> {
 				//log("messaggio arrivato: "+ message.payload());
-				serial.sendMsg(message.payload().toString());
+				serial.write(message.payload().toString());
 			});
 			endpoint.accept(false);
 		}).listen()

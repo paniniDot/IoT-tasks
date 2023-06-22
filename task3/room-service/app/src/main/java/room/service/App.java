@@ -8,40 +8,41 @@ import room.service.mqtt.MQTTServer;
 
 import room.service.serial.*;
 import room.service.utils.JsonUtils;
-
+import java.util.Scanner;
 import io.vertx.core.Vertx;
 
 public class App {
 
 	public static void main(String[] args) throws Exception {
-		// Create a blocking queue to store the received messages
-		CommChannel serial = new SerialCommChannel("COM12", 9600);
+		//CommChannel serial = new SerialCommChannel("COM12", 9600);
+		SerialArduino serial = new SerialArduino("COM12", 9600);
+		serial.openConnection();
 		Vertx vertx = Vertx.vertx();
 		DataService service = new DataService(8080);
 		vertx.deployVerticle(service);
 		Thread serverThread = new Thread(() -> {
 			new MQTTServer(serial);
 		});
-		Thread.sleep(5000);
 		Thread readThread = new Thread(() -> {
 			while (true) {
-				if (serial.isMsgAvailable()) {
-					try {
-						String msg = serial.receiveMsg();
-						System.out.println(msg);
-						if (JsonUtils.isFromArduino(msg)) {
-							service.addMeasure(JsonUtils.getJsonWithTimestamp(msg));
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
+			    try {
+			        String msg = serial.read();
+			        if (msg.length() > 0) {
+			            System.out.println(msg);
+			            if (JsonUtils.isFromArduino(msg)) {
+			                service.addMeasure(JsonUtils.getJsonWithTimestamp(msg));
+			            }
+			        }
+			        Thread.sleep(100);
+			    } catch (Exception e) {
+			        e.printStackTrace();
+			    }
 			}
+
 		});
-		Thread.sleep(5000);
 	
-		
 		serverThread.start();
+		Thread.sleep(5000);
 		readThread.start();
 	}
 
