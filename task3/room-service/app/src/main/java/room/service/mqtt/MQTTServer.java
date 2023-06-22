@@ -53,7 +53,7 @@ public class MQTTServer {
 
 			endpoint.publishHandler(message -> {
 				//log("messaggio arrivato: "+ message.payload());
-				serial.write(message.payload().toString());
+				serial.sendMsg(message.payload().toString());
 			});
 			endpoint.accept(false);
 		}).listen()

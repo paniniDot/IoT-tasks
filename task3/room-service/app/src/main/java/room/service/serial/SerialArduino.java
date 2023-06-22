@@ -4,7 +4,7 @@ import java.io.OutputStream;
 import com.fazecast.jSerialComm.*;
 import java.io.PrintWriter;
 
-public class SerialArduino {
+public class SerialArduino implements CommChannel{
 		private SerialPort comPort;
 	    private InputStream in;
 	    private OutputStream out;
@@ -15,7 +15,8 @@ public class SerialArduino {
 			comPort.openPort();
 			try {Thread.sleep(100);} catch(Exception e){}
 	    }
-	    public String read() {
+	    @Override
+	    public String receiveMsg() {
 	        StringBuilder sb = new StringBuilder();
 	        try {
 	            in = comPort.getInputStream();
@@ -36,8 +37,8 @@ public class SerialArduino {
 	        return sb.toString().trim();
 	    }
 
-
-	    public void write(String data) {
+	    @Override
+	    public void sendMsg(String data) {
 	    	comPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
 	        PrintWriter pout = new PrintWriter(comPort.getOutputStream());
 	        pout.println(data); // Utilizza println() invece di print() per aggiungere automaticamente un carattere di nuova riga

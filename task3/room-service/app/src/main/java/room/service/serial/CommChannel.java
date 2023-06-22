@@ -22,11 +22,4 @@ public interface CommChannel {
 	 */
 	String receiveMsg() throws InterruptedException;
 
-	/**
-	 * To check if a message is available.
-	 * 
-	 * @return
-	 */
-	boolean isMsgAvailable();
-
 }

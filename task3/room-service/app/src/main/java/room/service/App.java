@@ -24,7 +24,7 @@ public class App {
 		Thread readThread = new Thread(() -> {
 			while (true) {
 			    try {
-			        String msg = serial.read();
+			        String msg = serial.receiveMsg();
 			        if (msg.length() > 0) {
 			            System.out.println(msg);
 			            if (JsonUtils.isFromArduino(msg)) {
