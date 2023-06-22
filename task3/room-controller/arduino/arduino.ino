@@ -34,5 +34,5 @@ void loop() {
     MsgService.sendMsg(roll->toJson());
   }
   MsgService.receiveMsg();
-  //bluetooth->notify();
+  bluetooth->notify();
 }

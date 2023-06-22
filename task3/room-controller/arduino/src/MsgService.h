@@ -34,33 +34,15 @@ public:
 
 };
 
-class Pattern {
-public:
-  virtual boolean match(const Msg& m) = 0;  
-};
-
-class MsgServiceClass :public  Subject<Msg> {
-    
+class MsgServiceClass : public Subject<Msg> {
 private:
-
   void notify();
-
-public: 
-  
-  Msg* currentMsg;
-  bool msgAvailable;
-
-
-  void init();  
-
   bool isMsgAvailable();
+
+public:
+  Msg* currentMsg;
+  void init();
   void receiveMsg();
-
-  bool isMsgAvailable(Pattern& pattern);
-
-  /* note: message deallocation is responsibility of the client */
-  void receiveMsg(Pattern& pattern);
-  
   void sendMsg(const String& msg);
 };
 

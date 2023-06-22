@@ -5,28 +5,16 @@ import com.fazecast.jSerialComm.*;
 import java.io.PrintWriter;
 
 public class SerialArduino {
-	private SerialPort comPort;
-	private String portDescription;
+		private SerialPort comPort;
 	    private InputStream in;
 	    private OutputStream out;
-	    private int baud_rate;
-	    final byte [] b = new byte[1];
 
 	    public SerialArduino(String portDescription, int baud_rate) {
-			this.portDescription = portDescription;
-			comPort = SerialPort.getCommPort(this.portDescription);
-			this.baud_rate = baud_rate;
-			comPort.setBaudRate(this.baud_rate);
+			comPort = SerialPort.getCommPort(portDescription);
+			comPort.setBaudRate(baud_rate);
+			comPort.openPort();
+			try {Thread.sleep(100);} catch(Exception e){}
 	    }
-	    public boolean openConnection(){
-			if(comPort.openPort()){
-				try {Thread.sleep(100);} catch(Exception e){}
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
 	    public String read() {
 	        StringBuilder sb = new StringBuilder();
 	        try {
@@ -51,25 +39,8 @@ public class SerialArduino {
 
 	    public void write(String data) {
 	    	comPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
-	        try {
-	        	Thread.sleep(100);
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
 	        PrintWriter pout = new PrintWriter(comPort.getOutputStream());
-	        try {
-	        	Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 	        pout.println(data); // Utilizza println() invece di print() per aggiungere automaticamente un carattere di nuova riga
-	        try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 	        pout.flush();
 	    }
 

@@ -8,7 +8,6 @@ import room.service.mqtt.MQTTServer;
 
 import room.service.serial.*;
 import room.service.utils.JsonUtils;
-import java.util.Scanner;
 import io.vertx.core.Vertx;
 
 public class App {
@@ -16,7 +15,6 @@ public class App {
 	public static void main(String[] args) throws Exception {
 		//CommChannel serial = new SerialCommChannel("COM12", 9600);
 		SerialArduino serial = new SerialArduino("COM12", 9600);
-		serial.openConnection();
 		Vertx vertx = Vertx.vertx();
 		DataService service = new DataService(8080);
 		vertx.deployVerticle(service);
@@ -33,7 +31,6 @@ public class App {
 			                service.addMeasure(JsonUtils.getJsonWithTimestamp(msg));
 			            }
 			        }
-			        Thread.sleep(100);
 			    } catch (Exception e) {
 			        e.printStackTrace();
 			    }
