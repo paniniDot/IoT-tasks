@@ -3,12 +3,12 @@
 #include "Arduino.h"
 #include "JSONSensor.h"
 
-class PhotoResistor : public JSONSensor<bool>
+class PhotoResistor : public JSONSensor<int>
 {
 
 private:
   int pin;
-  bool isDark();
+  int isDark();
 
 public:
   PhotoResistor(int pin);

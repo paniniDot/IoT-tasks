@@ -1,6 +1,6 @@
 #include "Pir.h"
 
-Pir::Pir(int pin) : JSONSensor<bool>("pir_sensor"), pin(pin)
+Pir::Pir(int pin) : JSONSensor<int>("pir_sensor"), pin(pin)
 {
   pinMode(pin, INPUT);
   for (int i = 0; i < 5; i++)
@@ -9,7 +9,7 @@ Pir::Pir(int pin) : JSONSensor<bool>("pir_sensor"), pin(pin)
   }
 }
 
-bool Pir::getMotion()
+int Pir::getMotion()
 {
   return digitalRead(this->pin) == LOW;
 };
