@@ -52,10 +52,8 @@ void Light::updateLightState() {
   this->notify();  // serve per il bluetooth?
 }
 
-
-
 void Light::notify() {
-  Event<int> *e = new Event<int>(EventSourceType::LIGHT, new int(this->lightState));
+  Event<Msg> *e = new Event<Msg>(EventSourceType::LIGHT, new Msg(this->toJson()));
   for (int i = 0; i < this->getNObservers(); i++) {
     this->getObservers()[i]->update(e);
   }

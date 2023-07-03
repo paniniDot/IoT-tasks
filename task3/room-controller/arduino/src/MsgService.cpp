@@ -1,17 +1,21 @@
 #include "Arduino.h"
 #include "MsgService.h"
 
-String content;
-
-MsgServiceClass MsgService;
-
-bool MsgServiceClass::isMsgAvailable(){
-  return msgAvailable;
+MsgService::MsgService(){
+  Serial.begin(9600);
+  while (!Serial) {};
+  content.reserve(512);
+  content = "";
+  currentMsg = NULL;
+  msgAvailable = false;  
 }
 
 
+bool MsgService::isMsgAvailable(){
+  return msgAvailable;
+}
 
-void MsgServiceClass::receiveMsg(){
+void MsgService::receiveMsg(){
   if (msgAvailable){
     Msg* msg = currentMsg;
     delay(100);
@@ -24,17 +28,7 @@ void MsgServiceClass::receiveMsg(){
   }
 }
 
-
-
-void MsgServiceClass::init(){
-  Serial.begin(9600);
-  content.reserve(512);
-  content = "";
-  currentMsg = NULL;
-  msgAvailable = false;  
-}
-
-void MsgServiceClass::notify() {
+void MsgService::notify() {
   Event<Msg> *e = new Event<Msg>(EventSourceType::MSG_SERVICE, this->currentMsg);  
   for (int i = 0; i < this->getNObservers(); i++)
   {
@@ -43,36 +37,29 @@ void MsgServiceClass::notify() {
   delete e;
 }
 
-void MsgServiceClass::sendMsg(const String& msg){
+void MsgService::sendMsg(const String& msg){
   delay(100);
   Serial.println(msg);  
   delay(100);
 }
 
-void serialEvent() {
+void MsgService::serialEvent() {
   /* reading the content */
   while (Serial.available()) {
     char ch = (char) Serial.read();
     if (ch == '\n'){
-      MsgService.currentMsg = new Msg(content);
-      MsgService.msgAvailable = true;      
+      currentMsg = new Msg(content);
+      msgAvailable = true;      
     } else {
       content += ch;      
     }
   }
 }
 
-bool MsgServiceClass::isMsgAvailable(Pattern& pattern){
-  return (msgAvailable && pattern.match(*currentMsg));
-}
-
-void MsgServiceClass::receiveMsg(Pattern& pattern){
-  if (msgAvailable && pattern.match(*currentMsg)){
-    Msg* msg = currentMsg;
-    msgAvailable = false;
-    currentMsg = NULL;
-    content = "";
-  }
+void MsgService::update(Event<Msg> *e){
+  Msg* msg = e->getEventArgs();
+  this->sendMsg(msg->getContent());
+  delete msg;
 }
 
 

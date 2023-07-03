@@ -9,9 +9,10 @@
 #include "observer/Event.h"
 #include "observer/EventSourceType.h"
 #include "MsgService.h"
+#include "Msg.h"
 #include "TimeLib.h"
 
-class Roll : JSONSensor<int>, public Subject<int>, public Observer<int>, public Observer<Msg>
+class Roll : JSONSensor<int>, public Observer<int>, public Observer<Msg>, public Subject<Msg>
 {
 private:
   int rollState;

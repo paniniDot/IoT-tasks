@@ -21,16 +21,6 @@ void Roll::update(Event<int> *e)
   }
 }
 
-void Roll::notify()
-{
-  Event<int> *e = new Event<int>(EventSourceType::SERVO, new int(this->rollState));
-  for (int i = 0; i < this->getNObservers(); i++)
-  {
-    this->getObservers()[i]->update(e);
-  }
-  delete e;
-}
-
 void Roll::update(Event<Msg> *e)
 {
   this->handleMessage(e->getEventArgs());
@@ -41,7 +31,7 @@ void Roll::handleMessage(Msg* msg)
 {
   String sensorName = msg->getSensorName();
   long timestamp = msg->getTimestamp();
-  bool measure = msg->getMeasure();
+  int measure = msg->getMeasure();
 
   if (strcmp(sensorName.c_str(), "pir_sensor") == 0)
   {
@@ -69,4 +59,12 @@ int Roll::getCurrentHour(long timestamp)
 bool Roll::isDay(int hour)
 {
   return hour >= 8 && hour < 19;
+}
+
+void Roll::notify() {
+  Event<Msg> *e = new Event<Msg>(EventSourceType::SERVO, new Msg(this->toJson()));
+  for (int i = 0; i < this->getNObservers(); i++) {
+    this->getObservers()[i]->update(e);
+  }
+  delete e;
 }

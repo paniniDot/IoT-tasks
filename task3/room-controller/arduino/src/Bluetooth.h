@@ -8,8 +8,9 @@
 #include "observer/Event.h"
 #include "observer/EventSourceType.h"
 #include "ArduinoJson.h"
+#include "Msg.h"
 
-class Bluetooth : public Observer<int>, public Subject<int>
+class Bluetooth : public Observer<Msg>, public Subject<int>
 {
 private:
     SoftwareSerial *bt;
@@ -19,7 +20,7 @@ private:
 
 public:
     Bluetooth(int rx, int tx);
-    void update(Event<int> *e);
+    void update(Event<Msg> *e);
     void notify();
 };
 

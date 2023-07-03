@@ -6,17 +6,17 @@ Bluetooth::Bluetooth(int rx, int tx) {
   this->lightmode = 0;
   bt->begin(9600);
 }
-void Bluetooth::update(Event<int> *e) {
+void Bluetooth::update(Event<Msg> *e) {
   EventSourceType src = e->getSrcType();
   if (src == EventSourceType::LIGHT) {
     StaticJsonDocument<128> lightStateDoc;
-    lightStateDoc["lightstate"] = *e->getEventArgs();
+    lightStateDoc["lightstate"] = e->getEventArgs()->getMeasure();
     String lightStateJson;
     serializeJson(lightStateDoc, lightStateJson);
     this->bt->println(lightStateJson);
   } else if (src == EventSourceType::SERVO) {
     StaticJsonDocument<128> rollStateDoc;
-    rollStateDoc["roll"] = *e->getEventArgs();
+    rollStateDoc["roll"] = e->getEventArgs()->getMeasure();
     String rollStateJson;
     serializeJson(rollStateDoc, rollStateJson);
     this->bt->println(rollStateJson);

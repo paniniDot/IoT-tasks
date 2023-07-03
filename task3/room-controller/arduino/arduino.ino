@@ -8,11 +8,10 @@
 Bluetooth *bluetooth;
 Light *light;
 Roll *roll;
+MsgService *msgService;
 
 void setup() {
-  //MsgServiceBT.init();
-  MsgService.init();
-  while (!Serial) {};
+  msgService = new MsgService();
   bluetooth = new Bluetooth(2,3);
   light = new Light(13);
   roll = new Roll(6);
@@ -20,14 +19,14 @@ void setup() {
   bluetooth->attach(roll);
   light->attach(bluetooth);
   roll->attach(bluetooth);
-  MsgService.attach(light);
-  MsgService.attach(roll);
+  msgService->attach(light);
+  msgService->attach(roll);
+  light->attach(msgService);
+  roll->attach(msgService);
 }
 
 void loop() {
-  MsgService.receiveMsg();
-  MsgService.sendMsg(light->toJson());
-  MsgService.sendMsg(roll->toJson());
+  msgService->receiveMsg();
   bluetooth->notify();
   delay(1000);
 }

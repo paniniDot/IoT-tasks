@@ -8,8 +8,9 @@
 #include "observer/Event.h"
 #include "observer/EventSourceType.h"
 #include "MsgService.h"
+#include "Msg.h"
 
-class Light : public JSONSensor<bool>, public Subject<int>, public Observer<int>, public Observer<Msg>
+class Light : public JSONSensor<bool>, public Observer<int>, public Observer<Msg>, public Subject<Msg>
 {
 private:
   int lightState;
