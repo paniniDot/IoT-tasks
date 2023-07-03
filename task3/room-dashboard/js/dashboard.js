@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
         axios.post('http://localhost:8080/api/data', jsonData)
           .then(response => {
-            log("messaggio inviato");
+            console.log("messaggio inviato");
           })
           .catch(error => {
             console.error(error);
