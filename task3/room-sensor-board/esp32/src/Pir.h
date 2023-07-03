@@ -2,11 +2,11 @@
 #define __PIR__
 #include "Arduino.h"
 #include "JSONSensor.h"
-class Pir : public JSONSensor<bool>
+class Pir : public JSONSensor<int>
 {
 private:
   int pin;
-  bool getMotion();
+  int getMotion();
 
 public:
   Pir(int pin);
