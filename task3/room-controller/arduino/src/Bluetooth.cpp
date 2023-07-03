@@ -23,8 +23,6 @@ void Bluetooth::update(Event<int> *e) {
   }
 }
 
-
-
 void Bluetooth::notify() {
   if (this->bt->available()) {
     String msg = this->bt->readStringUntil('\n');

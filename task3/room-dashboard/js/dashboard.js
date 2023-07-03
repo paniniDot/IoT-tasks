@@ -8,11 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   lightButton.addEventListener("click", () => {
-    const bool = False;
+    let manual_light = false;
     if (lightButton.checked) {
-      bool = True;
+      manual_light = true;
       lightswitch.addEventListener("click", () => {
-        if (bool == True) {
+        if (manual_light == true) {
           const value = lightswitch.checked ? 1 : 0;
           const jsonData = createJson("light", value);
           axios.post('http://localhost:8080/api/data', jsonData)
@@ -30,6 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
+    const value = manual_light ? 1 : 0;
+    const jsonData = createJson("manual_light", value);
+    axios.post('http://localhost:8080/api/data', jsonData)
+      .then(response => {
+        console.log("messaggio inviato");
+      })
+      .catch(error => {
+        console.error(error);
+      });
   });
 
   function createJson(obj, value) {

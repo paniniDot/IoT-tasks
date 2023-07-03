@@ -16,6 +16,7 @@ private:
   int pin;
   bool pir_state;
   bool photoresistor_state;
+  bool manual_state;
   void notify();
   void handleMessage(Msg* msg);
   void updateLightState();

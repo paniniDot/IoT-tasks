@@ -8,7 +8,6 @@
 Bluetooth *bluetooth;
 Light *light;
 Roll *roll;
-boolean *boll;
 
 void setup() {
   //MsgServiceBT.init();
