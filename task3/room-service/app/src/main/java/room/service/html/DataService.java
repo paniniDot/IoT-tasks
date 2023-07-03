@@ -47,7 +47,7 @@ public class DataService extends AbstractVerticle {
 	}
 	
 	public String getMeasure() {
-		return this.received_values.getFirst();
+		return this.received_values.pollFirst();
 	}
 	
 	public boolean isMeasureAvailable() {
