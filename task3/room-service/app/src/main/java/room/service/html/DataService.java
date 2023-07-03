@@ -12,10 +12,12 @@ import java.util.LinkedList;
 public class DataService extends AbstractVerticle {
 
 	private int port;
-	private LinkedList<String> values;
+	private LinkedList<String> values_to_send;
+	private LinkedList<String> received_values;
 	
 	public DataService(int port) {
-		values = new LinkedList<>();		
+		this.values_to_send = new LinkedList<>();	
+		this.received_values = new LinkedList<>();
 		this.port = port;
 	}
 
@@ -23,7 +25,8 @@ public class DataService extends AbstractVerticle {
 	public void start() {		
 		Router router = Router.router(vertx);
 		router.route().handler(BodyHandler.create());
-		router.get("/api/data").handler(this::handleGetData);		
+		router.get("/api/data").handler(this::handleSendData);
+		router.post("/api/data").handler(this::handleReceiveData);
 		vertx.createHttpServer()
 			.requestHandler(router)
 			.listen(port);
@@ -32,15 +35,28 @@ public class DataService extends AbstractVerticle {
 	}
 	
 	public void addMeasure(String jsonMeasure) {
-		this.values.addFirst(jsonMeasure);
+		this.values_to_send.addFirst(jsonMeasure);
 	}
 	
-	private void handleGetData(RoutingContext routingContext) {
+	private void handleSendData(RoutingContext routingContext) {
 		final String origin = routingContext.request().getHeader("Origin");
 		routingContext.response()
 			.putHeader("Access-Control-Allow-Origin", origin)
 			.putHeader("content-type", "application/json")
-			.end(this.values.getFirst());
+			.end(this.values_to_send.getFirst());
+	}
+	
+	public String getMeasure() {
+		return this.received_values.getFirst();
+	}
+	
+	public boolean isMeasureAvailable() {
+		return !this.received_values.isEmpty();
+	}
+	
+	private void handleReceiveData(RoutingContext routingContext) {
+		this.received_values.addFirst(routingContext.body().asString());
+		routingContext.response().setStatusCode(201).end();
 	}
 
 	private void log(String msg) {

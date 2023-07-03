@@ -36,10 +36,14 @@ public class App {
 						e.printStackTrace();
 					}
 				}
+				if(service.isMeasureAvailable()) {
+					String measure = service.getMeasure();
+					System.out.println(measure);
+					serial.sendMsg(measure);
+				}
 			}
 		});
 		Thread.sleep(5000);
-	
 		
 		serverThread.start();
 		readThread.start();
