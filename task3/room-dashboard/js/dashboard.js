@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
             lightswitch.checked ? "bi-lightbulb-off" : "bi-lightbulb",
             lightswitch.checked ? "bi-lightbulb" : "bi-lightbulb-off"
           );
-
         }
       });
     }
@@ -45,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const json = {
       name: obj,
       measure: value,
-      timestamp: Date.now()
     }
     return JSON.stringify(json);
   }
