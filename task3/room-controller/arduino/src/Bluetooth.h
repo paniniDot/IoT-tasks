@@ -14,7 +14,7 @@ class Bluetooth : public Observer<Msg>, public Subject<Msg>
 {
 private:
     SoftwareSerial *bt;
-    StaticJsonDocument<JSON_OBJECT_SIZE(2)> doc;
+    StaticJsonDocument<16> doc;
     
 public:
     Bluetooth(int rx, int tx);

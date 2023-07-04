@@ -102,7 +102,8 @@ public class ControllerActivity extends AppCompatActivity {
                 if (isDragging) {
                     try {
                         JSONObject configJson = new JSONObject();
-                        configJson.put("roll", rollState);
+                        configJson.put("name", "roll");
+                        configJson.put("measure", rollState);
                         bluetoothOutputStream.write(configJson.toString().getBytes(StandardCharsets.UTF_8));
                     } catch (IOException | JSONException e) {
                         throw new RuntimeException(e);
@@ -124,7 +125,8 @@ public class ControllerActivity extends AppCompatActivity {
                 runOnUiThread(() -> rollSlider.setEnabled(isChecked));
                 try {
                     JSONObject configJson = new JSONObject();
-                    configJson.put("rollcheckbox", isChecked);
+                    configJson.put("name", "manual_roll");
+                    configJson.put("measure", isChecked ? 1 : 0);
                     bluetoothOutputStream.write(configJson.toString().getBytes(StandardCharsets.UTF_8));
                 } catch (IOException | JSONException e) {
                     throw new RuntimeException(e);

@@ -2,8 +2,6 @@
 #include "MsgService.h"
 
 MsgService::MsgService(){
-  Serial.begin(9600);
-  while (!Serial) {};
   content.reserve(512);
   content = "";
   currentMsg = NULL;
@@ -57,9 +55,7 @@ void MsgService::serialEvent() {
 }
 
 void MsgService::update(Event<Msg> *e){
-  Msg* msg = e->getEventArgs();
-  this->sendMsg(msg->getContent());
-  delete msg;
+  this->sendMsg(e->getEventArgs()->getContent());
 }
 
 

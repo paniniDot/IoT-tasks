@@ -9,16 +9,19 @@ Bluetooth *bluetooth;
 Light *light;
 Roll *roll;
 MsgService *msgService;
-
+unsigned long lastNotifyTime = 0;
+const unsigned long notifyInterval = 1000;
 void setup() {
   msgService = new MsgService();
-  bluetooth = new Bluetooth(2,3);
+  Serial.begin(9600);
+  while (!Serial) {};
+  bluetooth = new Bluetooth(2, 3);
   light = new Light(13);
   roll = new Roll(6);
   bluetooth->attach(light);
-  //bluetooth->attach(roll);
+  bluetooth->attach(roll);
   light->attach(bluetooth);
-  //roll->attach(bluetooth);
+  roll->attach(bluetooth);
   msgService->attach(light);
   msgService->attach(roll);
   light->attach(msgService);
@@ -26,7 +29,16 @@ void setup() {
 }
 
 void loop() {
-  //msgService->receiveMsg();
-  bluetooth->notify();
   delay(100);
+  msgService->receiveMsg();
+  bluetooth->notify();
+  unsigned long currentTime = millis(); 
+  if (currentTime - lastNotifyTime >= notifyInterval) {
+    delay(100);
+    light->notify();
+    delay(100);
+    roll->notify();
+    delay(100);
+    lastNotifyTime = currentTime; 
+  }
 }

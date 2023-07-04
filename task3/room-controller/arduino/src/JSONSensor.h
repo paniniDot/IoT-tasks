@@ -4,24 +4,24 @@
 #include "ArduinoJson.h"
 #include "Arduino.h"
 
-template <typename T>
 class JSONSensor {
 private:
-    String _name;
-    StaticJsonDocument<JSON_OBJECT_SIZE(3)> doc;
+  String name;
+  StaticJsonDocument<32> doc;
 
 protected:
-    String getJson(T measure) {
-        doc["name"] = _name;
-        doc["measure"] = measure;
-        String json;
-        serializeJson(doc, json);
-        doc.clear();
-        return json;
-    }
+  String getJson(int measure) {
+    doc.clear();
+    doc["name"] = name;
+    doc["measure"] = measure;
+    String json;
+    serializeJson(doc, json);
+    return json;
+  }
 
 public:
-    JSONSensor(const char* name) : _name(name) {}
+  JSONSensor(const char* name)
+    : name(name) {}
 };
 
 #endif

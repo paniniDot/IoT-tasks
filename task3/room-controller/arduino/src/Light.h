@@ -10,7 +10,7 @@
 #include "MsgService.h"
 #include "Msg.h"
 
-class Light : public JSONSensor<int>, public Observer<Msg>, public Subject<Msg>
+class Light : public JSONSensor, public Observer<Msg>, public Subject<Msg>
 {
 private:
   int lightState;
@@ -18,12 +18,12 @@ private:
   int pir_state;
   int photoresistor_state;
   int manual_state;
-  void notify();
   void handleMessage(Msg* msg);
   void updateLightState();
 
 public:
   Light(int pin);
+  void notify();
   void update(Event<Msg> *e);
 };
 

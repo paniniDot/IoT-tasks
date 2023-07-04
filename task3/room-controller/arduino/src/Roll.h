@@ -12,23 +12,21 @@
 #include "Msg.h"
 #include "TimeLib.h"
 
-class Roll : JSONSensor<int>, public Observer<Msg>, public Subject<Msg>
+class Roll : JSONSensor, public Observer<Msg>, public Subject<Msg>
 {
 private:
   int rollState;
   ServoTimer2 *servo;
-  void notify();
   void handleMessage(Msg* msg);
   void updateRollState();
   int getCurrentHour(long timestamp);
-  bool isDay(int hour);
+  int isDay(int hour);
+  int manual_state;
 
 public:
   Roll(int pin);
+  void notify();
   void update(Event<Msg> *e);
-  String toJson() {
-    return this->getJson(this->rollState);
-  }
 };
 
 #endif
