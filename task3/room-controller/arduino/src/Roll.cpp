@@ -27,7 +27,6 @@ void Roll::handleMessage(Msg *msg) {
   if (strcmp(sensorName.c_str(), "pir_sensor") == 0) {
     int hour = getCurrentHour(timestamp);
     this->isDay = (hour >= 8 && hour < 19) ? 1 : 0;
-    this->pir_state = measure;
   } else if (strcmp(sensorName.c_str(), "manual_roll") == 0) {
     this->manual_state = measure;
   } else if (strcmp(sensorName.c_str(), "roll") == 0) {
