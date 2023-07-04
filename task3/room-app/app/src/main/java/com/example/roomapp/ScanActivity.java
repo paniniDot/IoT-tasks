@@ -1,5 +1,7 @@
 package com.example.roomapp;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -40,10 +42,7 @@ public class ScanActivity extends AppCompatActivity {
 
     private final List<BluetoothDevice> pairedDevices = new ArrayList<>();
     private final List<String> pairedNameList = new ArrayList<>();
-    private final boolean bluetoothEnabled = false;
     private BluetoothAdapter btAdapter;
-    private ListView scannedListView;
-    private ListView pairedListView;
     private Button scanButton;
     private ArrayAdapter<String> scannedListAdapter;
     //When new bluetooth devices are discovered Bluetooth the system sends out an event.
@@ -87,10 +86,8 @@ public class ScanActivity extends AppCompatActivity {
 
     private void initUI() {
         //shortcut to avoid bluetooth scanning if using emulator
-        findViewById(R.id.emulator).setOnClickListener(v -> {
-            startActivity(new Intent(this, ControllerEmulatedActivity.class));
-        });
-        scannedListView = findViewById(R.id.scannedView);
+        findViewById(R.id.emulator).setOnClickListener(v -> startActivity(new Intent(this, ControllerEmulatedActivity.class)));
+        ListView scannedListView = findViewById(R.id.scannedView);
 
         //the adapter will let you update the view notifying changes to the data source
         scannedListAdapter = new ArrayAdapter<>(this,
@@ -98,19 +95,15 @@ public class ScanActivity extends AppCompatActivity {
         scannedListView.setAdapter(scannedListAdapter);
 
         //registering listeners
-        scannedListView.setOnItemClickListener((adapterView, view, i, l) -> {
-            onDeviceClicked(scannedDevices.get(i));
-        });
+        scannedListView.setOnItemClickListener((adapterView, view, i, l) -> onDeviceClicked(scannedDevices.get(i)));
 
         //repeating for paired listview
-        pairedListView = findViewById(R.id.pairedView);
+        ListView pairedListView = findViewById(R.id.pairedView);
         pairedListAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, pairedNameList);
         pairedListView.setAdapter(pairedListAdapter);
 
-        pairedListView.setOnItemClickListener((adapterView, view, i, l) -> {
-            onDeviceClicked(pairedDevices.get(i));
-        });
+        pairedListView.setOnItemClickListener((adapterView, view, i, l) -> onDeviceClicked(pairedDevices.get(i)));
 
         scanButton = findViewById(R.id.scan_button);
         scanButton.setOnClickListener((v) -> startScanning());
@@ -184,7 +177,6 @@ public class ScanActivity extends AppCompatActivity {
         int reqID = Build.VERSION.SDK_INT < Build.VERSION_CODES.S ? REQUEST_PERMISSION_ADMIN : REQUEST_PERMISSION_SCAN;
         if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{permission}, reqID);
-            return;
         } else {
             //empty lists
             if (!btAdapter.isDiscovering()) {
@@ -268,26 +260,24 @@ public class ScanActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_ENABLE_BT:
-                if (resultCode == RESULT_OK) {
-                    this.scanButton.setEnabled(true);
-                } else {
-                    displayError("You need to enable bluetooth to use the app");
-                }
-                break;
-            default:
-                logMessage("result of unknown activity request");
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == RESULT_OK) {
+                this.scanButton.setEnabled(true);
+            } else {
+                displayError("You need to enable bluetooth to use the app");
+            }
+        } else {
+            logMessage("result of unknown activity request");
         }
     }
 
     /* ================== LOGGING AND ERROR HANDLING ========================== */
 
     private void displayError(String s) {
-        Log.e(C.TAG, s);
+        Log.e(TAG, s);
     }
 
     private void logMessage(String message) {
-        Log.i(C.TAG, message);
+        Log.i(TAG, message);
     }
 }

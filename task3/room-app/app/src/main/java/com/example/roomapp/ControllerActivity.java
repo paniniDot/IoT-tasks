@@ -1,5 +1,7 @@
 package com.example.roomapp;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -66,7 +69,7 @@ public class ControllerActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
             runOnUiThread(() -> {
-                lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
+                lightSwitch.setThumbIconDrawable(lightState ? ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_filled_48px, null) : ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_48px, null));
                 lightSwitch.setText(lightState ? "light: on" : "light: off");
             });
         });
@@ -96,6 +99,7 @@ public class ControllerActivity extends AppCompatActivity {
             public void onStartTrackingTouch(@NonNull Slider slider) {
                 // Non è necessario fare nulla all'inizio del tracciamento del tocco.
             }
+
             @Override
             public void onStopTrackingTouch(@NonNull Slider slider) {
                 // Qui puoi ottenere il valore dello slider e inviarlo solo se il click è stato rilasciato.
@@ -111,7 +115,7 @@ public class ControllerActivity extends AppCompatActivity {
 
                     runOnUiThread(() -> {
                         // Aggiorna la visualizzazione del valore
-                        rollText.setText("roll: " + rollState);
+                        rollText.setText(R.string.roll + rollState);
                         rollSlider.setValue(rollState);
                     });
 
@@ -158,7 +162,7 @@ public class ControllerActivity extends AppCompatActivity {
                 rollCheckBox.setEnabled(true);
             });
             new Thread(() -> {
-                BufferedReader input = null;
+                BufferedReader input;
                 try {
                     input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 } catch (IOException e) {
@@ -175,7 +179,7 @@ public class ControllerActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         return;
                     }
-                    Log.i(C.TAG, "Message received: " + message);
+                    Log.i(TAG, "Message received: " + message);
                     try {
                         JSONObject jsonObject = new JSONObject(message);
                         String name = jsonObject.getString("name");
@@ -183,9 +187,9 @@ public class ControllerActivity extends AppCompatActivity {
                         if (name.equals("light")) {
                             boolean lightValue = measure != 0;
                             runOnUiThread(() -> {
-                                lightSwitch.setThumbIconDrawable(lightValue ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
+                                lightSwitch.setThumbIconDrawable(lightValue ? ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_filled_48px, null) : ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_48px, null));
                                 lightSwitch.setChecked(lightValue);
-                                lightSwitch.setText("light: " + (lightValue ? "on" : "off"));
+                                lightSwitch.setText(R.string.light + (lightValue ? R.string.on : R.string.off));
                             });
                         } else if (jsonObject.has("lightcheckbox")) {
                             int lightCheckboxState = jsonObject.getInt("lightcheckbox");
@@ -208,10 +212,10 @@ public class ControllerActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                Log.i(C.TAG, "Socket closed");
+                Log.i(TAG, "Socket closed");
             }).start();
         } catch (IOException e) {
-            Log.e(C.TAG, "Error occurred when creating output stream", e);
+            Log.e(TAG, "Error occurred when creating output stream", e);
         }
     }
 
