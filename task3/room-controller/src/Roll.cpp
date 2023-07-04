@@ -36,11 +36,7 @@ void Roll::handleMessage(Msg *msg) {
 
 void Roll::updateRollState() {
   if (this->manual_state == 0) {
-    if (this->pir_state && this->isDay) {
-      this->rollState = 0;
-    } else {
-      this->rollState = 100;
-    }
+    this->rollState = (this->pir_state && this->isDay) ? 0 : 100;
   }
   this->servo->write(map(this->rollState, 0, 100, 0, 1023));
 }
