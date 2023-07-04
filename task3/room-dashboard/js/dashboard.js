@@ -16,14 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
   lightButton.addEventListener("click", () => {
     lightswitch.addEventListener("click", () => {
       if (lightButton.checked) {
-        axios.post('http://localhost:8080/api/data', createJson("light", lightswitch.checked ? 1 : 0))
+        axios.post('http://localhost:8080/api/data', createJson("light", lightswitch.checked ? 1 : 0));
         lightbulbIcon.classList.replace(
           lightswitch.checked ? "bi-lightbulb-off" : "bi-lightbulb",
           lightswitch.checked ? "bi-lightbulb" : "bi-lightbulb-off"
         );
       }
     });
-    axios.post('http://localhost:8080/api/data', createJson("manual_light", lightButton.checked ? 1 : 0))
+    axios.post('http://localhost:8080/api/data', createJson("manual_light", lightButton.checked ? 1 : 0));
   });
 
   rollButton.addEventListener("click", () => {
@@ -38,6 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
         valueSpan.style.transform = `translateX(${offset}px) translateY(-120%)`;
       }
     });
-    axios.post('http://localhost:8080/api/data', createJson("manual_roll", rollButton.checked ? 1 : 0))
+    axios.post('http://localhost:8080/api/data', createJson("manual_roll", rollButton.checked ? 1 : 0));
   });
 });
