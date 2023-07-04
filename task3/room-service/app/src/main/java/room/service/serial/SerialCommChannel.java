@@ -35,7 +35,6 @@ public class SerialCommChannel implements CommChannel, SerialPortEventListener {
 
 	@Override
 	public void sendMsg(String msg) {
-		System.out.println(msg);
 		String messageWithNewline = msg + "\n";
         try {
 			serialPort.writeString(messageWithNewline);

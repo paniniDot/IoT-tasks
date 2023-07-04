@@ -38,7 +38,6 @@ public class App {
 				}
 				if(service.isMeasureAvailable()) {
 					String measure = service.getMeasure();
-					System.out.println(measure);
 					serial.sendMsg(measure);
 				}
 			}

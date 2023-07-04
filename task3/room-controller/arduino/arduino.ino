@@ -9,8 +9,10 @@ Bluetooth *bluetooth;
 Light *light;
 Roll *roll;
 MsgService *msgService;
+
 unsigned long lastNotifyTime = 0;
 const unsigned long notifyInterval = 1000;
+
 void setup() {
   msgService = new MsgService();
   while (!Serial) {};
@@ -33,11 +35,8 @@ void loop() {
   bluetooth->notify();
   unsigned long currentTime = millis(); 
   if (currentTime - lastNotifyTime >= notifyInterval) {
-    delay(100);
     light->notify();
-    delay(100);
     roll->notify();
-    delay(100);
     lastNotifyTime = currentTime; 
   }
 }

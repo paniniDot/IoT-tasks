@@ -16,6 +16,9 @@ const int mqtt_port = 1883;
 /* MQTT topics */
 const char* topic_light = "esp/light";
 const char* topic_motion = "esp/motion";
+
+unsigned long lastNotifyTime = 0;
+const unsigned long notifyInterval = 1000;
 /* MQTT client management */
 WiFiClient espClient;
 Adafruit_MQTT_Client mqttClient(&espClient, mqtt_server, mqtt_port);
@@ -58,6 +61,7 @@ void setup() {
 }
 
 void loop() {
+  delay(100);
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi connection lost. Reconnecting...");
     connectToWIFI();
@@ -67,21 +71,23 @@ void loop() {
     //mqttClient.disconnect();
     connectToMQTT();
   }
-  // Publish light value
-  String lightValue = resistor->toJson();
-  if (publisher_light.publish(lightValue.c_str())) {
-    Serial.println("Published light value");
-  } else {
-    Serial.println("Failed to publish light value");
-  }
+  unsigned long currentTime = millis();
+  if (currentTime - lastNotifyTime >= notifyInterval) {
+    // Publish light value
+    String lightValue = resistor->toJson();
+    if (publisher_light.publish(lightValue.c_str())) {
+      Serial.println("Published light value");
+    } else {
+      Serial.println("Failed to publish light value");
+    }
 
-  // Publish motion value
-  String motionValue = pir->toJson();
-  if (publisher_motion.publish(motionValue.c_str())) {
-    Serial.println("Published motion value");
-  } else {
-    Serial.println("Failed to publish motion value");
+    // Publish motion value
+    String motionValue = pir->toJson();
+    if (publisher_motion.publish(motionValue.c_str())) {
+      Serial.println("Published motion value");
+    } else {
+      Serial.println("Failed to publish motion value");
+    }
+    lastNotifyTime = currentTime;
   }
-
-  delay(1000);  // Publish every 5 seconds
 }
