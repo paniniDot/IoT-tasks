@@ -7,12 +7,12 @@ Bluetooth::Bluetooth(int rx, int tx) {
 void Bluetooth::update(Event<Msg> *e) {
   String sensorName = e->getEventArgs()->getSensorName();
   int measure = e->getEventArgs()->getMeasure();
+  doc.clear();
   doc["name"] = sensorName;
   doc["measure"] = measure;
   String docJson;
   serializeJson(doc, docJson);
   this->bt->println(docJson);
-  doc.clear();
 }
 
 void Bluetooth::notify() {
