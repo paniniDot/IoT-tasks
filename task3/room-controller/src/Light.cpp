@@ -23,19 +23,19 @@ void Light::handleMessage(Msg *msg) {
   String sensorName = msg->getSensorName();
   long timestamp = msg->getTimestamp();
   int measure = msg->getMeasure();
-  if (strcmp(sensorName.c_str(), "manual_light") == 0) {
+  if (sensorName.equals("manual_light")) {
     this->manual_state = measure;
-  } else if (strcmp(sensorName.c_str(), "pir_sensor") == 0) {
+  } else if (sensorName.equals("pir_sensor")) {
     this->pir_state = measure;
-  } else if (strcmp(sensorName.c_str(), "photo_resistor") == 0) {
+  } else if (sensorName.equals("photo_resistor")) {
     this->photoresistor_state = measure;
-  } else if (strcmp(sensorName.c_str(), "light") == 0) {
+  } else if (sensorName.equals("light")) {
     this->lightState = measure;
   }
 }
 
 void Light::updateLightState() {
-  if (this->manual_state==0) {
+  if (!this->manual_state) {
     this->lightState = (pir_state && photoresistor_state) ? 1 : 0;
   }
   digitalWrite(this->pin, this->lightState ? HIGH : LOW);

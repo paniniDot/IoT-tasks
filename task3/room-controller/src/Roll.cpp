@@ -24,18 +24,18 @@ void Roll::handleMessage(Msg *msg) {
   long timestamp = msg->getTimestamp();
   int measure = msg->getMeasure();
 
-  if (strcmp(sensorName.c_str(), "pir_sensor") == 0) {
+  if (sensorName.equals("pir_sensor")) {
     int hour = getCurrentHour(timestamp);
     this->isDay = (hour >= 8 && hour < 19) ? 1 : 0;
-  } else if (strcmp(sensorName.c_str(), "manual_roll") == 0) {
+  } else if (sensorName.equals("manual_roll")) {
     this->manual_state = measure;
-  } else if (strcmp(sensorName.c_str(), "roll") == 0) {
+  } else if (sensorName.equals("roll")) {
     this->rollState = measure;
   }
 }
 
 void Roll::updateRollState() {
-  if (this->manual_state == 0) {
+  if (!this->manual_state) {
     this->rollState = (this->pir_state && this->isDay) ? 0 : 100;
   }
   this->servo->write(map(this->rollState, 0, 100, 0, 1023));
