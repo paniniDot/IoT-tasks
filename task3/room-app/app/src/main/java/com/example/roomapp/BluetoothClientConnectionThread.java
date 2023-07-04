@@ -1,5 +1,7 @@
 package com.example.roomapp;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -7,10 +9,12 @@ import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 @SuppressLint("MissingPermission")
 public class BluetoothClientConnectionThread extends Thread {
+    private static final UUID DEFAULT_DEVICE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private final BluetoothSocket socket;
     private final BluetoothAdapter btAdapter;
     Consumer<BluetoothSocket> handler;
@@ -26,9 +30,9 @@ public class BluetoothClientConnectionThread extends Thread {
         try {
             // Get a BluetoothSocket to connect with the given BluetoothDevice.
             // MY_UUID is the app's UUID string, also used in the server code.
-            tmp = device.createRfcommSocketToServiceRecord(C.DEFAULT_DEVICE_UUID);
+            tmp = device.createRfcommSocketToServiceRecord(DEFAULT_DEVICE_UUID);
         } catch (IOException e) {
-            Log.e(C.TAG, "Socket's create() method failed", e);
+            Log.e(TAG, "Socket's create() method failed", e);
         }
         socket = tmp;
     }
@@ -42,12 +46,12 @@ public class BluetoothClientConnectionThread extends Thread {
             // until it succeeds or throws an exception.
             socket.connect();
         } catch (IOException connectException) {
-            Log.e(C.TAG, "unable to connect");
+            Log.e(TAG, "unable to connect");
             // Unable to connect; close the socket and return.
             try {
                 socket.close();
             } catch (IOException closeException) {
-                Log.e(C.TAG, "Could not close the client socket", closeException);
+                Log.e(TAG, "Could not close the client socket", closeException);
             }
             return;
         }
@@ -61,7 +65,7 @@ public class BluetoothClientConnectionThread extends Thread {
         try {
             socket.close();
         } catch (IOException e) {
-            Log.e(C.TAG, "Could not close the client socket", e);
+            Log.e(TAG, "Could not close the client socket", e);
         }
     }
 }

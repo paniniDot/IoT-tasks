@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">smart home</string>
+    <string name="roll">roll:</string>
+    <string name="light">light:</string>
+    <string name="on">on</string>
+    <string name="off">off</string>
 </resources>

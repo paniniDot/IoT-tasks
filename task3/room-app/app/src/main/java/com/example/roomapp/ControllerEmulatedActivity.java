@@ -1,5 +1,7 @@
 package com.example.roomapp;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.CheckBox;
@@ -55,7 +57,7 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         rollSlider = findViewById(R.id.seekBar);
         rollSlider.addOnChangeListener((slider, value, fromUser) -> {
             rollState = (int) rollSlider.getValue();
-            Log.i(C.TAG, "roll: " + rollSlider.getValue());
+            Log.i(TAG, "roll: " + rollSlider.getValue());
             runOnUiThread(() -> {
                 rollText.setText("roll: " + rollSlider.getValue());
                 rollSlider.setValue(rollState);
