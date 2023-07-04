@@ -67,15 +67,19 @@ function updateChart(chartId, data, layout, time, value) {
   Plotly.update(chartId, data, layout);
 }
 
-function fetchDataAndUpdateCharts() {
+function fetchDataAndUpdateChart(chartName, chartId) {
   axios.get('http://localhost:8080/api/data')
     .then(response => {
       const data = response.data;
+      console.log(data);
       const time = convertTimestampToFormattedDate(data.timestamp);
       const measure = data.measure;
       const name = data.name;
-      const chartName = name === 'light' ? 'lightchart' : 'rollchart';
-      updateChart(chartName, chartData[name].data, chartData[name].layout, time, measure);
+
+      if (name === chartName) {
+        const chart = chartData[chartName];
+        updateChart(chartId, chart.data, chart.layout, time, measure);
+      }
     })
     .catch(error => {
       console.error(error);
@@ -100,5 +104,6 @@ initializeChart('rollchart', chartData.roll.data, chartData.roll.layout);
 
 // Aggiorna i grafici ad intervalli regolari
 setInterval(function () {
-  fetchDataAndUpdateCharts();
+  fetchDataAndUpdateChart('light', 'lightchart');
+  fetchDataAndUpdateChart('roll', 'rollchart');
 }, 1000);
