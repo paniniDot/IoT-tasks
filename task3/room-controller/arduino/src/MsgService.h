@@ -11,17 +11,13 @@ class MsgService : public Subject<Msg>, public Observer<Msg> {
     
 private:
 
-  String content;
+  String msg;
   void notify();
-  void serialEvent();
 
 public: 
 
   MsgService();
-  Msg* currentMsg;
-  bool msgAvailable;
   void update(Event<Msg> *e);
-  bool isMsgAvailable();
   void receiveMsg();
   void sendMsg(const String& msg);
 };
