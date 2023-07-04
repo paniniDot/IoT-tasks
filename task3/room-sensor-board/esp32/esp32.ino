@@ -11,7 +11,7 @@
 const char* ssid = "asus";
 const char* password = "0123456789";
 /* MQTT server address */
-const char* mqtt_server = "192.168.2.2";
+const char* mqtt_server = "192.168.2.138";
 const int mqtt_port = 1883;
 /* MQTT topics */
 const char* topic_light = "esp/light";

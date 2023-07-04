@@ -12,7 +12,7 @@ void Roll::update(Event<Msg> *e) {
   this->handleMessage(e->getEventArgs());
   this->updateRollState();
   EventSourceType src = e->getSrcType();
-  if (src != EventSourceType::BLUETOOTH) {
+  if (src != EventSourceType::BLUETOOTH || src != EventSourceType::MSG_SERVICE) {
     this->notify();
   }
 }

@@ -2,6 +2,7 @@
 #include "MsgService.h"
 
 MsgService::MsgService(){
+  Serial.begin(9600);
   content.reserve(512);
   content = "";
   currentMsg = NULL;

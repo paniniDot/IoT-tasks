@@ -13,7 +13,6 @@ unsigned long lastNotifyTime = 0;
 const unsigned long notifyInterval = 1000;
 void setup() {
   msgService = new MsgService();
-  Serial.begin(9600);
   while (!Serial) {};
   bluetooth = new Bluetooth(2, 3);
   light = new Light(13);
