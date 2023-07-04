@@ -12,9 +12,12 @@ class MsgService : public Subject<Msg>, public Observer<Msg> {
     
 private:
   SoftwareSerial *bt;
+  String roll_state;
+  String light_State;
 public: 
   MsgService(int rx, int tx);
   void notify();
+  void print();
   void update(Event<Msg> *e);
 };
 

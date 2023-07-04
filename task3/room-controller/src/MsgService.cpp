@@ -6,6 +6,8 @@ MsgService::MsgService(int rx, int tx) {
   while (!Serial) {};
   this->bt = new SoftwareSerial(rx, tx);
   bt->begin(9600);
+  this->roll_state = "";
+  this->light_State = "";
 }
 
 void MsgService::notify() {
@@ -28,10 +30,17 @@ void MsgService::notify() {
 }
 
 void MsgService::update(Event<Msg> *e) {
-  String msg=e->getEventArgs()->getContent();
-  delay(100);
-  Serial.println(msg);
-  delay(100);
-  this->bt->println(msg);
-  delay(100);
+  EventSourceType src = e->getSrcType();
+  if (src == EventSourceType::SERVO) {
+    this->roll_state = e->getEventArgs()->getContent();
+  } else if (src == EventSourceType::LIGHT) {
+    this->light_State = e->getEventArgs()->getContent();
+  }
+}
+
+void MsgService::print() {
+  Serial.println(this->roll_state);
+  Serial.println(this->light_State);
+  this->bt->println(this->roll_state);
+  this->bt->println(this->light_State);
 }

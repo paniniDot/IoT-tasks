@@ -22,7 +22,6 @@ public class App {
 		Thread serverThread = new Thread(() -> {
 			new MQTTServer(serial);
 		});
-		Thread.sleep(5000);
 		Thread readThread = new Thread(() -> {
 			while (true) {
 				if (serial.isMsgAvailable()) {
@@ -42,8 +41,6 @@ public class App {
 				}
 			}
 		});
-		Thread.sleep(5000);
-		
 		serverThread.start();
 		readThread.start();
 	}
