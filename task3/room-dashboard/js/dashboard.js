@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightButton = document.getElementById("lightcheck");
   const lightbulbIcon = document.querySelector(".bi-lightbulb-off");
 
-
   lightButton.addEventListener("click", () => {
     lightswitch.addEventListener("click", () => {
       if (lightButton.checked) {
