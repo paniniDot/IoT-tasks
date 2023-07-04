@@ -12,7 +12,7 @@
 #include "Msg.h"
 #include "TimeLib.h"
 
-class Roll : JSONSensor<int>, public Observer<int>, public Observer<Msg>, public Subject<Msg>
+class Roll : JSONSensor<int>, public Observer<Msg>, public Subject<Msg>
 {
 private:
   int rollState;
@@ -25,7 +25,6 @@ private:
 
 public:
   Roll(int pin);
-  void update(Event<int> *e);
   void update(Event<Msg> *e);
   String toJson() {
     return this->getJson(this->rollState);

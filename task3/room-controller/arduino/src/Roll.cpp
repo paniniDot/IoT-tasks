@@ -7,24 +7,11 @@ Roll::Roll(int pin) : JSONSensor<int>("roll")
   this->rollState = 0;
 }
 
-void Roll::update(Event<int> *e)
-{
-  EventSourceType src = e->getSrcType();
-  if (src == EventSourceType::SERVO)
-  {
-    this->rollState = *e->getEventArgs();
-    this->servo->write(map(this->rollState, 0, 100, 0, 1023));
-  }
-  else if (src == EventSourceType::BLUETOOTH)
-  {
-    this->notify();
-  }
-}
-
 void Roll::update(Event<Msg> *e)
 {
   this->handleMessage(e->getEventArgs());
   this->updateRollState();
+  this->notify();
 }
 
 void Roll::handleMessage(Msg* msg)
@@ -47,7 +34,6 @@ void Roll::handleMessage(Msg* msg)
 void Roll::updateRollState()
 {
   this->servo->write(map(this->rollState, 0, 100, 0, 1023));
-  this->notify(); // serve per il bluetooth?
 }
 
 int Roll::getCurrentHour(long timestamp)

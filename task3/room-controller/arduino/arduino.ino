@@ -16,9 +16,9 @@ void setup() {
   light = new Light(13);
   roll = new Roll(6);
   bluetooth->attach(light);
-  bluetooth->attach(roll);
+  //bluetooth->attach(roll);
   light->attach(bluetooth);
-  roll->attach(bluetooth);
+  //roll->attach(bluetooth);
   msgService->attach(light);
   msgService->attach(roll);
   light->attach(msgService);
@@ -26,7 +26,7 @@ void setup() {
 }
 
 void loop() {
-  msgService->receiveMsg();
+  //msgService->receiveMsg();
   bluetooth->notify();
-  delay(1000);
+  delay(100);
 }

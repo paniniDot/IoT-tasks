@@ -10,25 +10,22 @@
 #include "MsgService.h"
 #include "Msg.h"
 
-class Light : public JSONSensor<bool>, public Observer<int>, public Observer<Msg>, public Subject<Msg>
+class Light : public JSONSensor<int>, public Observer<Msg>, public Subject<Msg>
 {
 private:
   int lightState;
   int pin;
-  bool pir_state;
-  bool photoresistor_state;
-  bool manual_state;
+  int pir_state;
+  int photoresistor_state;
+  int manual_state;
+  StaticJsonDocument<JSON_OBJECT_SIZE(2)> doc;
   void notify();
   void handleMessage(Msg* msg);
   void updateLightState();
 
 public:
   Light(int pin);
-  void update(Event<int> *e);
   void update(Event<Msg> *e);
-  String toJson() {
-    return this->getJson(this->lightState);
-  }
 };
 
 #endif

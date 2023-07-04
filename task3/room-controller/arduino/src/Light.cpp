@@ -1,38 +1,29 @@
 #include "Light.h"
 
 Light::Light(int pin)
-  : JSONSensor<bool>("light") {
+  : JSONSensor<int>("light") {
   this->pin = pin;
   pinMode(this->pin, OUTPUT);
   this->lightState = 0;
-  this->pir_state = false;
-  this->photoresistor_state = false;
-  this->manual_state = false;
-}
-
-void Light::update(Event<int> *e) {
-  EventSourceType src = e->getSrcType();
-  if (src == EventSourceType::LIGHT) {
-    this->lightState = *e->getEventArgs();
-    if (this->lightState == 1) {
-      digitalWrite(this->pin, HIGH);
-    } else {
-      digitalWrite(this->pin, LOW);
-    }
-  } else if (src == EventSourceType::BLUETOOTH) {
-    this->notify();
-  }
+  this->pir_state = 0;
+  this->photoresistor_state = 0;
+  this->manual_state = 0;
 }
 
 void Light::update(Event<Msg> *e) {
   this->handleMessage(e->getEventArgs());
   this->updateLightState();
+  EventSourceType src = e->getSrcType();
+  if (src != EventSourceType::BLUETOOTH) {
+    this->notify();
+  }
+  this->notify();
 }
 
 void Light::handleMessage(Msg *msg) {
   String sensorName = msg->getSensorName();
   long timestamp = msg->getTimestamp();
-  bool measure = msg->getMeasure();
+  int measure = msg->getMeasure();
   if (strcmp(sensorName.c_str(), "manual_light") == 0) {
     this->manual_state = measure;
   } else if (strcmp(sensorName.c_str(), "pir_sensor") == 0) {
@@ -49,13 +40,18 @@ void Light::updateLightState() {
     this->lightState = (pir_state && photoresistor_state) ? 1 : 0;
   }
   digitalWrite(this->pin, this->lightState ? HIGH : LOW);
-  this->notify();  // serve per il bluetooth?
 }
 
 void Light::notify() {
-  Event<Msg> *e = new Event<Msg>(EventSourceType::LIGHT, new Msg(this->toJson()));
+  //String msg=this->getJson(this->lightState);
+  doc["name"] = "light";
+  doc["measure"] = lightState;
+  String docJson;
+  serializeJson(doc, docJson);
+  Event<Msg> *e = new Event<Msg>(EventSourceType::LIGHT, new Msg(docJson));
   for (int i = 0; i < this->getNObservers(); i++) {
     this->getObservers()[i]->update(e);
   }
   delete e;
+  doc.clear();
 }

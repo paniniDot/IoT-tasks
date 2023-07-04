@@ -10,14 +10,12 @@
 #include "ArduinoJson.h"
 #include "Msg.h"
 
-class Bluetooth : public Observer<Msg>, public Subject<int>
+class Bluetooth : public Observer<Msg>, public Subject<Msg>
 {
 private:
     SoftwareSerial *bt;
-    int rollmode;
-    int lightmode;
+    StaticJsonDocument<JSON_OBJECT_SIZE(2)> doc;
     
-
 public:
     Bluetooth(int rx, int tx);
     void update(Event<Msg> *e);

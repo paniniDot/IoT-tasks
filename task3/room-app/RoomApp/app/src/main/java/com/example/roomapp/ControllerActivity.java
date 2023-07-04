@@ -59,7 +59,8 @@ public class ControllerActivity extends AppCompatActivity {
             lightState = !lightState;
             try {
                 JSONObject configJson = new JSONObject();
-                configJson.put("light", lightState);
+                configJson.put("name", "light");
+                configJson.put("measure", lightState ? 1 : 0);
                 bluetoothOutputStream.write(configJson.toString().getBytes(StandardCharsets.UTF_8));
             } catch (IOException | JSONException e) {
                 throw new RuntimeException(e);
@@ -75,7 +76,8 @@ public class ControllerActivity extends AppCompatActivity {
                 runOnUiThread(() -> lightSwitch.setEnabled(isChecked));
                 try {
                     JSONObject configJson = new JSONObject();
-                    configJson.put("lightcheckbox", isChecked);
+                    configJson.put("name", "manual_light");
+                    configJson.put("measure", isChecked ? 1 : 0);
                     bluetoothOutputStream.write(configJson.toString().getBytes(StandardCharsets.UTF_8));
                 } catch (IOException | JSONException e) {
                     throw new RuntimeException(e);
@@ -149,9 +151,6 @@ public class ControllerActivity extends AppCompatActivity {
     private void manageConnectedSocket(BluetoothSocket socket) {
         try {
             bluetoothOutputStream = socket.getOutputStream();
-            JSONObject configJson = new JSONObject();
-            configJson.put("connesso", 0);
-            bluetoothOutputStream.write(configJson.toString().getBytes(StandardCharsets.UTF_8));
             runOnUiThread(() -> {
                 lightCheckBox.setEnabled(true);
                 rollCheckBox.setEnabled(true);
@@ -177,8 +176,8 @@ public class ControllerActivity extends AppCompatActivity {
                     Log.i(C.TAG, "Message received: " + message);
                     try {
                         JSONObject jsonObject = new JSONObject(message);
-                        if (jsonObject.has("lightstate")) {
-                            int lightState = jsonObject.getInt("lightState");
+                        if (jsonObject.has("light")) {
+                            int lightState = jsonObject.getInt("light");
                             boolean lightValue = lightState != 0;
                             runOnUiThread(() -> {
                                 lightSwitch.setThumbIconDrawable(lightValue ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
@@ -211,8 +210,6 @@ public class ControllerActivity extends AppCompatActivity {
             }).start();
         } catch (IOException e) {
             Log.e(C.TAG, "Error occurred when creating output stream", e);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
         }
     }
 

@@ -8,15 +8,15 @@ template <typename T>
 class JSONSensor {
 private:
     String _name;
+    StaticJsonDocument<JSON_OBJECT_SIZE(3)> doc;
 
 protected:
     String getJson(T measure) {
-        DynamicJsonDocument doc(JSON_OBJECT_SIZE(4));
         doc["name"] = _name;
         doc["measure"] = measure;
-      
         String json;
         serializeJson(doc, json);
+        doc.clear();
         return json;
     }
 
