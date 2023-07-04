@@ -27,7 +27,7 @@ public class App {
 				if (serial.isMsgAvailable()) {
 					try {
 						String msg = serial.receiveMsg();
-						System.out.println(msg);
+						System.out.println("arduino " + msg);
 						if (JsonUtils.isFromArduino(msg)) {
 							service.addMeasure(JsonUtils.getJsonWithTimestamp(msg));
 						}
@@ -35,13 +35,16 @@ public class App {
 						e.printStackTrace();
 					}
 				}
-				if(service.isMeasureAvailable()) {
-					String measure = service.getMeasure();
-					serial.sendMsg(measure);
+				if (service.isMeasureAvailable()) {
+					String msg = service.getMeasure();
+					System.out.println("recceived " + msg);
+					serial.sendMsg(msg);
 				}
 			}
 		});
+		Thread.sleep(1000);
 		serverThread.start();
+		Thread.sleep(1000);
 		readThread.start();
 	}
 
