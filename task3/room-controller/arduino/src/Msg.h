@@ -10,8 +10,7 @@ private:
   StaticJsonDocument<128> doc;
 
 public:
-  Msg(String content) {
-    this->content = content;
+  Msg(String content) : content(content) {
     deserializeJson(doc, content);
     delay(100);
     Serial.println("msg.h");

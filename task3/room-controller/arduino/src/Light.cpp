@@ -14,23 +14,19 @@ void Light::update(Event<Msg> *e) {
   this->handleMessage(e->getEventArgs());
   this->updateLightState();
   EventSourceType src = e->getSrcType();
-  if (src != EventSourceType::BLUETOOTH) {
-    this->notify();
-  }
   this->notify();
 }
 
 void Light::handleMessage(Msg *msg) {
   String sensorName = msg->getSensorName();
-  long timestamp = msg->getTimestamp();
   int measure = msg->getMeasure();
-  if (strcmp(sensorName.c_str(), "manual_light") == 0) {
+  if (sensorName == "manual_light") {
     this->manual_state = measure;
-  } else if (strcmp(sensorName.c_str(), "pir_sensor") == 0) {
+  } else if (sensorName == "pir_sensor") {
     this->pir_state = measure;
-  } else if (strcmp(sensorName.c_str(), "photo_resistor") == 0) {
+  } else if (sensorName == "photo_resistor") {
     this->photoresistor_state = measure;
-  } else if (strcmp(sensorName.c_str(), "light") == 0) {
+  } else if (sensorName == "light") {
     this->lightState = measure;
   }
 }
@@ -43,12 +39,7 @@ void Light::updateLightState() {
 }
 
 void Light::notify() {
-  //String msg=this->getJson(this->lightState);
-  doc["name"] = "light";
-  doc["measure"] = lightState;
-  String docJson;
-  serializeJson(doc, docJson);
-  Event<Msg> *e = new Event<Msg>(EventSourceType::LIGHT, new Msg(docJson));
+  Event<Msg> *e = new Event<Msg>(EventSourceType::LIGHT, new Msg(this->getJson(this->lightState)));
   for (int i = 0; i < this->getNObservers(); i++) {
     this->getObservers()[i]->update(e);
   }

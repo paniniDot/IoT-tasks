@@ -18,7 +18,6 @@ private:
   int pir_state;
   int photoresistor_state;
   int manual_state;
-  StaticJsonDocument<JSON_OBJECT_SIZE(2)> doc;
   void notify();
   void handleMessage(Msg* msg);
   void updateLightState();
