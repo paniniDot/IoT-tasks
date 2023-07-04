@@ -55,7 +55,7 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
             rollState = (int) rollSlider.getValue();
             Log.i(TAG, "roll: " + rollSlider.getValue());
             runOnUiThread(() -> {
-                rollText.setText("roll: " + rollSlider.getValue());
+                rollText.setText((int) (R.string.light + rollSlider.getValue()));
                 rollSlider.setValue(rollState);
             });
         });
