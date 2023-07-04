@@ -17,7 +17,6 @@ void Light::update(Event<Msg> *e) {
   if (src != EventSourceType::BLUETOOTH || src != EventSourceType::MSG_SERVICE) {
     this->notify();
   }
-  //this->notify();
 }
 
 void Light::handleMessage(Msg *msg) {

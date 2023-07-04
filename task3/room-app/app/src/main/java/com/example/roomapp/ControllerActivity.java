@@ -178,9 +178,10 @@ public class ControllerActivity extends AppCompatActivity {
                     Log.i(C.TAG, "Message received: " + message);
                     try {
                         JSONObject jsonObject = new JSONObject(message);
-                        if (jsonObject.has("light")) {
-                            int lightState = jsonObject.getInt("light");
-                            boolean lightValue = lightState != 0;
+                        String name = jsonObject.getString("name");
+                        int measure = jsonObject.getInt("measure");
+                        if (name.equals("light")) {
+                            boolean lightValue = measure != 0;
                             runOnUiThread(() -> {
                                 lightSwitch.setThumbIconDrawable(lightValue ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
                                 lightSwitch.setChecked(lightValue);
@@ -200,9 +201,8 @@ public class ControllerActivity extends AppCompatActivity {
                                 rollCheckBox.setChecked(rollCheckboxValue);
                                 rollSlider.setEnabled(rollCheckboxValue);
                             });
-                        } else if (jsonObject.has("roll")) {
-                            int rollState = jsonObject.getInt("roll");
-                            runOnUiThread(() -> rollSlider.setValue(rollState));
+                        } else if (name.equals("roll")) {
+                            runOnUiThread(() -> rollSlider.setValue(measure));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

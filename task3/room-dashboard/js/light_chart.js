@@ -42,15 +42,15 @@ const data_light = [
   
   setInterval(function () {
     axios.get('http://localhost:8080/api/data')
-    .then(response => {
+    .then(response_light => {
       // Dati ricevuti dal server
-      const data = response.data;
-      console.log(data);
-      const time = convertTimestampToFormattedDate(data.timestamp);
-      const measure = data.measure;
-      const name = data.name;
-      if(name == "light") {
-        updateLightChart(time, measure);
+      const data_light = response_light.data;
+      console.log(data_light);
+      const time_light = convertTimestampToFormattedDate(data_light.timestamp);
+      const measure_light = data_light.measure;
+      const name_light = data_light.name;
+      if(name_light == "light") {
+        updateLightChart(time_light, measure_light);
       }
     })
     .catch(error => {

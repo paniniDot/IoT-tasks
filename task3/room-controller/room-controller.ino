@@ -1,11 +1,8 @@
-
 #include "src/Light.h"
-#include "src/Bluetooth.h"
 #include "src/Roll.h"
 #include "src/MsgService.h"
 #include "Arduino.h"
 
-Bluetooth *bluetooth;
 Light *light;
 Roll *roll;
 MsgService *msgService;
@@ -14,29 +11,23 @@ unsigned long lastNotifyTime = 0;
 const unsigned long notifyInterval = 1000;
 
 void setup() {
-  msgService = new MsgService();
-  while (!Serial) {};
-  bluetooth = new Bluetooth(2, 3);
+  msgService = new MsgService(2, 3);
   light = new Light(13);
   roll = new Roll(6);
-  bluetooth->attach(light);
-  bluetooth->attach(roll);
-  light->attach(bluetooth);
-  roll->attach(bluetooth);
   msgService->attach(light);
   msgService->attach(roll);
   light->attach(msgService);
   roll->attach(msgService);
+  light->notify();
+  roll->notify();
 }
 
 void loop() {
   delay(100);
-  msgService->receiveMsg();
-  bluetooth->notify();
+  msgService->notify();
   unsigned long currentTime = millis(); 
   if (currentTime - lastNotifyTime >= notifyInterval) {
-    light->notify();
-    roll->notify();
+    msgService->print();
     lastNotifyTime = currentTime; 
   }
 }
