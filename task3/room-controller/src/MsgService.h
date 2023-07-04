@@ -2,6 +2,7 @@
 #define __MSGSERVICE__
 
 #include "Arduino.h"
+#include "SoftwareSerial.h"
 #include "observer/Subject.h"
 #include "observer/Event.h"
 #include "observer/EventSourceType.h"
@@ -10,16 +11,11 @@
 class MsgService : public Subject<Msg>, public Observer<Msg> {
     
 private:
-
-  String msg;
-  void notify();
-
+  SoftwareSerial *bt;
 public: 
-
-  MsgService();
+  MsgService(int rx, int tx);
+  void notify();
   void update(Event<Msg> *e);
-  void receiveMsg();
-  void sendMsg(const String& msg);
 };
 
 #endif

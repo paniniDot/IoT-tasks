@@ -1,35 +1,37 @@
 #include "Arduino.h"
 #include "MsgService.h"
 
-MsgService::MsgService(){
+MsgService::MsgService(int rx, int tx) {
   Serial.begin(9600);
-  this->msg ="";
-}
-
-void MsgService::receiveMsg(){
-   if (Serial.available()) {
-    this->msg = Serial.readStringUntil('\n');
-    this->notify();
-  }
-}
-
-void MsgService::sendMsg(const String& msg){
-  delay(100);
-  Serial.println(msg);  
-  delay(100);
+  while (!Serial) {};
+  this->bt = new SoftwareSerial(rx, tx);
+  bt->begin(9600);
 }
 
 void MsgService::notify() {
-  Event<Msg> *e = new Event<Msg>(EventSourceType::MSG_SERVICE, new Msg(this->msg));  
-  for (int i = 0; i < this->getNObservers(); i++)
-  {
-    this->getObservers()[i]->update(e);
+  if (Serial.available()) {
+    String msg = Serial.readStringUntil('\n');
+    Event<Msg> *e = new Event<Msg>(EventSourceType::MSG_SERVICE, new Msg(msg));
+    for (int i = 0; i < this->getNObservers(); i++) {
+      this->getObservers()[i]->update(e);
+    }
+    delete e;
   }
-  delete e;
+  if (this->bt->available()) {
+    String msg = this->bt->readStringUntil('\n');
+    Event<Msg> *e = new Event<Msg>(EventSourceType::BLUETOOTH, new Msg(msg));
+    for (int i = 0; i < this->getNObservers(); i++) {
+      this->getObservers()[i]->update(e);
+    }
+    delete e;
+  }
 }
 
-void MsgService::update(Event<Msg> *e){
-  this->sendMsg(e->getEventArgs()->getContent());
+void MsgService::update(Event<Msg> *e) {
+  String msg=e->getEventArgs()->getContent();
+  delay(100);
+  Serial.println(msg);
+  delay(100);
+  this->bt->println(msg);
+  delay(100);
 }
-
-
