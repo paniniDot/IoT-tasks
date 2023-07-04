@@ -5,6 +5,8 @@ Roll::Roll(int pin)
   this->servo = new ServoTimer2();
   this->servo->attach(pin);
   this->rollState = 0;
+  this->pir_state = 0;
+  this->isDay = 0;
   this->manual_state = 0;
 }
 
@@ -23,29 +25,30 @@ void Roll::handleMessage(Msg *msg) {
   int measure = msg->getMeasure();
 
   if (strcmp(sensorName.c_str(), "pir_sensor") == 0) {
-    if (measure && isDay(getCurrentHour(timestamp))) {
-      this->rollState = 0;
-    } else {
-      this->rollState = 100;
-    }
+    int hour = getCurrentHour(timestamp);
+    this->isDay = (hour >= 8 && hour < 19) ? 1 : 0;
+    this->pir_state = measure;
   } else if (strcmp(sensorName.c_str(), "manual_roll") == 0) {
     this->manual_state = measure;
-  }  else if (strcmp(sensorName.c_str(), "roll") == 0) {
+  } else if (strcmp(sensorName.c_str(), "roll") == 0) {
     this->rollState = measure;
   }
 }
 
 void Roll::updateRollState() {
+  if (this->manual_state == 0) {
+    if (this->pir_state && this->isDay) {
+      this->rollState = 0;
+    } else {
+      this->rollState = 100;
+    }
+  }
   this->servo->write(map(this->rollState, 0, 100, 0, 1023));
 }
 
 int Roll::getCurrentHour(long timestamp) {
   setTime(timestamp);  // Set the time using the timestamp
   return hour();       // Return the current hour
-}
-
-int Roll::isDay(int hour) {
-  return hour >= 8 && hour < 19;
 }
 
 void Roll::notify() {

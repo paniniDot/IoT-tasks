@@ -20,7 +20,8 @@ private:
   void handleMessage(Msg* msg);
   void updateRollState();
   int getCurrentHour(long timestamp);
-  int isDay(int hour);
+  int isDay;
+  int pir_state;
   int manual_state;
 
 public:
