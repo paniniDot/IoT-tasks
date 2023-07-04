@@ -23,7 +23,6 @@ void setup() {
 }
 
 void loop() {
-  delay(100);
   msgService->notify();
   unsigned long currentTime = millis(); 
   if (currentTime - lastNotifyTime >= notifyInterval) {
