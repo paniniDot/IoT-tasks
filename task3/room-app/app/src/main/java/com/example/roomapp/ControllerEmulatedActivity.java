@@ -8,13 +8,11 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
-
-import java.io.OutputStream;
-
 public class ControllerEmulatedActivity extends AppCompatActivity {
     private MaterialSwitch lightSwitch;
     private CheckBox lightCheckBox;
@@ -23,8 +21,6 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
     private CheckBox rollCheckBox;
     private int rollState;
     private TextView rollText;
-
-    private OutputStream emulatedBluetoothOutputStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +38,8 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         lightSwitch.setOnClickListener((v) -> {
             lightState = !lightState;
             runOnUiThread(() -> {
-                lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
-                lightSwitch.setText("light: " + (lightState ? "on" : "off"));
+                lightSwitch.setThumbIconDrawable(lightState ? ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_filled_48px, null) : ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_48px, null));
+                lightSwitch.setText(R.string.light + (lightState ? R.string.on : R.string.off));
             });
         });
         lightCheckBox = findViewById(R.id.checkBox2);
@@ -82,8 +78,8 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         super.onStart();
         runOnUiThread(() -> {
             lightSwitch.setChecked(lightState);
-            lightSwitch.setThumbIconDrawable(lightState ? getResources().getDrawable(R.drawable.lightbulb_filled_48px) : getResources().getDrawable(R.drawable.lightbulb_48px));
-            lightSwitch.setText("light: " + (lightState ? "on" : "off"));
+            lightSwitch.setThumbIconDrawable(lightState ? ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_filled_48px, null) : ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_48px, null));
+            lightSwitch.setText(R.string.light + (lightState ? R.string.on : R.string.off));
             rollSlider.setValue(rollState);
             rollCheckBox.setEnabled(true);
             lightCheckBox.setEnabled(true);
