@@ -115,7 +115,7 @@ public class ControllerActivity extends AppCompatActivity {
 
                     runOnUiThread(() -> {
                         // Aggiorna la visualizzazione del valore
-                        rollText.setText(R.string.roll + rollState);
+                        rollText.setText("roll: " + rollState);
                         rollSlider.setValue(rollState);
                     });
 
@@ -189,7 +189,7 @@ public class ControllerActivity extends AppCompatActivity {
                             runOnUiThread(() -> {
                                 lightSwitch.setThumbIconDrawable(lightValue ? ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_filled_48px, null) : ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_48px, null));
                                 lightSwitch.setChecked(lightValue);
-                                lightSwitch.setText(R.string.light + (lightValue ? R.string.on : R.string.off));
+                                lightSwitch.setText("light: " + (lightValue ? "on" : "off"));
                             });
                         } else if (jsonObject.has("lightcheckbox")) {
                             int lightCheckboxState = jsonObject.getInt("lightcheckbox");

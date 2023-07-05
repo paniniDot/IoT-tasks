@@ -39,7 +39,7 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
             lightState = !lightState;
             runOnUiThread(() -> {
                 lightSwitch.setThumbIconDrawable(lightState ? ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_filled_48px, null) : ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_48px, null));
-                lightSwitch.setText(R.string.light + (lightState ? R.string.on : R.string.off));
+                lightSwitch.setText("light" + (lightState ? "on" : "off"));
             });
         });
         lightCheckBox = findViewById(R.id.checkBox2);
@@ -55,7 +55,7 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
             rollState = (int) rollSlider.getValue();
             Log.i(TAG, "roll: " + rollSlider.getValue());
             runOnUiThread(() -> {
-                rollText.setText((int) (R.string.light + rollSlider.getValue()));
+                rollText.setText("roll: " + rollSlider.getValue());
                 rollSlider.setValue(rollState);
             });
         });
@@ -79,7 +79,7 @@ public class ControllerEmulatedActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             lightSwitch.setChecked(lightState);
             lightSwitch.setThumbIconDrawable(lightState ? ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_filled_48px, null) : ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_48px, null));
-            lightSwitch.setText(R.string.light + (lightState ? R.string.on : R.string.off));
+            lightSwitch.setText("light: " + (lightState ? "on" : "off"));
             rollSlider.setValue(rollState);
             rollCheckBox.setEnabled(true);
             lightCheckBox.setEnabled(true);
