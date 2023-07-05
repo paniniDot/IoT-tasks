@@ -1,93 +1,78 @@
 package room.service;
 
-import java.util.concurrent.*;
-import jssc.*;
+import jssc.SerialPort;
+import jssc.SerialPortEvent;
+import jssc.SerialPortEventListener;
+import jssc.SerialPortException;
 
-/**
- * Comm channel implementation based on serial port.
- * 
- * @author aricci
- *
- */
 public class SerialService implements SerialPortEventListener {
 
 	private SerialPort serialPort;
-	private BlockingQueue<String> queue;
-	private StringBuffer currentMsg = new StringBuffer("");
+	private String receivedMessage;
+	private StringBuilder currentMessage = new StringBuilder();
+	private boolean messageAvailable = false;
 
-	public SerialService(String port, int rate) throws Exception {
-		queue = new ArrayBlockingQueue<String>(100);
-
+	public SerialService(String port, int rate) throws SerialPortException {
 		serialPort = new SerialPort(port);
 		serialPort.openPort();
-
 		serialPort.setParams(rate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-
 		serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_RTSCTS_IN | SerialPort.FLOWCONTROL_RTSCTS_OUT);
-
-		// serialPort.addEventListener(this, SerialPort.MASK_RXCHAR);
 		serialPort.addEventListener(this);
 	}
 
-	public void sendMsg(String msg) {
+	public void sendMsg(String msg) throws SerialPortException {
 		String messageWithNewline = msg + "\n";
-		try {
-			serialPort.writeString(messageWithNewline);
-		} catch (SerialPortException e) {
-			e.printStackTrace();
-		}
-
+		serialPort.writeString(messageWithNewline);
 	}
+
 	public String receiveMsg() throws InterruptedException {
-		return queue.take();
+		synchronized (this) {
+			while (!messageAvailable) {
+				wait();
+			}
+			String message = receivedMessage;
+			receivedMessage = null;
+			messageAvailable = false;
+			return message;
+		}
 	}
 
 	public boolean isMsgAvailable() {
-		return !queue.isEmpty();
+		synchronized (this) {
+			return messageAvailable;
+		}
 	}
 
-	/**
-	 * This should be called when you stop using the port. This will prevent port
-	 * locking on platforms like Linux.
-	 */
 	public void close() {
 		try {
 			if (serialPort != null) {
 				serialPort.removeEventListener();
 				serialPort.closePort();
 			}
-		} catch (Exception ex) {
+		} catch (SerialPortException ex) {
 			ex.printStackTrace();
 		}
 	}
 
 	public void serialEvent(SerialPortEvent event) {
-		/* if there are bytes received in the input buffer */
 		if (event.isRXCHAR()) {
 			try {
-				String msg = serialPort.readString(event.getEventValue());
+				String receivedData = serialPort.readString(event.getEventValue());
+				receivedData = receivedData.replaceAll("\r", "");
+				currentMessage.append(receivedData);
 
-				msg = msg.replaceAll("\r", "");
+				int index;
+				while ((index = currentMessage.indexOf("\n")) >= 0) {
+					String message = currentMessage.substring(0, index);
+					currentMessage.delete(0, index + 1);
 
-				currentMsg.append(msg);
-
-				boolean goAhead = true;
-
-				while (goAhead) {
-					String msg2 = currentMsg.toString();
-					int index = msg2.indexOf("\n");
-					if (index >= 0) {
-						queue.put(msg2.substring(0, index));
-						currentMsg = new StringBuffer("");
-						if (index + 1 < msg2.length()) {
-							currentMsg.append(msg2.substring(index + 1));
-						}
-					} else {
-						goAhead = false;
+					synchronized (this) {
+						receivedMessage = message;
+						messageAvailable = true;
+						notify();
 					}
 				}
-
-			} catch (Exception ex) {
+			} catch (SerialPortException ex) {
 				ex.printStackTrace();
 				System.out.println("Error in receiving string from COM-port: " + ex);
 			}

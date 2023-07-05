@@ -1,4 +1,4 @@
-package room.service;
+package room.utils;
 
 import com.google.gson.JsonParser;
 

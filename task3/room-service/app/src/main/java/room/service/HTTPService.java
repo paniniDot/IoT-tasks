@@ -6,17 +6,15 @@ import io.vertx.core.http.ServerWebSocket;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import jssc.SerialPortException;
 
-/*
- * Data Service as a vertx event-loop
- */
 public class HTTPService extends AbstractVerticle {
 
 	private int port;
 	private SerialService serial;
 	private ServerWebSocket clientWebSocket;
 
-	public HTTPService(int port,SerialService serial) {
+	public HTTPService(int port, SerialService serial) {
 		this.port = port;
 		this.serial = serial;
 	}
@@ -56,7 +54,12 @@ public class HTTPService extends AbstractVerticle {
 
 	private void handleReceiveData(RoutingContext routingContext) {
 		final String origin = routingContext.request().getHeader("Origin");
-		serial.sendMsg(routingContext.body().asString());
+		try {
+			serial.sendMsg(routingContext.body().asString());
+		} catch (SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		routingContext.response().setStatusCode(201).putHeader("Access-Control-Allow-Origin", origin)
 				.putHeader("content-type", "application/json").end();
 	}
