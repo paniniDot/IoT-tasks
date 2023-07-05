@@ -25,8 +25,8 @@ public class DataService extends AbstractVerticle {
 	public void start() {		
 		Router router = Router.router(vertx);
 		router.route().handler(BodyHandler.create());
-		router.get("/api/data").handler(this::handleSendData);
-		router.post("/api/data").handler(this::handleReceiveData);
+		router.get("/api/data_from_server").handler(this::handleSendData);
+		router.post("/api/data_from_client").handler(this::handleReceiveData);
 		vertx.createHttpServer()
 			.requestHandler(router)
 			.listen(port);

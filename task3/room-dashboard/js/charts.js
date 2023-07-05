@@ -68,7 +68,7 @@ function updateChart(chartId, data, layout, time, value) {
 }
 
 function fetchDataAndUpdateChart(chartName, chartId) {
-  axios.get('http://localhost:8080/api/data')
+  axios.get('http://localhost:8080/api/data_from_server')
     .then(response => {
       const data = response.data;
       console.log(data);
