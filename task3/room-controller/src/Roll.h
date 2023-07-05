@@ -15,14 +15,14 @@
 class Roll : JSONSensor, public Observer<Msg>, public Subject<Msg>
 {
 private:
-  int rollState;
+
   ServoTimer2 *servo;
-  void handleMessage(Msg* msg);
-  void updateRollState();
-  int getCurrentHour(long timestamp);
+  int rollState;
   int isDay;
   int pir_state;
   int manual_state;
+  void handleMessage(Msg* msg);
+  void updateRollState();
 
 public:
   Roll(int pin);

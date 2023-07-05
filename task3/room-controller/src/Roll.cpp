@@ -25,8 +25,8 @@ void Roll::handleMessage(Msg *msg) {
   int measure = msg->getMeasure();
 
   if (sensorName.equals("pir_sensor")) {
-    int hour = getCurrentHour(timestamp);
-    this->isDay = (hour >= 8 && hour < 19) ? 1 : 0;
+    setTime(timestamp);
+    this->isDay = (hour() >= 8 && hour() < 19) ? 1 : 0;
   } else if (sensorName.equals("manual_roll")) {
     this->manual_state = measure;
   } else if (sensorName.equals("roll")) {
@@ -39,11 +39,6 @@ void Roll::updateRollState() {
     this->rollState = (this->pir_state && this->isDay) ? 0 : 100;
   }
   this->servo->write(map(this->rollState, 0, 100, 0, 1023));
-}
-
-int Roll::getCurrentHour(long timestamp) {
-  setTime(timestamp);  // Set the time using the timestamp
-  return hour();       // Return the current hour
 }
 
 void Roll::notify() {

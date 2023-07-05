@@ -61,29 +61,22 @@ void setup() {
 }
 
 void loop() {
-  delay(100);
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi connection lost. Reconnecting...");
     connectToWIFI();
   }
   if (!mqttClient.ping()) {
     Serial.println("MQTT server connection lost");
-    //mqttClient.disconnect();
     connectToMQTT();
   }
   unsigned long currentTime = millis();
   if (currentTime - lastNotifyTime >= notifyInterval) {
-    // Publish light value
-    String lightValue = resistor->toJson();
-    if (publisher_light.publish(lightValue.c_str())) {
+    if (publisher_light.publish(resistor->toJson().c_str())) {
       Serial.println("Published light value");
     } else {
       Serial.println("Failed to publish light value");
     }
-
-    // Publish motion value
-    String motionValue = pir->toJson();
-    if (publisher_motion.publish(motionValue.c_str())) {
+    if (publisher_motion.publish(pir->toJson().c_str())) {
       Serial.println("Published motion value");
     } else {
       Serial.println("Failed to publish motion value");

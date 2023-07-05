@@ -13,6 +13,8 @@ MsgService::MsgService(int rx, int tx) {
 void MsgService::notify() {
   if (Serial.available()) {
     String msg = Serial.readStringUntil('\n');
+    Serial.print("s ");
+    Serial.println(msg);
     Event<Msg> *e = new Event<Msg>(EventSourceType::MSG_SERVICE, new Msg(msg));
     for (int i = 0; i < this->getNObservers(); i++) {
       this->getObservers()[i]->update(e);
@@ -21,6 +23,8 @@ void MsgService::notify() {
   }
   if (this->bt->available()) {
     String msg = this->bt->readStringUntil('\n');
+    Serial.print("bt ");
+    Serial.println(msg);
     Event<Msg> *e = new Event<Msg>(EventSourceType::BLUETOOTH, new Msg(msg));
     for (int i = 0; i < this->getNObservers(); i++) {
       this->getObservers()[i]->update(e);

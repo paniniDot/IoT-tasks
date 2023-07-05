@@ -18,14 +18,14 @@ void setup() {
   msgService->attach(roll);
   light->attach(msgService);
   roll->attach(msgService);
-  light->notify();
-  roll->notify();
 }
 
 void loop() {
   msgService->notify();
   unsigned long currentTime = millis(); 
   if (currentTime - lastNotifyTime >= notifyInterval) {
+    light->notify();
+    roll->notify();
     msgService->print();
     lastNotifyTime = currentTime; 
   }
