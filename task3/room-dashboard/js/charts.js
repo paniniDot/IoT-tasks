@@ -98,6 +98,5 @@ function convertTimestampToFormattedDate(timestamp) {
 initializeChart('lightchart', chartData.light.data, chartData.light.layout);
 initializeChart('rollchart', chartData.roll.data, chartData.roll.layout);
 
-const webSocket = new WebSocket('ws://localhost:8080/api/data_from_server');
-
+// Inserito su socket.js 
 webSocket.onmessage = handleWebSocketMessage;

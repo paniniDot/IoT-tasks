@@ -23,7 +23,7 @@ public class App {
 					String msg = serial.receiveMsg();
 					System.out.println("arduino " + msg);
 					if (JsonUtils.isFromArduino(msg)) {
-						service.addMeasure(JsonUtils.getJsonWithTimestamp(msg));
+						service.handleSendData(JsonUtils.getJsonWithTimestamp(msg));
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
