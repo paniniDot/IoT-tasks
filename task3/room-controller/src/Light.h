@@ -3,7 +3,6 @@
 
 #include "Arduino.h"
 #include "JSONSensor.h"
-#include "MsgService.h"
 
 class Light : public JSONSensor
 {
