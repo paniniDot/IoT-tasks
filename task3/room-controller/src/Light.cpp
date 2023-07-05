@@ -13,10 +13,7 @@ Light::Light(int pin)
 void Light::update(Event<Msg> *e) {
   this->handleMessage(e->getEventArgs());
   this->updateLightState();
-  EventSourceType src = e->getSrcType();
-  if (src != EventSourceType::BLUETOOTH || src != EventSourceType::MSG_SERVICE) {
-    this->notify();
-  }
+  this->notify();
 }
 
 void Light::handleMessage(Msg *msg) {

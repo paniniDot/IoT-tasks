@@ -185,12 +185,15 @@ public class ControllerActivity extends AppCompatActivity {
                         String name = jsonObject.getString("name");
                         int measure = jsonObject.getInt("measure");
                         if (name.equals("light")) {
-                            boolean lightValue = measure != 0;
+                            lightState = measure != 0;
                             runOnUiThread(() -> {
-                                lightSwitch.setThumbIconDrawable(lightValue ? ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_filled_48px, null) : ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_48px, null));
-                                lightSwitch.setChecked(lightValue);
-                                lightSwitch.setText("light: " + (lightValue ? "on" : "off"));
+                                lightSwitch.setThumbIconDrawable(lightState ? ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_filled_48px, null) : ResourcesCompat.getDrawable(getResources(), R.drawable.lightbulb_48px, null));
+                                lightSwitch.setChecked(lightState);
+                                lightSwitch.setText("light: " + (lightState ? "on" : "off"));
                             });
+                        } else if (name.equals("roll")) {
+                            rollState = measure;
+                            runOnUiThread(() -> rollSlider.setValue(measure));
                         } else if (jsonObject.has("lightcheckbox")) {
                             int lightCheckboxState = jsonObject.getInt("lightcheckbox");
                             boolean lightCheckboxValue = lightCheckboxState != 0;
@@ -205,8 +208,6 @@ public class ControllerActivity extends AppCompatActivity {
                                 rollCheckBox.setChecked(rollCheckboxValue);
                                 rollSlider.setEnabled(rollCheckboxValue);
                             });
-                        } else if (name.equals("roll")) {
-                            runOnUiThread(() -> rollSlider.setValue(measure));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
