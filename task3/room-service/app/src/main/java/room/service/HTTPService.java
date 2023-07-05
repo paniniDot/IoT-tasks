@@ -53,7 +53,6 @@ public class HTTPService extends AbstractVerticle {
 		clientWebSocket = null;
 	}
 
-
 	public void handleSendData(String jsonMeasure) {
 		if (clientWebSocket != null) {
 			clientWebSocket.writeTextMessage(jsonMeasure);

@@ -67,21 +67,6 @@ function updateChart(chartId, data, layout, time, value) {
   Plotly.update(chartId, data, layout);
 }
 
-function handleWebSocketMessage(event) {
-  const data = JSON.parse(event.data);
-  console.log(data);
-  const time = convertTimestampToFormattedDate(data.timestamp);
-  const measure = data.measure;
-  const name = data.name;
-  if (name === "light") {
-    const chart = chartData[name];
-    updateChart('lightchart', chart.data, chart.layout, time, measure);
-  } else if (name === "roll") {
-    const chart = chartData[name];
-    updateChart('rollchart', chart.data, chart.layout, time, measure);
-  }
-}
-
 function convertTimestampToFormattedDate(timestamp) {
   const date = new Date(timestamp);
   const year = date.getFullYear();
@@ -97,6 +82,3 @@ function convertTimestampToFormattedDate(timestamp) {
 // Inizializza i grafici
 initializeChart('lightchart', chartData.light.data, chartData.light.layout);
 initializeChart('rollchart', chartData.roll.data, chartData.roll.layout);
-
-// Inserito su socket.js 
-webSocket.onmessage = handleWebSocketMessage;
