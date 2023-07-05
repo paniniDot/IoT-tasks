@@ -26,8 +26,6 @@ public class HTTPService extends AbstractVerticle {
 		server.webSocketHandler(webSocket -> {
 			if (clientWebSocket == null) {
 				clientWebSocket = webSocket;
-
-				webSocket.textMessageHandler(this::handleWebSocketMessage);
 				webSocket.closeHandler(this::handleWebSocketClose);
 			} else {
 				webSocket.reject();
@@ -41,11 +39,6 @@ public class HTTPService extends AbstractVerticle {
 		server.requestHandler(router).listen(port);
 
 		log("Service ready on port: " + port);
-	}
-
-	private void handleWebSocketMessage(String message) {
-		// Gestisci i messaggi ricevuti dal client
-		// Puoi aggiungere la tua logica personalizzata qui
 	}
 
 	private void handleWebSocketClose(Void unused) {
