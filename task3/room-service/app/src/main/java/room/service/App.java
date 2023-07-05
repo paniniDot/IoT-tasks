@@ -11,10 +11,10 @@ public class App {
 		// Create a blocking queue to store the received messages
 		SerialService serial = new SerialService("COM12", 9600);
 		Vertx vertx = Vertx.vertx();
-		HTTPService service = new HTTPService(8080);
+		HTTPService service = new HTTPService(8080,serial);
 		vertx.deployVerticle(service);
 		Thread serverThread = new Thread(() -> {
-			new MQTTService(serial);
+			new MQTTService(1883,"192.168.2.138",serial);
 		});
 		Thread readThread = new Thread(() -> {
 			while (true) {
@@ -28,11 +28,6 @@ public class App {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				}
-				if (service.isMeasureAvailable()) {
-					String msg = service.getMeasure();
-					System.out.println("recceived " + msg);
-					serial.sendMsg(msg);
 				}
 			}
 		});

@@ -38,7 +38,6 @@ public class SerialService implements SerialPortEventListener {
 		}
 
 	}
-
 	public String receiveMsg() throws InterruptedException {
 		return queue.take();
 	}

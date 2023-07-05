@@ -7,20 +7,18 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 
-import java.util.LinkedList;
-
 /*
  * Data Service as a vertx event-loop
  */
 public class HTTPService extends AbstractVerticle {
 
 	private int port;
-	private LinkedList<String> receivedValues;
+	private SerialService serial;
 	private ServerWebSocket clientWebSocket;
 
-	public HTTPService(int port) {
-		this.receivedValues = new LinkedList<>();
+	public HTTPService(int port,SerialService serial) {
 		this.port = port;
+		this.serial = serial;
 	}
 
 	@Override
@@ -58,7 +56,7 @@ public class HTTPService extends AbstractVerticle {
 
 	private void handleReceiveData(RoutingContext routingContext) {
 		final String origin = routingContext.request().getHeader("Origin");
-		receivedValues.addFirst(routingContext.body().asString());
+		serial.sendMsg(routingContext.body().asString());
 		routingContext.response().setStatusCode(201).putHeader("Access-Control-Allow-Origin", origin)
 				.putHeader("content-type", "application/json").end();
 	}
@@ -67,14 +65,6 @@ public class HTTPService extends AbstractVerticle {
 		if (clientWebSocket != null) {
 			clientWebSocket.writeTextMessage(jsonMeasure);
 		}
-	}
-
-	public String getMeasure() {
-		return receivedValues.pollFirst();
-	}
-
-	public boolean isMeasureAvailable() {
-		return !receivedValues.isEmpty();
 	}
 
 	private void log(String msg) {
