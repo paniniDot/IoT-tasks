@@ -3,24 +3,18 @@
  */
 package room.service;
 
-import room.service.html.DataService;
-import room.service.mqtt.MQTTServer;
-
-import room.service.serial.*;
-import room.service.utils.JsonUtils;
-
 import io.vertx.core.Vertx;
 
 public class App {
 
 	public static void main(String[] args) throws Exception {
 		// Create a blocking queue to store the received messages
-		CommChannel serial = new SerialCommChannel("COM12", 9600);
+		SerialService serial = new SerialService("COM12", 9600);
 		Vertx vertx = Vertx.vertx();
-		DataService service = new DataService(8080);
+		HTTPService service = new HTTPService(8080);
 		vertx.deployVerticle(service);
 		Thread serverThread = new Thread(() -> {
-			new MQTTServer(serial);
+			new MQTTService(serial);
 		});
 		Thread readThread = new Thread(() -> {
 			while (true) {

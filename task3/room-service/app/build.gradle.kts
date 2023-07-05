@@ -34,6 +34,7 @@ dependencies {
 	
 	// https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl
 	implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")	
+	implementation 'javax.websocket:javax.websocket-api:1.1'
 
     // https://central.sonatype.com/artifact/io.vertx/vertx-core/4.4.3
     implementation("io.vertx:vertx-core:4.4.3")

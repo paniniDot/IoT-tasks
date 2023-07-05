@@ -67,23 +67,19 @@ function updateChart(chartId, data, layout, time, value) {
   Plotly.update(chartId, data, layout);
 }
 
-function fetchDataAndUpdateChart(chartName, chartId) {
-  axios.get('http://localhost:8080/api/data_from_server')
-    .then(response => {
-      const data = response.data;
-      console.log(data);
-      const time = convertTimestampToFormattedDate(data.timestamp);
-      const measure = data.measure;
-      const name = data.name;
-
-      if (name === chartName) {
-        const chart = chartData[chartName];
-        updateChart(chartId, chart.data, chart.layout, time, measure);
-      }
-    })
-    .catch(error => {
-      console.error(error);
-    });
+function handleWebSocketMessage(event) {
+  const data = JSON.parse(event.data);
+  console.log(data);
+  const time = convertTimestampToFormattedDate(data.timestamp);
+  const measure = data.measure;
+  const name = data.name;
+  if (name === "light") {
+    const chart = chartData[name];
+    updateChart('lightchart', chart.data, chart.layout, time, measure);
+  } else if (name === "roll") {
+    const chart = chartData[name];
+    updateChart('rollchart', chart.data, chart.layout, time, measure);
+  }
 }
 
 function convertTimestampToFormattedDate(timestamp) {
@@ -102,8 +98,6 @@ function convertTimestampToFormattedDate(timestamp) {
 initializeChart('lightchart', chartData.light.data, chartData.light.layout);
 initializeChart('rollchart', chartData.roll.data, chartData.roll.layout);
 
-// Aggiorna i grafici ad intervalli regolari
-setInterval(function () {
-  fetchDataAndUpdateChart('light', 'lightchart');
-  fetchDataAndUpdateChart('roll', 'rollchart');
-}, 1000);
+const webSocket = new WebSocket('ws://localhost:8080/api/data_from_server');
+
+webSocket.onmessage = handleWebSocketMessage;
