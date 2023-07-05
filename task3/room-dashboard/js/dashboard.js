@@ -17,6 +17,11 @@ range.disabled = true;
 function updateDashboard(name, value) {
   if (name == "light") {
     lightswitch.checked = value > 0;
+    if (lightswitch.checked) {
+      lightbulbIcon.classList.replace("bi-lightbulb-off", "bi-lightbulb");
+    } else {
+      lightbulbIcon.classList.replace("bi-lightbulb", "bi-lightbulb-off");
+    }
   } else if (name == "roll") {
     valueSpan.textContent = `${value}`;
     const offset = ((value - range.min + 2) / (range.max - range.min + 4)) * range.offsetWidth;
