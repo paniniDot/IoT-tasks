@@ -13,6 +13,7 @@ import androidx.core.content.res.ResourcesCompat;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
+
 public class ControllerEmulatedActivity extends AppCompatActivity {
     private MaterialSwitch lightSwitch;
     private CheckBox lightCheckBox;

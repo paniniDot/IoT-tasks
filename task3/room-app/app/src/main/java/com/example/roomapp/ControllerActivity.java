@@ -193,7 +193,10 @@ public class ControllerActivity extends AppCompatActivity {
                             });
                         } else if (name.equals("roll")) {
                             rollState = measure;
-                            runOnUiThread(() -> rollSlider.setValue(measure));
+                            runOnUiThread(() -> {
+                                rollSlider.setValue(rollState);
+                                rollText.setText("roll: " + rollState);
+                            });
                         } else if (jsonObject.has("lightcheckbox")) {
                             int lightCheckboxState = jsonObject.getInt("lightcheckbox");
                             boolean lightCheckboxValue = lightCheckboxState != 0;
