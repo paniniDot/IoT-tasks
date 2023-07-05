@@ -4,15 +4,9 @@
 #include "ServoTimer2.h"
 #include "Arduino.h"
 #include "JSONSensor.h"
-#include "observer/Observer.h"
-#include "observer/Subject.h"
-#include "observer/Event.h"
-#include "observer/EventSourceType.h"
-#include "MsgService.h"
-#include "Msg.h"
 #include "TimeLib.h"
 
-class Roll : JSONSensor, public Observer<Msg>, public Subject<Msg>
+class Roll : public JSONSensor
 {
 private:
 

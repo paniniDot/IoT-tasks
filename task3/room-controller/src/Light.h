@@ -3,14 +3,8 @@
 
 #include "Arduino.h"
 #include "JSONSensor.h"
-#include "observer/Observer.h"
-#include "observer/Subject.h"
-#include "observer/Event.h"
-#include "observer/EventSourceType.h"
-#include "MsgService.h"
-#include "Msg.h"
 
-class Light : public JSONSensor, public Observer<Msg>, public Subject<Msg>
+class Light : public JSONSensor
 {
 private:
   int lightState;
