@@ -3,8 +3,12 @@
 
 #include "ArduinoJson.h"
 #include "Arduino.h"
+#include "observer/Observer.h"
+#include "observer/Subject.h"
+#include "observer/Event.h"
+#include "Msg.h"
 
-class JSONSensor {
+class JSONSensor : public Observer<Msg>, public Subject<Msg> {
 private:
   String name;
   StaticJsonDocument<32> doc;
@@ -22,6 +26,8 @@ protected:
 public:
   JSONSensor(const char* name)
     : name(name) {}
+  virtual void notify() = 0;
+  virtual void update(Event<Msg> *e) = 0;
 };
 
 #endif
