@@ -76,16 +76,11 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/scan_button"
-            android:layout_width="wrap_content"
+            android:layout_width="186dp"
             android:layout_height="wrap_content"
             android:insetRight="20dp"
             android:text="SCAN DEVICES" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/emulator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="EMULATOR" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

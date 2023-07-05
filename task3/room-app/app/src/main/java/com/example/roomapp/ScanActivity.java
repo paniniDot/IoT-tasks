@@ -86,7 +86,6 @@ public class ScanActivity extends AppCompatActivity {
 
     private void initUI() {
         //shortcut to avoid bluetooth scanning if using emulator
-        findViewById(R.id.emulator).setOnClickListener(v -> startActivity(new Intent(this, ControllerEmulatedActivity.class)));
         ListView scannedListView = findViewById(R.id.scannedView);
 
         //the adapter will let you update the view notifying changes to the data source

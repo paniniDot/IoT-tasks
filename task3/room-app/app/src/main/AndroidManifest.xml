@@ -41,13 +41,6 @@
         android:theme="@style/Theme.roomapp"
         tools:targetApi="33">
         <activity
-            android:name=".ControllerEmulatedActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".ControllerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false">
