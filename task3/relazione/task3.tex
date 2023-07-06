@@ -204,7 +204,7 @@ L'app android sviluppata per il progetto si suddivide in due \emph{activity} (ci
     \end{itemize}
 \end{enumerate}
 Per la lettura dei messaggi da parte di Arduino è stato creato un thread interno che, a partire da un \texttt{BluetoothSocket}, apre una input stream sulla quale si mette in ascolto. 
-Per l'invio di messaggi ad Arduino esiste un'ulteriore thread (quello principale) che, sempre a partire dal socket \texttt{BluetoothSocket}, crea uno stream sul quale invia dati in formato JSON.
+Per l'invio di messaggi ad Arduino esiste un'ulteriore thread che, sempre a partire dal socket \texttt{BluetoothSocket}, crea uno stream sul quale invia dati in formato JSON.
 Tutte le modifiche effettuate sulla parte grafica vengono eseguite sul thread predefinito messo a disposizione da Android, chiamato \texttt{UiThread}.
 Esiste poi un thread a parte \texttt{BluetoothClientConnectionThread} che si occupa di mantenere attiva la connessione fra client (il dispositivo) e Android.
 
