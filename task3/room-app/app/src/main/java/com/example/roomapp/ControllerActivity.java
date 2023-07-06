@@ -1,5 +1,7 @@
 package com.example.roomapp;
 
+import static android.content.ContentValues.TAG;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -9,14 +11,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,7 +32,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ControllerActivity extends AppCompatActivity {
-    private static final String TAG = "ControllerActivity";
     private static final String NAME = "name";
     private static final String MEASURE = "measure";
     private static final String LIGHT_CHECKBOX = "lightcheckbox";
@@ -93,7 +98,7 @@ public class ControllerActivity extends AppCompatActivity {
                 if (isDragging) {
                     bluetoothSend(ROLL, rollState);
                     runOnUiThread(() -> {
-                        rollText.setText(ROLL + rollState);
+                        rollText.setText(ROLL + " " + rollState);
                         rollSlider.setValue(rollState);
                     });
                     isDragging = false;
@@ -186,7 +191,7 @@ public class ControllerActivity extends AppCompatActivity {
                 case ROLL:
                     rollState = measure;
                     rollSlider.setValue(rollState);
-                    rollText.setText(ROLL + rollState);
+                    rollText.setText(ROLL + " " +rollState);
                     break;
                 case LIGHT_CHECKBOX:
                     boolean lightCheckboxValue = measure != 0;
