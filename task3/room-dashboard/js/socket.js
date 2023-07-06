@@ -23,3 +23,4 @@ function sendMessage(message) {
   webSocket.send(message);
   console.log('Messaggio inviato:', message);
 }
+ 
