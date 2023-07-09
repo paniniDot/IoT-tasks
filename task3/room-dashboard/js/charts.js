@@ -56,14 +56,23 @@ function updateChart(chartId, data, layout, time, value) {
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
   const seconds = String(date.getSeconds()).padStart(2, '0');
-  if(value>0){
-    data[0].x.push(`${day}-${hours}`);
-    data[0].y.push((1 / 3600) * 100);
-  }
-  if (data[0].x.length > 24) {
+
+  if (data[0].x.length >= 24) {
     data[0].x.shift();
     data[0].y.shift();
   }
+
+  if (value > 0) {
+    const Column = `${day}-${hours}`;
+    if (!data[0].x.includes(Column)) {
+      data[0].x.push(Column);
+      data[0].y.push((1 / 3600) * 100);
+    }else{
+      data[0].y[data[0].x.indexOf(Column)]=data[0].y[data[0].x.indexOf(Column)]+(1 / 3600) * 100;
+    }
+    
+  }
+
   Plotly.update(chartId, data, layout);
 }
 

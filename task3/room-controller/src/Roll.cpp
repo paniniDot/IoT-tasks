@@ -24,7 +24,7 @@ void Roll::handleMessage(Msg *msg) {
   if (sensorName.equals("pir_sensor")) {
     setTime(timestamp);
     this->pir_state = measure;
-    this->isDay = (second() >= 15 && second() < 45) ? 1 : 0;
+    this->isDay = (hour() >= 8 && hour() < 19) ? 1 : 0;
   } else if (sensorName.equals("manual_roll")) {
     this->manual_state = measure;
   } else if (sensorName.equals("roll")) {
