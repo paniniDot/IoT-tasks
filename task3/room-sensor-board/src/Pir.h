@@ -5,11 +5,12 @@
 class Pir : public JSONSensor<int>
 {
 private:
-  int pin;
+  int pir_pin;
+  int led_pin;
   int getMotion();
 
 public:
-  Pir(int pin);
+  Pir(int pir_pin,int led_pin);
   String toJson() {
     return this->getJson(this->getMotion());
   }

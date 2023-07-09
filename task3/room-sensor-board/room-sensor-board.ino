@@ -4,7 +4,6 @@
 #include <esp_system.h>
 #include "src/Pir.h"
 #include "src/PhotoResistor.h"
-#include "src/Light.h"
 #define PIR_PIN 34
 #define PHOTO_RESISTOR_PIN 35
 #define LED_PIN 32
@@ -30,7 +29,6 @@ Adafruit_MQTT_Publish publisher_motion(&mqttClient, topic_motion);
 /* Hardware objects */
 PhotoResistor* resistor;
 Pir* pir;
-Light* led;
 
 void connectToWIFI() {
   delay(100);
@@ -60,8 +58,7 @@ void setup() {
   connectToWIFI();
   connectToMQTT();
   resistor = new PhotoResistor(PHOTO_RESISTOR_PIN);
-  pir = new Pir(PIR_PIN);
-  led = new Light(LED_PIN);
+  pir = new Pir(PIR_PIN,LED_PIN);
 }
 
 void loop() {
@@ -75,7 +72,6 @@ void loop() {
   }
   unsigned long currentTime = millis();
   if (currentTime - lastNotifyTime >= notifyInterval) {
-    led->gradualBrightness();
     if (publisher_light.publish(resistor->toJson().c_str())) {
       Serial.println("Published light value");
     } else {
