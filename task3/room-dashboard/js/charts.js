@@ -12,6 +12,7 @@ const chartData = {
       xaxis: {
         title: 'giorno-ora',
         type: 'category',
+        range: [0, 4],
         tickformat: '%D-%H'
       },
       yaxis: {
@@ -32,6 +33,7 @@ const chartData = {
       title: 'Storico luce',
       xaxis: {
         title: 'giorno-ora',
+        range: [0, 4],
         type: 'category',
         tickformat: '%D-%H'
       },
@@ -50,14 +52,10 @@ function initializeChart(chartId, data, layout) {
 
 function updateChart(chartId, data, layout, time, value) {
   const date = new Date(time);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
 
-  if (data[0].x.length >= 24) {
+  if (data[0].x.length >= 4) {
     data[0].x.shift();
     data[0].y.shift();
   }
