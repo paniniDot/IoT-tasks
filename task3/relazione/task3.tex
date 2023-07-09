@@ -41,12 +41,8 @@ Come da specifiche, tutto il progetto è stato fin da subito suddiviso nei cinqu
     \item \emph{Room Mobile App} (android)
     \item \emph{Room Controller} (arduino)
 \end{enumerate}
-Per ciascuno di essi è riportata di seguito una descrizione accurata delle scelte progettuali intraprese prima dell'effettivo sviluppo del codice.
 
-\subsection{Room Sensor-Board (ESP)}
-\subsection{Room Service (Backend, PC)}
-\subsection{Room Dashboard (frontend, PC)}
-\subsection{Room Mobile App (Android)}
+Di seguito sono riportate le scelte progettuali per le parti più critiche.
 \subsection{Room Controller (Arduino)}
 Per il sottosistema imputato al controllo della luce e delle tende, sono state concepite due macchine a stati finiti che descrivessero il comportamento di ciascuno di questi due componenti. Si è inoltre pensato di fare in modo che entrambe fossero \textbf{asincrone}, ovvero che non dipendessero dalla frequenza di clock, ma unicamente dagli eventi che si verificano all'interno della stanza. In particolare si ha
 \begin{enumerate}
@@ -108,10 +104,9 @@ Le transizioni fra i macro stati avvengono qualora si attivi (o disattivi) la mo
 
 \section{Architettura nel dettaglio}
 In questo paragrafo si spiegherà nel dettaglio l'architettura implementata.
-\subsection{Descrizione dei sottosistemi}
 Poiché il sistema è suddiviso in cinque sottosistemi, ciascuno considerabile indipendente dal resto, tratteremo ciascuno di essi singolarmente.
 
-\subsubsection{Room Sensor Board (ESP)}
+\subsection{Room Sensor Board (ESP)}
 Come già anticipato, il compito dell'ESP32 è quello di inviare periodicamente i dati registrati dalla fotoresistenza e dal sensore di movimento (PIR) a un server remoto tramite WiFi, utilizzando il protocollo MQTT.
 
 L'architettura del sistema è rappresentata in figura \ref{fig:espclassi}
@@ -143,30 +138,30 @@ Per fare questo abbiamo definito un'interfaccia comune ai due sensori, chiamata 
 A questo punto, all'interno del file .ino, abbiamo istanziato un oggetto \texttt{Adafruit\_MQTT\_Client} dell'omonima libreria. Questo oggetto è stato iscritto ai topic MQTT ``topic\_light'' e ``topic\_motion'', corrispondenti ai rispettivi sensori.
 All'interno del \texttt{loop()} vengono pubblicate sui rispettivi topic le misurazioni effettuate dai sensori, con cadenza di un secondo.
 
-\subsubsection{Room Service (Backend)}
-Il sottosistema è suddiviso in diversi componenti autonomi con compiti specifici. La struttura dei package rispecchia questa suddivisione.
-Per la comunicazione con Arduino, è presente un'interfaccia chiamata \texttt{CommChannel}, implementata da \texttt{SerialCommChannel}. Questi componenti forniscono metodi per comunicare i dati tramite una connessione seriale.
-Un'istanza di \texttt{SerialCommChannel} è utilizzata all'interno dell'implementazione del server MQTT, chiamata \texttt{MQTTServer}. All'arrivo di un messaggio da parte dell'ESP, viene direttamente inoltrato ad Arduino via seriale.
-Per quanto riguarda l'interazione con il frontend (la dashboard html) è stato implementato un \texttt{AbstractVerticle} della libreria \texttt{Vertx}. Poiché l'interazione dev'essere bidirezionale, ovvero il server deve inviare dati al frontend e viceversa, abbiamo stabilito le seguenti convenzioni 
-\begin{itemize}
-    \item Una chiamata GET alla route ``/api/data\_from\_server'' per inviare dati dal server al client.
-    \item Una chiamata POST alla route ``/api/data\_from\_client'' per ricevere dati dal client.
-\end{itemize}
-Il client può inviare i propri dati al server in qualsiasi momento, mentre il server invia dati al client ogni secondo utilizzando una logica di invio gestita nel frontend tramite richieste periodiche utilizzando \texttt{setInterval()}.
+\subsection{Room Service (Backend)}
+Il sottosistema è suddiviso in diversi componenti autonomi che offrono ciascuno un particolare servizio.
+Per la comunicazione con Arduino, è presente una classe definita \texttt{SerialService} che si occupa di mantenere attivo un canale di comunicazione seriale. 
+Per quanto riguarda l'interazione con il frontend (la dashboard html) è stato implementato un \texttt{AbstractVerticle} della libreria \texttt{Vertx} all'interno della classe \texttt{HTTPService}. Poiché l'interazione dev'essere bidirezionale, ovvero il server deve inviare dati al frontend e viceversa, 
+abbiamo deciso di utilizzare il protocollo \texttt{WebSocket}, che permette di mantenere una connessione persistente fra client e server.
+La prima implementazione del sottosistema prevedeva l'utilizzo di chiamate axios da parte di javascript per inviare richieste HTTP al server con frequenza di un secondo (con \texttt{setInterval()}), ma ci siamo resi conto che questo approccio non era adatto al nostro caso d'uso, poiché le richieste HTTP sono state progettate per essere stateless, ovvero non mantengono alcuno stato fra una richiesta e l'altra. Questo significa che, affinché il server invii dati al client, il client deve inviare una richiesta HTTP per riceverli, ma questo comporta un overhead di comunicazione non necessario, poiché il client deve inviare una richiesta per ricevere dati che il server ha già pronti. Per questo motivo abbiamo deciso di utilizzare il protocollo WebSocket, che permette di mantenere una connessione persistente fra client e server, in modo che il server possa inviare dati al client in qualsiasi momento, senza che il client debba inviare una richiesta.
+
+Per quanto riguarda la comunicazione con l'ESP32, abbiamo utilizzato il protocollo MQTT, che permette di inviare messaggi a un topic, che può essere iscritto da uno o più client. In questo modo, non appena l'ESP invia un messaggio ad uno dei due topic, il server lo riceve immediatamente.
 
 Di seguito è riportato un diagramma delle classi che spiega l'interazione fra le parti
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{img/Classi - backend.png}
+    \includegraphics[width=\textwidth]{img/Classi - backend.png}
     \caption{Backend.}
     \label{fig:backend}
 \end{figure}
 
-\subsubsection{Room Dashboard (Frontend)}
-Dal punto di vista logico, per il lato frontend abbiamo suddiviso la logica in due script JS: \texttt{charts.js} e \texttt{dashboard.js}.
+Dove si può notare che il \texttt{SerialService} è un'istanza unica che viene condivisa fra tutti i servizi. Questo è stato fatto per evitare di aprire più canali di comunicazione seriale, che Arduino non supporta. Attraverso questo canale il server potrà indirizzare e ricevere dati da arduino. 
+
+\subsection{Room Dashboard (Frontend)}
+Dal punto di vista logico, per il lato frontend abbiamo suddiviso la logica in tre script JS: \texttt{charts.js}, \texttt{dashboard.js} e \texttt{socket.js}.
 \begin{itemize}
-    \item \texttt{charts.js} ha lo scopo di gestire la logica per l'aggiornamento dei due grafici. L'approccio adottato prevede l'invio di due richieste axios al secondo, una per la luce e una per la tenda, al server. Qualora il server avesse nuovi dati, lo script provvede a inserirli in una struttura dati che verrà letta dal grafico per aggiornarsi.
-    \item \texttt{dashboard.js} invece gestisce l'invio dei dati per il controllo manuale della luce e della tenda. È necessario comunicare al server (che a sua volta informerà Arduino), l'istante in cui la pagina HTML prende il controllo dei sistemi, e il momento in cui si interrompe tale controllo. A tal proposito il nostro protocollo prevede l'invio di due tipi di messaggi.
+    \item \texttt{charts.js} ha lo scopo di gestire la logica per l'aggiornamento dei due grafici. L'approccio adottato prevede il mettersi in ascolto sul webSocket \texttt{ws://localhost:8080}. Qualora il server avesse nuovi dati, lo script li può inviare su questo canale persistente e il client può riceverli. In questo modo si evita di dover effettuare richieste HTTP di overhead per richiedere i dati.
+    \item \texttt{dashboard.js} gestisce l'invio dei dati per il controllo manuale della luce e della tenda. È necessario comunicare al server (che a sua volta informerà Arduino), l'istante in cui la pagina HTML prende il controllo dei sistemi, e il momento in cui si interrompe tale controllo. A tal proposito il nostro protocollo prevede l'invio di due tipi di messaggi.
     Il primo è questo
     \begin{lstlisting}[style=json]
     {
@@ -182,9 +177,10 @@ Dal punto di vista logico, per il lato frontend abbiamo suddiviso la logica in d
       "measure": 0..100,
     }
     \end{lstlisting}
-    che indica che il dispositivo dev'essere acceso (1) o spento (0) nel caso della luce o in un range fra 0 e 100 per la tenda. 
+    che indica che il dispositivo dev'essere acceso (1) o spento (0) nel caso della luce o in un range fra 0 e 100 per la tenda. Il meccanismo di invio è il medesimo della ricezione, i messaggi vengono inoltrati sullo stesso socket.
+    \item \texttt{socket.js} si occupa di gestire la connessione con il server. In particolare, si occupa di gestire gli eventi di connessione e disconnessione, e di inviare i messaggi al server.
 \end{itemize}
-\subsubsection{Room Controller (Aruino)}
+\subsection{Room Controller (Aruino)}
 In questa sezione, come nel caso dell'ESP, poiché sia la luce che la tenda devono inviare e ricevere messaggi in formato JSON, abbiamo un'interfaccia \texttt{JSONSensor} che viene implementata da \texttt{Light} e \texttt{Roll}.
 Tutta l'architettura è basata su una classe chiamata \texttt{MsgService} che mediante pattern Observer (il codice è stato ripreso dal task2 dal momento che era stato fatto quanto più possibile generico in modo da adattarsi a qualsiasi situazione), indirizza i pacchetti agli opportuni elementi. In particolare \texttt{MsgService} si occupa sia di ricevere i messaggi dal server (sia quelli provenienti dall'ESP che dalla dashboard), e indirizzarli a luce e tenda, le quali al loro interno avranno incapsulata la logica con cui adattarsi a questo tipo di messaggi, che indirizzare i messaggi generati da questi sensori verso il server. Oltre a questo, si occupa anche di gestire la logica del Bluetooth che, essendo basata anch'essa sulla seriale, è stata collassata all'interno della classe \texttt{MsgService}.
 Tutto lo scambio di messaggi avviene sottoforma di istanze della classe \texttt{Msg} che incapsula la logica con cui i messaggi in formato JSON vengono deserializzati affinché si possa accedere ai vari campi. 
@@ -192,12 +188,12 @@ Tutto lo scambio di messaggi avviene sottoforma di istanze della classe \texttt{
 Di seguito è riportata la struttura del sottosistema 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{img/Classi - arduino.png}
+    \includegraphics[width=0.9\textwidth]{img/Classi - arduino.png}
     \caption{Arduino.}
     \label{fig:arduino}
 \end{figure}
 
-\subsubsection{Room Mobile App (Android)}
+\subsection{Room Mobile App (Android)}
 L'app android sviluppata per il progetto si suddivide in due \emph{activity} (ciascuna rappresenta una schermata dell'applicazione).
 \begin{enumerate}
     \item \texttt{Scan Activity}. È la prima schermata che appare all'utente all'avvio dell'applicazione. Serve per ricercare nuovi dispositivi bluetooth a cui connettersi.
@@ -208,9 +204,52 @@ L'app android sviluppata per il progetto si suddivide in due \emph{activity} (ci
     \end{itemize}
 \end{enumerate}
 Per la lettura dei messaggi da parte di Arduino è stato creato un thread interno che, a partire da un \texttt{BluetoothSocket}, apre una input stream sulla quale si mette in ascolto. 
-Per l'invio di messaggi ad Arduino esiste un'ulteriore thread (quello principale) che, sempre a partire dal socket \texttt{BluetoothSocket}, crea uno stream sul quale invia dati in formato JSON.
+Per l'invio di messaggi ad Arduino esiste un'ulteriore thread che, sempre a partire dal socket \texttt{BluetoothSocket}, crea uno stream sul quale invia dati in formato JSON.
 Tutte le modifiche effettuate sulla parte grafica vengono eseguite sul thread predefinito messo a disposizione da Android, chiamato \texttt{UiThread}.
 Esiste poi un thread a parte \texttt{BluetoothClientConnectionThread} che si occupa di mantenere attiva la connessione fra client (il dispositivo) e Android.
+
+
+\section{UI}
+Per ovvie ragioni verranno di seguito mostrate solo le UI dell'applicazione web (dashboard) e dell'applicazione mobile.
+Le UI sono state sviluppate in maniera tale da essere il più possibile intuitive e semplici da utilizzare.
+\subsection{Room Dashboard (Frontend)}
+Abbiamo utilizzato \texttt{Bootstrap} per lo sviluppo dell'interfaccia grafica e \texttt{Plotly}
+per la rappresentazione dei grafici.
+Le motivazioni per cui abbiamo scelto queste tecnologie sono le seguenti:
+\begin{itemize}
+    \item \texttt{Bootstrap} è un framework CSS che permette di sviluppare interfacce grafiche responsive e moderne. Inoltre, essendo molto diffuso, è facile trovare documentazione e risorse online.
+    \item \texttt{Plotly.js} è una libreria JavaScript che permette di creare grafici interattivi. È stata scelta perché permette di creare grafici di qualità e perché è compatibile con \texttt{Bootstrap}. Inoltre è estremamente semplice da utilizzare e offre molta personalizzazione.
+\end{itemize}
+Di seguito è riportata un'immagine dell'interfaccia grafica.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/Ui - dashboard.jpeg}
+    \caption{Dashboard.}
+    \label{fig:dashboard}
+\end{figure}
+
+\subsection{Room Mobile App (Android)}
+L'app android è sviluppata, come già detto, in due \emph{activity}
+\begin{itemize}
+    \item \texttt{Scan Activity}. È la prima schermata che appare all'utente all'avvio dell'applicazione. Serve per ricercare nuovi dispositivi bluetooth a cui connettersi.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.4\textwidth]{img/Ui - scan.jpeg}
+        \caption{Scan Activity.}
+        \label{fig:scan}
+    \end{figure}
+    \item \texttt{Controller Activity}. Una volta avviata la connessione, l'interfaccia si aggiorna presentando questa activity che ha il compito di consentire all'utente il controllo di tenda e luci.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.4\textwidth]{img/Ui - controller.jpeg}
+        \caption{Controller Activity.}
+        \label{fig:controller}
+    \end{figure}
+\end{itemize}
+Per entrambe è stato utilizzato il framework \texttt{Material Design V3} che permette di sviluppare interfacce grafiche moderne e intuitive. 
+
+
 
 
 \chapter{Wirings}
