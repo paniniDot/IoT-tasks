@@ -1,5 +1,5 @@
 #include "PhotoResistor.h"
-#define TRESHOLD 1000
+#define TRESHOLD 2000
 
 PhotoResistor::PhotoResistor(int pin) : JSONSensor<int>("photo_resistor"), pin(pin)
 {

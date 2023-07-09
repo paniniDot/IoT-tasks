@@ -4,14 +4,16 @@
 #include <esp_system.h>
 #include "src/Pir.h"
 #include "src/PhotoResistor.h"
+#include "src/Light.h"
 #define PIR_PIN 34
-#define PHOTO_RESISTOR_PIN 24
+#define PHOTO_RESISTOR_PIN 35
+#define LED_PIN 32
 
 /* wifi network info */
 const char* ssid = "asus";
 const char* password = "0123456789";
 /* MQTT server address */
-const char* mqtt_server = "192.168.2.138";
+const char* mqtt_server = "192.168.2.2";
 const int mqtt_port = 1883;
 /* MQTT topics */
 const char* topic_light = "esp/light";
@@ -28,6 +30,7 @@ Adafruit_MQTT_Publish publisher_motion(&mqttClient, topic_motion);
 /* Hardware objects */
 PhotoResistor* resistor;
 Pir* pir;
+Light* led;
 
 void connectToWIFI() {
   delay(100);
@@ -58,6 +61,7 @@ void setup() {
   connectToMQTT();
   resistor = new PhotoResistor(PHOTO_RESISTOR_PIN);
   pir = new Pir(PIR_PIN);
+  led = new Light(LED_PIN);
 }
 
 void loop() {
@@ -71,6 +75,7 @@ void loop() {
   }
   unsigned long currentTime = millis();
   if (currentTime - lastNotifyTime >= notifyInterval) {
+    led->gradualBrightness();
     if (publisher_light.publish(resistor->toJson().c_str())) {
       Serial.println("Published light value");
     } else {

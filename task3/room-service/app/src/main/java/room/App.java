@@ -15,7 +15,7 @@ public class App {
 		HTTPService service = new HTTPService(8080, serial);
 		vertx.deployVerticle(service);
 		Thread serverThread = new Thread(() -> {
-			new MQTTService(1883, "192.168.2.138", serial);
+			new MQTTService(1883, "192.168.2.2", serial);
 		});
 		Thread readThread = new Thread(() -> {
 			while (true) {

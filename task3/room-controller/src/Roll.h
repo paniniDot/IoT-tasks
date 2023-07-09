@@ -1,7 +1,7 @@
 #ifndef __ROLL__
 #define __ROLL__
 
-#include "ServoTimer2.h"
+#include <Servo.h>
 #include "Arduino.h"
 #include "JSONSensor.h"
 #include "TimeLib.h"
@@ -10,7 +10,7 @@ class Roll : public JSONSensor
 {
 private:
 
-  ServoTimer2 *servo;
+  Servo *servo;
   int rollState;
   int isDay;
   int pir_state;

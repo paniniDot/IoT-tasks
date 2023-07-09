@@ -2,7 +2,7 @@
 
 Roll::Roll(int pin)
   : JSONSensor("roll") {
-  this->servo = new ServoTimer2();
+  this->servo = new Servo();
   this->servo->attach(pin);
   this->rollState = 0;
   this->pir_state = 0;
@@ -23,7 +23,8 @@ void Roll::handleMessage(Msg *msg) {
 
   if (sensorName.equals("pir_sensor")) {
     setTime(timestamp);
-    this->isDay = (hour() >= 8 && hour() < 19) ? 1 : 0;
+    this->pir_state = measure;
+    this->isDay = (second() >= 15 && second() < 45) ? 1 : 0;
   } else if (sensorName.equals("manual_roll")) {
     this->manual_state = measure;
   } else if (sensorName.equals("roll")) {
@@ -33,9 +34,13 @@ void Roll::handleMessage(Msg *msg) {
 
 void Roll::updateRollState() {
   if (!this->manual_state) {
-    this->rollState = (this->pir_state && this->isDay) ? 0 : 100;
+    if (this->pir_state && this->isDay) {
+      this->rollState = 100;
+    } else if (!this->pir_state && !this->isDay) {
+      this->rollState = 0;
+    }
   }
-  this->servo->write(map(this->rollState, 0, 100, 0, 1023));
+  this->servo->write(map(this->rollState, 0, 100, 0, 180));
 }
 
 void Roll::notify() {
