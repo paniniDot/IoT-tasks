@@ -1,13 +1,14 @@
 #include "Light.h"
 
-Light::Light(int pin) : pin(pin)
+Light::Light(int pin) : pin(pin), timeClient(ntpUDP, "pool.ntp.org", 7200)
 {
   pinMode(pin, OUTPUT);
 }
 
 void Light::gradualBrightness()
 {
-  int currentSecond = second();
+  timeClient.update();
+  int currentSecond = timeClient.getSeconds();
   int brightness = 0;
   int startSecond = 0;
   int peakSecond = 30;
