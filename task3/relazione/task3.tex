@@ -268,15 +268,15 @@ Di seguito sono riportati i cablaggi per Arduino
 Nell'immagine vediamo un led collegato al pin 2 (rappresenta la luce), un servo motore collegato al pin e (tenda) e infine un modulo bluetooth (poiché Thinkercad non disponeva del modulo bluetooth lo abbiamo sostituito con un modulo wifi, i cui pin restano però i medesimi), in particolare RX sul 6 e TX sul 7.
 
 \section{Descrizione Esp32}
-Poiché Thinkercad non mette a disposizione un modulo esp lo abbiamo sostituito nella figura che segue con un modulo bluetooth 
+Poiché Thinkercad non mette a disposizione un modulo esp lo abbiamo sostituito nella figura che segue solamente con dei pin
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{img/wire-esp.png}
+\includegraphics[width=\textwidth]{img/wire-esp.jpeg}
 \caption{Schema del cablaggio di Esp32.}
 \label{fig:wiringsesp}
 \end{figure}
 
-Dall'immagine non si vede che la fotoresistenza è collegata al pin, mentre il pir a 
+Dall'immagine non si vede che la fotoresistenza è collegata al pin 35, mentre il pir al pin 34, mentre il led al pin 32.
 
 \end{document}

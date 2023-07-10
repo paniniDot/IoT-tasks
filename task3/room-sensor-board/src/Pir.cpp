@@ -9,11 +9,7 @@ Pir::Pir(int pir_pin, int led_pin) : JSONSensor<int>("pir_sensor"), pir_pin(pir_
 }
 
 int Pir::getMotion() {
-  if (digitalRead(this->pir_pin) == HIGH) {
-    analogWrite(this->led_pin, 255);
-    return 1;
-  } else {
-    analogWrite(this->led_pin, 0);
-    return 0;
-  }
+  int motion = digitalRead(this->pir_pin) == HIGH ? 1 : 0;
+  analogWrite(this->led_pin, motion * 255);
+  return motion;
 };
